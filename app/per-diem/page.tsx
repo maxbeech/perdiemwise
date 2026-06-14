@@ -36,7 +36,7 @@ export default function PerDiemIndex() {
             <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm sm:grid-cols-3 md:grid-cols-4">
               {byState.get(s.code)!.map((l) => (
                 <Link key={l.slug} href={`/per-diem/${l.slug}`} className="truncate py-0.5 text-stone-600 hover:text-sky-700">
-                  {l.city} <span className="text-stone-400">${l.mie}</span>
+                  {l.city} <span className="text-stone-500">${l.mie}</span>
                 </Link>
               ))}
             </div>

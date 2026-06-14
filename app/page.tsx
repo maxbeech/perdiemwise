@@ -53,7 +53,7 @@ export default function Home() {
             return (
               <Link key={slug} href={`/per-diem/${slug}`} className="rounded-xl border border-stone-200 bg-white px-4 py-3 text-sm hover:border-sky-300 hover:shadow-sm">
                 <div className="font-medium text-stone-900">{loc.city}, {loc.state}</div>
-                <div className="text-xs text-stone-500">${loc.lodging[0]}–${Math.max(...loc.lodging)} lodging · ${loc.mie} M&amp;IE</div>
+                <div className="text-xs text-stone-500">${Math.min(...loc.lodging)}–${Math.max(...loc.lodging)} lodging · ${loc.mie} M&amp;IE</div>
               </Link>
             );
           })}

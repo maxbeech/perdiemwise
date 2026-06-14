@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import PerDiemCalculator from "@/components/PerDiemCalculator";
 import RateTable from "@/components/RateTable";
 import { LOCATIONS, getLocation, firstLastForMie, FISCAL_YEAR } from "@/lib/gsa";
-import { stateName, locationsInState } from "@/lib/states";
+import { stateName, stateSlug, locationsInState } from "@/lib/states";
 import { SITE } from "@/lib/site";
 
 export const dynamicParams = false;
@@ -51,7 +51,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
   return (
     <div>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <nav className="text-sm text-stone-500"><Link href="/per-diem" className="hover:text-sky-700">Per diem rates</Link> · <Link href={`/states/${stateName(loc.state).toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} className="hover:text-sky-700">{stateName(loc.state)}</Link></nav>
+      <nav className="text-sm text-stone-500"><Link href="/per-diem" className="hover:text-sky-700">Per diem rates</Link> · <Link href={`/states/${stateSlug(loc.state)}`} className="hover:text-sky-700">{stateName(loc.state)}</Link></nav>
       <h1 className="mt-2 text-3xl font-extrabold text-stone-900">{loc.city}, {loc.state} per diem rates</h1>
       <p className="mt-2 max-w-2xl text-stone-600">
         Official FY{FISCAL_YEAR} GSA per diem for {loc.city}{loc.county ? ` (${loc.county} County)` : ""}, {stateName(loc.state)}.

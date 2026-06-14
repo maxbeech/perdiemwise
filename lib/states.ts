@@ -76,6 +76,10 @@ export function stateName(code: string): string {
   return BY_CODE.get(code)?.name ?? code;
 }
 
+export function stateSlug(code: string): string {
+  return BY_CODE.get(code)?.slug ?? code.toLowerCase();
+}
+
 export function locationsInState(code: string): GsaLocation[] {
   return LOCATIONS.filter((l) => l.state === code).sort((a, b) => a.city.localeCompare(b.city));
 }

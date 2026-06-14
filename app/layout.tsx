@@ -48,7 +48,7 @@ function Footer() {
           <Link href="/methodology" className="hover:text-stone-900">Methodology &amp; sources</Link>
           <Link href="/pricing" className="hover:text-stone-900">Pro</Link>
         </div>
-        <p className="mt-4 max-w-2xl text-xs text-stone-400">
+        <p className="mt-4 max-w-2xl text-xs text-stone-500">
           {SITE.name} uses the official GSA FY2026 CONUS per diem rates and the 2026 IRS standard
           mileage rates. It is a planning aid — always confirm figures against your employer&apos;s
           travel policy or the official GSA and IRS publications before filing a claim.
