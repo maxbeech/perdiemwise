@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* DeckCalc HQ ships a single, intentional LIGHT theme — every surface uses
+   explicit Tailwind colors (bg-stone-50, white cards, text-stone-900). We do
+   NOT honour prefers-color-scheme: a dark body background would sit behind the
+   light-theme text and make the hero unreadable. Background/colour are left to
+   the layout's Tailwind utilities (an unlayered `body{background}` rule would
+   otherwise override bg-stone-50 under Tailwind v4 cascade layers). */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
