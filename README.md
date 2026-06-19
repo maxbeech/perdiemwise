@@ -16,9 +16,16 @@ Built by the MaxedLabs Product Factory (Plan 38).
 - Destinations not separately listed by GSA fall back to the standard CONUS rate, and the
   UI says so explicitly — never a guessed number.
 
+## Design system
+A deliberate "premium expense ledger" aesthetic — warm ivory paper, deep ink, a forest-emerald
+accent, **Fraunces** (display) + **Hanken Grotesk** (body) + **IBM Plex Mono** (every figure, via
+the `.tnum` class). Tokens live in `app/globals.css` (`@theme`); reusable primitives
+(`Container`, `Button`, `Eyebrow`, `Badge`, `Card`, `SectionHead`) in `components/ui.tsx` — the
+single source of truth for layout and styling across every page.
+
 ## Stack
-Next.js 16 (App Router, SSG/ISR) · Tailwind CSS 4 · TypeScript · `tsx` tests · env-gated
-Stripe checkout. The free calculators need no database.
+Next.js 16 (App Router, SSG/ISR) · Tailwind CSS 4 · TypeScript · `tsx` tests · `next/font` ·
+env-gated Stripe checkout. The free product needs no database (saved trips use localStorage).
 
 ## Develop
 ```bash
@@ -54,6 +61,17 @@ robots, JSON-LD and canonical URLs included.
 - `STRIPE_SECRET_KEY` + `STRIPE_PRICE_ID` — enable Pro checkout. Absent → checkout
   degrades to a 503 early-access note; the free tools are unaffected.
 
+## What works live now vs. what needs your keys
+- **Live now (no setup):** the full premium marketing site, all three calculators, provided-meal
+  deductions, OCONUS awareness, copy-ready summaries, and **saved trips (localStorage)** — a real,
+  working freemium product.
+- **Needs your Stripe account (env vars above):** live Pro payments. The checkout, env-gating and
+  graceful fallback are fully built; add `STRIPE_SECRET_KEY` + `STRIPE_PRICE_ID` and it works.
+- **Needs a Supabase project (documented, not yet wired):** user accounts + **cloud-synced trips
+  across devices** + team sharing. This is the natural Pro backend; until it exists, saved trips
+  live on-device via localStorage (which is genuinely useful on its own).
+
 ## Roadmap (next)
-Custom employer rate with taxable-excess flag; multi-destination trips; expense-report
-PDF + CSV export; OCONUS/international rate data; historical fiscal-year rates.
+Supabase auth + cloud-synced trips (the "sign-up" product); custom employer rate with
+taxable-excess flag; multi-destination trips; expense-report PDF + CSV export;
+OCONUS/international rate data; historical fiscal-year rates.
