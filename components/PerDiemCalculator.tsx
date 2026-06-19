@@ -1,89 +1,84 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { LOCATIONS, FISCAL_YEAR_LABEL } from "@/lib/gsa";
+import { useState } from "react";
+import CityCombobox from "@/components/CityCombobox";
+import { FISCAL_YEAR_LABEL, type GsaLocation } from "@/lib/gsa";
 import { calculateTrip, type TripResult } from "@/lib/perdiem";
 
 const usd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 const DAY_LABEL: Record<string, string> = { first: "Travel day (75% M&IE)", full: "Full day", last: "Return day (75% M&IE)", single: "Same-day trip (75% M&IE)" };
+const DISPLAY_CAP = 62;
 
 function fmtDate(iso: string) {
   return new Date(iso + "T12:00:00Z").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" });
 }
 
 export default function PerDiemCalculator({ initialSlug }: { initialSlug?: string }) {
-  const initial = initialSlug ? LOCATIONS.find((l) => l.slug === initialSlug) : undefined;
-  const [query, setQuery] = useState(initial ? `${initial.city}, ${initial.state}` : "");
-  const [slug, setSlug] = useState<string | null>(initial?.slug ?? null);
-  const [open, setOpen] = useState(false);
+  const [loc, setLoc] = useState<GsaLocation | null>(null);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
-
-  const matches = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return LOCATIONS.slice(0, 8);
-    return LOCATIONS.filter((l) => `${l.city} ${l.state} ${l.county ?? ""}`.toLowerCase().includes(q)).slice(0, 30);
-  }, [query]);
+  const [meals, setMeals] = useState({ breakfast: false, lunch: false, dinner: false });
+  const [copied, setCopied] = useState(false);
 
   let result: TripResult | null = null;
   let error: string | null = null;
   if (start && end) {
     try {
-      result = calculateTrip({ locationSlug: slug, startDate: start, endDate: end });
+      result = calculateTrip({ locationSlug: loc?.slug ?? null, startDate: start, endDate: end, providedMeals: meals });
     } catch (e) {
       error = e instanceof Error ? e.message : "Could not calculate this trip.";
     }
   }
 
+  function copySummary() {
+    if (!result) return;
+    const where = result.location.isStandard ? "Standard CONUS rate" : `${result.location.city}, ${result.location.state}`;
+    const lines = [
+      `Per diem — ${where} (GSA ${FISCAL_YEAR_LABEL.split(" (")[0]})`,
+      `${start} to ${end} · ${result.days} day(s), ${result.nights} night(s)`,
+      ...result.lines.map((l) => `  ${l.date}  ${DAY_LABEL[l.type]}  lodging ${l.lodging ? usd(l.lodging) : "—"}  M&IE ${usd(l.mie)}`),
+      `Lodging total: ${usd(result.lodgingTotal)}`,
+      `M&IE total: ${usd(result.mieTotal)}${result.mealsDeducted > 0 ? ` (after ${usd(result.mealsDeducted)} provided-meal deductions)` : ""}`,
+      `TOTAL PER DIEM: ${usd(result.total)}`,
+    ];
+    navigator.clipboard?.writeText(lines.join("\n")).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+  }
+
+  const tooLong = result && result.days > DISPLAY_CAP;
+
   return (
     <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="relative sm:col-span-3">
+        <div className="sm:col-span-3">
           <label className="mb-1 block text-sm font-medium text-stone-700">Destination</label>
-          <input
-            value={query}
-            onChange={(e) => { setQuery(e.target.value); setSlug(null); setOpen(true); }}
-            onFocus={() => setOpen(true)}
-            onBlur={() => setTimeout(() => setOpen(false), 150)}
-            placeholder="Search a city (e.g. San Francisco) — or leave blank for the standard rate"
-            className="w-full rounded-lg border border-stone-300 px-3 py-2 text-stone-900 outline-none focus:border-sky-500"
-          />
-          {open && (
-            <ul className="absolute z-10 mt-1 max-h-64 w-full overflow-auto rounded-lg border border-stone-200 bg-white shadow-lg">
-              <li>
-                <button type="button" onMouseDown={() => { setSlug(null); setQuery("Standard CONUS rate"); setOpen(false); }}
-                  className="flex w-full justify-between px-3 py-2 text-left text-sm hover:bg-stone-50">
-                  <span className="font-medium">Standard CONUS rate</span>
-                  <span className="text-stone-500">$110 + $68</span>
-                </button>
-              </li>
-              {matches.map((l) => (
-                <li key={l.slug}>
-                  <button type="button" onMouseDown={() => { setSlug(l.slug); setQuery(`${l.city}, ${l.state}`); setOpen(false); }}
-                    className="flex w-full justify-between px-3 py-2 text-left text-sm hover:bg-stone-50">
-                    <span>{l.city}, {l.state}{l.county ? <span className="text-stone-400"> · {l.county}</span> : null}</span>
-                    <span className="text-stone-500">M&IE ${l.mie}</span>
-                  </button>
-                </li>
-              ))}
-              {matches.length === 0 && <li className="px-3 py-2 text-sm text-stone-500">No GSA city matches — leave blank to use the standard rate.</li>}
-            </ul>
-          )}
+          <CityCombobox initialSlug={initialSlug} onChange={setLoc} idPrefix="trip" />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-stone-700">Depart</label>
-          <input type="date" value={start} onChange={(e) => setStart(e.target.value)}
+          <label htmlFor="trip-depart" className="mb-1 block text-sm font-medium text-stone-700">Depart</label>
+          <input id="trip-depart" type="date" value={start} onChange={(e) => setStart(e.target.value)}
             className="w-full rounded-lg border border-stone-300 px-3 py-2 text-stone-900 outline-none focus:border-sky-500" />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-stone-700">Return</label>
-          <input type="date" value={end} min={start || undefined} onChange={(e) => setEnd(e.target.value)}
+          <label htmlFor="trip-return" className="mb-1 block text-sm font-medium text-stone-700">Return</label>
+          <input id="trip-return" type="date" value={end} min={start || undefined} onChange={(e) => setEnd(e.target.value)}
             className="w-full rounded-lg border border-stone-300 px-3 py-2 text-stone-900 outline-none focus:border-sky-500" />
         </div>
         <div className="flex items-end text-xs text-stone-500">Rates: {FISCAL_YEAR_LABEL}</div>
       </div>
 
-      {error && <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">{error}</p>}
+      <fieldset className="mt-4">
+        <legend className="text-sm font-medium text-stone-700">Meals provided? <span className="font-normal text-stone-500">(deducted from M&amp;IE)</span></legend>
+        <div className="mt-1 flex flex-wrap gap-4 text-sm text-stone-600">
+          {(["breakfast", "lunch", "dinner"] as const).map((m) => (
+            <label key={m} className="flex items-center gap-2 capitalize">
+              <input type="checkbox" checked={meals[m]} onChange={(e) => setMeals({ ...meals, [m]: e.target.checked })} className="h-4 w-4 rounded border-stone-300 text-sky-600" />
+              {m}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      {error && <p className="mt-4 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert">{error}</p>}
 
       {!start || !end ? (
         <p className="mt-4 text-sm text-stone-500">Choose your travel dates to see the itemised per diem.</p>
@@ -94,29 +89,42 @@ export default function PerDiemCalculator({ initialSlug }: { initialSlug?: strin
             <Stat label="Meals & incidentals" value={usd(result.mieTotal)} sub={`${result.days} day${result.days === 1 ? "" : "s"}`} />
             <Stat label="Total per diem" value={usd(result.total)} sub={result.location.isStandard ? "standard rate" : `${result.location.city}, ${result.location.state}`} highlight />
           </div>
+          {result.mealsDeducted > 0 && (
+            <p className="mt-3 text-xs text-stone-500">Provided meals reduced M&amp;IE by {usd(result.mealsDeducted)} (incidentals are always retained).</p>
+          )}
           {result.location.isStandard && (
             <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
               This destination isn&apos;t separately listed by GSA, so the <strong>standard CONUS rate</strong> ($110 lodging / $68 M&amp;IE) is applied.
             </p>
           )}
-          <table className="mt-4 w-full text-sm">
-            <thead>
-              <tr className="border-b border-stone-200 text-left text-stone-500">
-                <th className="py-2 font-medium">Date</th><th className="font-medium">Day</th>
-                <th className="font-medium">Lodging</th><th className="font-medium">M&amp;IE</th>
-              </tr>
-            </thead>
-            <tbody>
-              {result.lines.map((l) => (
-                <tr key={l.date} className="border-b border-stone-100">
-                  <td className="py-2">{fmtDate(l.date)}</td>
-                  <td className="text-stone-500">{DAY_LABEL[l.type]}</td>
-                  <td>{l.lodging ? usd(l.lodging) : <span className="text-stone-400">—</span>}</td>
-                  <td>{usd(l.mie)}</td>
+          <div className="mt-4 flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-stone-700">Day-by-day breakdown</h3>
+            <button type="button" onClick={copySummary} className="rounded-lg border border-stone-300 px-3 py-1 text-xs font-medium text-stone-600 hover:bg-stone-50">
+              {copied ? "Copied ✓" : "Copy summary"}
+            </button>
+          </div>
+          {tooLong ? (
+            <p className="mt-2 rounded-lg bg-stone-50 px-3 py-2 text-sm text-stone-600">This trip spans {result.days} days — the totals above are correct; the day-by-day list is hidden for trips over {DISPLAY_CAP} days.</p>
+          ) : (
+            <table className="mt-2 w-full text-sm">
+              <thead>
+                <tr className="border-b border-stone-200 text-left text-stone-500">
+                  <th className="py-2 font-medium">Date</th><th className="font-medium">Day</th>
+                  <th className="font-medium">Lodging</th><th className="font-medium">M&amp;IE</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {result.lines.map((l) => (
+                  <tr key={l.date} className="border-b border-stone-100">
+                    <td className="py-2">{fmtDate(l.date)}</td>
+                    <td className="text-stone-500">{DAY_LABEL[l.type]}</td>
+                    <td>{l.lodging ? usd(l.lodging) : <span className="text-stone-400">—</span>}</td>
+                    <td>{usd(l.mie)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       ) : null}
     </div>

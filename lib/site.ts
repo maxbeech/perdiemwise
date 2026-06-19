@@ -1,7 +1,12 @@
+// Canonical/OG base. Defaults to the live Vercel URL so canonicals, sitemaps and
+// OG images all resolve TODAY; once the custom domain is connected, set
+// NEXT_PUBLIC_SITE_URL=https://perdiemwise.com (inlined at build) and redeploy.
+const URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://perdiemwise.vercel.app").replace(/\/$/, "");
+
 export const SITE = {
   name: "PerDiemWise",
-  domain: "perdiemwise.com",
-  url: "https://perdiemwise.com",
+  domain: URL.replace(/^https?:\/\//, ""),
+  url: URL,
   tagline: "Free GSA per diem & IRS mileage calculator",
   description:
     "Free per diem calculator using the official GSA FY2026 lodging and M&IE rates — with the 75% first-and-last-day rule built in — plus an IRS 2026 mileage reimbursement calculator. Real government rates, itemized day by day.",

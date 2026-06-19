@@ -42,12 +42,49 @@ export function getLocation(slug: string): GsaLocation | null {
   return BY_SLUG.get(slug) ?? null;
 }
 
+/** The M&IE tier for a given total (every GSA location maps to one of five tiers). */
+export function tierForMie(mieTotal: number): MieTier {
+  const tier = MIE_BREAKDOWN.find((t) => t.total === mieTotal);
+  if (tier) return tier;
+  // Fallback for any non-standard total: derive a proportional breakdown.
+  return {
+    total: mieTotal,
+    breakfast: Math.round(mieTotal * 0.23),
+    lunch: Math.round(mieTotal * 0.28),
+    dinner: Math.round(mieTotal * 0.41),
+    incidental: 5,
+    firstLast: Math.round(mieTotal * 0.75 * 4) / 4,
+  };
+}
+
 /** The first/last-day (75%) M&IE amount for a given M&IE total. */
 export function firstLastForMie(mieTotal: number): number {
-  const tier = MIE_BREAKDOWN.find((t) => t.total === mieTotal);
-  if (tier) return tier.firstLast;
-  // Any M&IE total maps to 75%, rounded to the nearest 0.25 like GSA's table.
-  return Math.round(mieTotal * 0.75 * 4) / 4;
+  return tierForMie(mieTotal).firstLast;
+}
+
+export interface ProvidedMeals {
+  breakfast?: boolean;
+  lunch?: boolean;
+  dinner?: boolean;
+}
+
+/** Dollar value of the meals provided to a traveller for one day at a tier. */
+export function mealDeduction(tier: MieTier, provided: ProvidedMeals): number {
+  let d = 0;
+  if (provided.breakfast) d += tier.breakfast;
+  if (provided.lunch) d += tier.lunch;
+  if (provided.dinner) d += tier.dinner;
+  return d;
+}
+
+/**
+ * M&IE payable for one day after deducting any provided meals. Per GSA rules,
+ * a provided meal is deducted from the day's M&IE; the incidental portion is
+ * always retained, so the result never drops below it.
+ */
+export function mieAfterMeals(baseMie: number, tier: MieTier, provided: ProvidedMeals): number {
+  const after = baseMie - mealDeduction(tier, provided);
+  return Math.max(tier.incidental, Math.round(after * 100) / 100);
 }
 
 /** The standard CONUS location used whenever a destination is not separately listed. */

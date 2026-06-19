@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { calculateTrip, dayCount, resolveLocation } from "../lib/perdiem.ts";
-import { LOCATIONS, MIE_BREAKDOWN, STANDARD_LODGING, STANDARD_MIE, firstLastForMie, getLocation } from "../lib/gsa.ts";
+import { LOCATIONS, MIE_BREAKDOWN, STANDARD_LODGING, STANDARD_MIE, firstLastForMie, getLocation, tierForMie, mieAfterMeals, mealDeduction } from "../lib/gsa.ts";
 import { calculateMileage } from "../lib/mileage.ts";
 import { US_STATES, locationsInState } from "../lib/states.ts";
 
@@ -122,6 +122,34 @@ test("50 states + DC, each with a slug", () => {
 test("locationsInState matches the dataset (e.g. CA has San Francisco)", () => {
   assert.ok(locationsInState("CA").some((l) => l.slug === "san-francisco-ca"));
   assert.equal(locationsInState("CA").length, LOCATIONS.filter((l) => l.state === "CA").length);
+});
+
+console.log("Provided-meal deductions");
+test("tierForMie returns the correct GSA tier", () => {
+  assert.equal(tierForMie(68).breakfast, 16);
+  assert.equal(tierForMie(92).total, 92);
+});
+test("mealDeduction sums only the provided meals", () => {
+  assert.equal(mealDeduction(tierForMie(68), { lunch: true }), 19);
+  assert.equal(mealDeduction(tierForMie(68), { breakfast: true, lunch: true, dinner: true }), 63); // 16+19+28
+});
+test("mieAfterMeals deducts and never drops below incidentals", () => {
+  assert.equal(mieAfterMeals(68, tierForMie(68), { lunch: true }), 49); // 68 - 19
+  assert.equal(mieAfterMeals(68, tierForMie(68), { breakfast: true, lunch: true, dinner: true }), 5); // floored at $5 incidental
+  assert.equal(mieAfterMeals(51, tierForMie(68), { dinner: true }), 23); // 75% day 51 - 28
+});
+test("trip with lunch provided reduces M&IE by the lunch value each day", () => {
+  const r = calculateTrip({ locationSlug: null, startDate: "2026-03-10", endDate: "2026-03-12", providedMeals: { lunch: true } });
+  // day1 51-19=32, day2 68-19=49, day3 51-19=32 → 113 M&IE; lodging unchanged 220
+  assert.equal(r.mieTotal, 113);
+  assert.equal(r.mealsDeducted, 57); // 3 x 19
+  assert.equal(r.lodgingTotal, 220);
+  assert.equal(r.total, 333);
+});
+test("no provided meals = zero deduction (back-compat)", () => {
+  const r = calculateTrip({ locationSlug: null, startDate: "2026-03-10", endDate: "2026-03-12" });
+  assert.equal(r.mealsDeducted, 0);
+  assert.equal(r.total, 390);
 });
 
 console.log(`\n${passed} checks passed.`);

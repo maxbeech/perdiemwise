@@ -1,69 +1,68 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { LOCATIONS, MIE_BREAKDOWN, STANDARD_MIE, firstLastForMie } from "@/lib/gsa";
+import { useState } from "react";
+import CityCombobox from "@/components/CityCombobox";
+import { STANDARD_MIE, firstLastForMie, mieAfterMeals, tierForMie, type GsaLocation } from "@/lib/gsa";
 
 const usd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
 export default function MieCalculator({ initialSlug }: { initialSlug?: string }) {
-  const initial = initialSlug ? LOCATIONS.find((l) => l.slug === initialSlug) : undefined;
-  const [query, setQuery] = useState(initial ? `${initial.city}, ${initial.state}` : "");
-  const [mie, setMie] = useState<number>(initial?.mie ?? STANDARD_MIE);
-  const [open, setOpen] = useState(false);
+  const [loc, setLoc] = useState<GsaLocation | null>(null);
+  const [meals, setMeals] = useState({ breakfast: false, lunch: false, dinner: false });
 
-  const matches = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return LOCATIONS.slice(0, 8);
-    return LOCATIONS.filter((l) => `${l.city} ${l.state}`.toLowerCase().includes(q)).slice(0, 30);
-  }, [query]);
+  const mie = loc?.mie ?? STANDARD_MIE;
+  const tier = tierForMie(mie);
+  const fullAfter = mieAfterMeals(mie, tier, meals);
+  const firstLastAfter = mieAfterMeals(firstLastForMie(mie), tier, meals);
 
-  const tier = MIE_BREAKDOWN.find((t) => t.total === mie);
-  const firstLast = firstLastForMie(mie);
+  const rows: { key: "breakfast" | "lunch" | "dinner" | "incidental"; label: string; value: number; deductible: boolean }[] = [
+    { key: "breakfast", label: "Breakfast", value: tier.breakfast, deductible: true },
+    { key: "lunch", label: "Lunch", value: tier.lunch, deductible: true },
+    { key: "dinner", label: "Dinner", value: tier.dinner, deductible: true },
+    { key: "incidental", label: "Incidentals", value: tier.incidental, deductible: false },
+  ];
 
   return (
     <div className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm">
       <label className="mb-1 block text-sm font-medium text-stone-700">Destination</label>
-      <div className="relative">
-        <input value={query} onChange={(e) => { setQuery(e.target.value); setOpen(true); }}
-          onFocus={() => setOpen(true)} onBlur={() => setTimeout(() => setOpen(false), 150)}
-          placeholder="Search a city — or leave blank for the standard $68 rate"
-          className="w-full rounded-lg border border-stone-300 px-3 py-2 text-stone-900 outline-none focus:border-sky-500" />
-        {open && (
-          <ul className="absolute z-10 mt-1 max-h-64 w-full overflow-auto rounded-lg border border-stone-200 bg-white shadow-lg">
-            <li><button type="button" onMouseDown={() => { setMie(STANDARD_MIE); setQuery("Standard CONUS rate"); setOpen(false); }}
-              className="flex w-full justify-between px-3 py-2 text-left text-sm hover:bg-stone-50"><span className="font-medium">Standard CONUS rate</span><span className="text-stone-500">$68</span></button></li>
-            {matches.map((l) => (
-              <li key={l.slug}><button type="button" onMouseDown={() => { setMie(l.mie); setQuery(`${l.city}, ${l.state}`); setOpen(false); }}
-                className="flex w-full justify-between px-3 py-2 text-left text-sm hover:bg-stone-50"><span>{l.city}, {l.state}</span><span className="text-stone-500">${l.mie}</span></button></li>
-            ))}
-          </ul>
-        )}
-      </div>
+      <CityCombobox initialSlug={initialSlug} onChange={setLoc} idPrefix="mie" placeholder="Search a city — or leave blank for the standard $68 rate" />
+
+      <fieldset className="mt-4">
+        <legend className="text-sm font-medium text-stone-700">Meals provided? <span className="font-normal text-stone-500">(deducted)</span></legend>
+        <div className="mt-1 flex flex-wrap gap-4 text-sm text-stone-600">
+          {(["breakfast", "lunch", "dinner"] as const).map((m) => (
+            <label key={m} className="flex items-center gap-2 capitalize">
+              <input type="checkbox" checked={meals[m]} onChange={(e) => setMeals({ ...meals, [m]: e.target.checked })} className="h-4 w-4 rounded border-stone-300 text-sky-600" />
+              {m}
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <div className="mt-5 grid grid-cols-2 gap-3 text-center">
-        <Stat label="Full-day M&IE" value={usd(mie)} highlight />
-        <Stat label="First & last day (75%)" value={usd(firstLast)} />
+        <Stat label="Full-day M&IE" value={usd(fullAfter)} highlight />
+        <Stat label="First & last day (75%)" value={usd(firstLastAfter)} />
       </div>
 
-      {tier && (
-        <table className="mt-4 w-full text-sm">
-          <tbody>
-            <Row label="Breakfast" value={usd(tier.breakfast)} />
-            <Row label="Lunch" value={usd(tier.lunch)} />
-            <Row label="Dinner" value={usd(tier.dinner)} />
-            <Row label="Incidentals" value={usd(tier.incidental)} />
-            <tr className="border-t border-stone-300 font-semibold"><td className="py-2">Total</td><td className="text-right">{usd(tier.total)}</td></tr>
-          </tbody>
-        </table>
-      )}
-      <p className="mt-3 text-xs text-stone-500">Deduct any provided meal from the day&apos;s M&amp;IE; the $5 incidental portion always remains.</p>
+      <table className="mt-4 w-full text-sm">
+        <tbody>
+          {rows.map((r) => {
+            const struck = r.deductible && meals[r.key as "breakfast" | "lunch" | "dinner"];
+            return (
+              <tr key={r.key} className="border-b border-stone-100">
+                <td className={`py-2 ${struck ? "text-stone-400 line-through" : "text-stone-600"}`}>{r.label}{struck ? " (provided)" : ""}</td>
+                <td className={`text-right ${struck ? "text-stone-400 line-through" : ""}`}>{usd(r.value)}</td>
+              </tr>
+            );
+          })}
+          <tr className="border-t border-stone-300 font-semibold"><td className="py-2">Total full-day M&amp;IE</td><td className="text-right">{usd(fullAfter)}</td></tr>
+        </tbody>
+      </table>
+      <p className="mt-3 text-xs text-stone-500">Deduct any meal provided to you; the $5 incidental portion always remains.</p>
     </div>
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
-  return <tr className="border-b border-stone-100"><td className="py-2 text-stone-600">{label}</td><td className="text-right">{value}</td></tr>;
-}
 function Stat({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div className={`rounded-xl border p-3 ${highlight ? "border-sky-200 bg-sky-50" : "border-stone-200 bg-stone-50"}`}>

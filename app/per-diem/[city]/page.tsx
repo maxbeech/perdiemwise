@@ -42,9 +42,21 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
 
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: [
-      { "@type": "Question", name: `What is the per diem rate for ${loc.city}, ${loc.state}?`, acceptedAnswer: { "@type": "Answer", text: `For FY${FISCAL_YEAR}, ${loc.city} has a GSA lodging rate of ${seasonal ? `${usd(low)}–${usd(peak)} depending on the month` : usd(peak)} per night and a meals & incidentals rate of ${usd(loc.mie)} per day (${usd(firstLastForMie(loc.mie))} on the first and last travel day).` } },
+    "@graph": [
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          { "@type": "Question", name: `What is the per diem rate for ${loc.city}, ${loc.state}?`, acceptedAnswer: { "@type": "Answer", text: `For FY${FISCAL_YEAR}, ${loc.city} has a GSA lodging rate of ${seasonal ? `${usd(low)}–${usd(peak)} depending on the month` : usd(peak)} per night and a meals & incidentals rate of ${usd(loc.mie)} per day (${usd(firstLastForMie(loc.mie))} on the first and last travel day).` } },
+        ],
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Per diem rates", item: `${SITE.url}/per-diem` },
+          { "@type": "ListItem", position: 2, name: stateName(loc.state), item: `${SITE.url}/states/${stateSlug(loc.state)}` },
+          { "@type": "ListItem", position: 3, name: `${loc.city}, ${loc.state}`, item: `${SITE.url}/per-diem/${loc.slug}` },
+        ],
+      },
     ],
   };
 

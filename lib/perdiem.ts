@@ -3,8 +3,15 @@ import {
   STANDARD_MIE,
   firstLastForMie,
   getLocation,
+  mieAfterMeals,
+  tierForMie,
   type GsaLocation,
+  type ProvidedMeals,
 } from "./gsa";
+
+// Maximum trip length the day-by-day table renders in full; the total is always
+// correct, but very long ranges are almost always a date-entry slip.
+export const MAX_TRIP_DAYS = 366;
 
 // PerDiemWise per-diem engine — computes a federal-travel per diem the way the
 // GSA rules require:
@@ -40,6 +47,7 @@ export interface TripResult {
   lines: DayLine[];
   lodgingTotal: number;
   mieTotal: number;
+  mealsDeducted: number; // total M&IE removed because meals were provided
   total: number;
 }
 
@@ -106,6 +114,7 @@ export interface TripInput {
   locationSlug: string | null;
   startDate: string;
   endDate: string;
+  providedMeals?: ProvidedMeals;
 }
 
 /**
@@ -126,12 +135,21 @@ export function calculateTrip(input: TripInput): TripResult {
   const days = dayCount(startDate, endDate);
   const fullMie = resolved.mie;
   const firstLastMie = firstLastForMie(fullMie);
+  const tier = tierForMie(fullMie);
+  const provided = input.providedMeals ?? {};
 
   const lines: DayLine[] = [];
+  let mealsDeducted = 0;
+
+  const pushDay = (date: Date, type: DayType, lodging: number, base: number) => {
+    const mie = mieAfterMeals(base, tier, provided);
+    mealsDeducted += round2(base - mie);
+    lines.push({ date: fmt(date), type, lodging, mie });
+  };
 
   if (days === 1) {
     // Same-day travel (no overnight): 75% M&IE, no lodging.
-    lines.push({ date: fmt(start), type: "single", lodging: 0, mie: firstLastMie });
+    pushDay(start, "single", 0, firstLastMie);
   } else {
     for (let i = 0; i < days; i++) {
       const date = new Date(start.getTime() + i * MS_PER_DAY);
@@ -141,8 +159,7 @@ export function calculateTrip(input: TripInput): TripResult {
       // Lodging is for the night that begins on this day, so the last
       // (departure) day has no lodging.
       const lodging = isLast ? 0 : lodgingForNight(raw, date);
-      const mie = isFirst || isLast ? firstLastMie : fullMie;
-      lines.push({ date: fmt(date), type, lodging, mie });
+      pushDay(date, type, lodging, isFirst || isLast ? firstLastMie : fullMie);
     }
   }
 
@@ -155,6 +172,7 @@ export function calculateTrip(input: TripInput): TripResult {
     lines,
     lodgingTotal,
     mieTotal,
+    mealsDeducted: round2(mealsDeducted),
     total: round2(lodgingTotal + mieTotal),
   };
 }
