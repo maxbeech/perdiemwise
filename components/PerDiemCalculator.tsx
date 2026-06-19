@@ -19,6 +19,7 @@ export default function PerDiemCalculator({ initialSlug }: { initialSlug?: strin
   const [end, setEnd] = useState("");
   const [meals, setMeals] = useState({ breakfast: false, lunch: false, dinner: false });
   const [copied, setCopied] = useState(false);
+  const [copyText, setCopyText] = useState<string | null>(null);
 
   let result: TripResult | null = null;
   let error: string | null = null;
@@ -30,18 +31,27 @@ export default function PerDiemCalculator({ initialSlug }: { initialSlug?: strin
     }
   }
 
-  function copySummary() {
+  async function copySummary() {
     if (!result) return;
     const where = result.location.isStandard ? "Standard CONUS rate" : `${result.location.city}, ${result.location.state}`;
-    const lines = [
+    const text = [
       `Per diem — ${where} (GSA ${FISCAL_YEAR_LABEL.split(" (")[0]})`,
       `${start} to ${end} · ${result.days} day(s), ${result.nights} night(s)`,
       ...result.lines.map((l) => `  ${l.date}  ${DAY_LABEL[l.type]}  lodging ${l.lodging ? usd(l.lodging) : "—"}  M&IE ${usd(l.mie)}`),
       `Lodging total: ${usd(result.lodgingTotal)}`,
       `M&IE total: ${usd(result.mieTotal)}${result.mealsDeducted > 0 ? ` (after ${usd(result.mealsDeducted)} provided-meal deductions)` : ""}`,
       `TOTAL PER DIEM: ${usd(result.total)}`,
-    ];
-    navigator.clipboard?.writeText(lines.join("\n")).then(() => { setCopied(true); setTimeout(() => setCopied(false), 2000); });
+    ].join("\n");
+    // Primary: async clipboard. Fallback (blocked/unsupported): show a selectable
+    // box so the summary is never a dead button.
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyText(null);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setCopyText(text);
+    }
   }
 
   const tooLong = result && result.days > DISPLAY_CAP;
@@ -103,6 +113,13 @@ export default function PerDiemCalculator({ initialSlug }: { initialSlug?: strin
               {copied ? "Copied ✓" : "Copy summary"}
             </button>
           </div>
+          {copyText && (
+            <div className="mt-2">
+              <p className="text-xs text-stone-500">Select all and copy:</p>
+              <textarea readOnly value={copyText} rows={Math.min(10, result.lines.length + 4)} onFocus={(e) => e.currentTarget.select()}
+                className="mt-1 w-full rounded-lg border border-stone-300 p-2 font-mono text-xs text-stone-700" />
+            </div>
+          )}
           {tooLong ? (
             <p className="mt-2 rounded-lg bg-stone-50 px-3 py-2 text-sm text-stone-600">This trip spans {result.days} days — the totals above are correct; the day-by-day list is hidden for trips over {DISPLAY_CAP} days.</p>
           ) : (
