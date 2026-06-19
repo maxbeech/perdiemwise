@@ -5,6 +5,7 @@ import { CALCS, getCalc } from "@/lib/calculators";
 import PerDiemCalculator from "@/components/PerDiemCalculator";
 import MileageCalculator from "@/components/MileageCalculator";
 import MieCalculator from "@/components/MieCalculator";
+import { Container, Eyebrow } from "@/components/ui";
 
 export const dynamicParams = false;
 export const revalidate = 604800;
@@ -26,23 +27,27 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
   if (!c) notFound();
 
   return (
-    <div>
-      <nav className="text-sm text-stone-500"><Link href="/calculators" className="hover:text-sky-700">Calculators</Link></nav>
-      <h1 className="mt-2 text-3xl font-extrabold text-stone-900">{c.h1}</h1>
-      <p className="mt-2 max-w-2xl text-stone-600">{c.intro}</p>
+    <Container className="py-12 sm:py-16">
+      <nav className="text-sm text-muted">
+        <Link href="/calculators" className="hover:text-accent">Calculators</Link>
+      </nav>
 
-      <div className="mt-6">
+      <Eyebrow className="mt-4">Calculators</Eyebrow>
+      <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{c.h1}</h1>
+      <p className="mt-3 max-w-2xl text-ink-soft">{c.intro}</p>
+
+      <div className="mt-8">
         {c.tool === "perdiem" && <PerDiemCalculator />}
         {c.tool === "mileage" && <MileageCalculator />}
         {c.tool === "mie" && <MieCalculator />}
       </div>
 
-      <div className="mt-8 flex flex-wrap gap-3 text-sm">
+      <div className="mt-10 flex flex-wrap gap-3 text-sm">
         {CALCS.filter((o) => o.slug !== c.slug).map((o) => (
-          <Link key={o.slug} href={`/calculators/${o.slug}`} className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-stone-600 hover:border-sky-300">{o.h1}</Link>
+          <Link key={o.slug} href={`/calculators/${o.slug}`} className="rounded-xl border border-line bg-surface px-3 py-1.5 text-ink-soft hover:border-accent/40 hover:shadow-sm">{o.h1}</Link>
         ))}
-        <Link href="/methodology" className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-stone-600 hover:border-sky-300">How it&apos;s calculated</Link>
+        <Link href="/methodology" className="rounded-xl border border-line bg-surface px-3 py-1.5 text-ink-soft hover:border-accent/40 hover:shadow-sm">How it&apos;s calculated</Link>
       </div>
-    </div>
+    </Container>
   );
 }

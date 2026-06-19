@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function CheckoutButton() {
+export default function CheckoutButton({ label = "Get PerDiemWise Pro", className = "" }: { label?: string; className?: string }) {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState<string | null>(null);
 
@@ -24,10 +24,10 @@ export default function CheckoutButton() {
   return (
     <div>
       <button onClick={start} disabled={loading}
-        className="w-full rounded-lg bg-sky-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-sky-500 disabled:opacity-60">
-        {loading ? "Starting…" : "Get PerDiemWise Pro"}
+        className={`inline-flex h-11 w-full items-center justify-center rounded-full bg-accent px-5 text-[15px] font-medium text-white transition-colors hover:bg-accent-dark disabled:opacity-60 ${className}`}>
+        {loading ? "Starting…" : label}
       </button>
-      {msg && <p className="mt-2 text-center text-xs text-stone-500">{msg}</p>}
+      {msg && <p className="mt-2 text-center text-xs text-muted">{msg}</p>}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import RateTable from "@/components/RateTable";
 import { LOCATIONS, getLocation, firstLastForMie, FISCAL_YEAR } from "@/lib/gsa";
 import { stateName, stateSlug, locationsInState } from "@/lib/states";
 import { SITE } from "@/lib/site";
+import { Container, Eyebrow } from "@/components/ui";
 
 export const dynamicParams = false;
 export const revalidate = 604800; // 1 week
@@ -61,39 +62,53 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
   };
 
   return (
-    <div>
+    <Container className="py-12 sm:py-16">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <nav className="text-sm text-stone-500"><Link href="/per-diem" className="hover:text-sky-700">Per diem rates</Link> · <Link href={`/states/${stateSlug(loc.state)}`} className="hover:text-sky-700">{stateName(loc.state)}</Link></nav>
-      <h1 className="mt-2 text-3xl font-extrabold text-stone-900">{loc.city}, {loc.state} per diem rates</h1>
-      <p className="mt-2 max-w-2xl text-stone-600">
+
+      <nav className="text-sm text-muted">
+        <Link href="/per-diem" className="hover:text-accent">Per diem rates</Link>
+        {" · "}
+        <Link href={`/states/${stateSlug(loc.state)}`} className="hover:text-accent">{stateName(loc.state)}</Link>
+      </nav>
+
+      <Eyebrow className="mt-4">Per diem rates</Eyebrow>
+      <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+        {loc.city}, {loc.state} per diem rates
+      </h1>
+      <p className="mt-3 max-w-2xl text-ink-soft">
         Official FY{FISCAL_YEAR} GSA per diem for {loc.city}{loc.county ? ` (${loc.county} County)` : ""}, {stateName(loc.state)}.
         Lodging is capped at {seasonal ? `${usd(low)}–${usd(peak)} per night depending on the season` : `${usd(peak)} per night`}, and
         meals &amp; incidentals are {usd(loc.mie)} per day ({usd(firstLastForMie(loc.mie))} on your first and last travel day).
       </p>
 
-      <div className="mt-6 grid gap-6 md:grid-cols-2">
+      <div className="mt-8 grid gap-8 md:grid-cols-2">
         <div>
-          <h2 className="mb-2 text-lg font-bold text-stone-900">{loc.city} rate table</h2>
+          <h2 className="mb-3 font-display text-xl font-semibold text-ink">{loc.city} rate table</h2>
           <RateTable loc={loc} />
-          {seasonal && <p className="mt-2 text-xs text-stone-500">Lodging changes by month here — the calculator uses the right rate for each night of your trip.</p>}
+          {seasonal && <p className="mt-2 text-xs text-muted">Lodging changes by month here — the calculator uses the right rate for each night of your trip.</p>}
         </div>
         <div>
-          <h2 className="mb-2 text-lg font-bold text-stone-900">Calculate a trip to {loc.city}</h2>
+          <h2 className="mb-3 font-display text-xl font-semibold text-ink">Calculate a trip to {loc.city}</h2>
           <PerDiemCalculator initialSlug={loc.slug} />
         </div>
       </div>
 
       {siblings.length > 0 && (
-        <section className="mt-10">
-          <h2 className="text-lg font-bold text-stone-900">Other {stateName(loc.state)} per diem rates</h2>
-          <div className="mt-2 flex flex-wrap gap-2 text-sm">
+        <section className="mt-12">
+          <h2 className="font-display text-xl font-semibold text-ink">Other {stateName(loc.state)} per diem rates</h2>
+          <div className="mt-3 flex flex-wrap gap-2 text-sm">
             {siblings.map((l) => (
-              <Link key={l.slug} href={`/per-diem/${l.slug}`} className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-stone-600 hover:border-sky-300">{l.city}</Link>
+              <Link key={l.slug} href={`/per-diem/${l.slug}`} className="rounded-xl border border-line bg-surface px-3 py-1.5 text-ink-soft hover:border-accent/40 hover:shadow-sm">{l.city}</Link>
             ))}
           </div>
         </section>
       )}
-      <p className="mt-8 text-sm text-stone-500">Rates from the <Link href="/methodology" className="text-sky-700 hover:underline">GSA FY{FISCAL_YEAR} dataset</Link>. {SITE.name} is an independent tool, not affiliated with the GSA.</p>
-    </div>
+
+      <p className="mt-10 text-sm text-muted">
+        Rates from the{" "}
+        <Link href="/methodology" className="text-accent hover:underline">GSA FY{FISCAL_YEAR} dataset</Link>.{" "}
+        {SITE.name} is an independent tool, not affiliated with the GSA.
+      </p>
+    </Container>
   );
 }

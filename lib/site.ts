@@ -11,6 +11,7 @@ export const SITE = {
   description:
     "Free per diem calculator using the official GSA FY2026 lodging and M&IE rates — with the 75% first-and-last-day rule built in — plus an IRS 2026 mileage reimbursement calculator. Real government rates, itemized day by day.",
   email: "hello@perdiemwise.com",
+  fyShort: "FY2026",
 };
 
 // Single source of truth for the current IRS optional standard mileage rates.

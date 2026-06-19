@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { US_STATES, getState, locationsInState } from "@/lib/states";
 import { STANDARD_LODGING, STANDARD_MIE, firstLastForMie, FISCAL_YEAR } from "@/lib/gsa";
+import { Container, Eyebrow } from "@/components/ui";
 
 export const dynamicParams = false;
 export const revalidate = 604800;
@@ -31,17 +32,23 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
   const cities = locationsInState(s.code);
 
   return (
-    <div>
-      <nav className="text-sm text-stone-500"><Link href="/states" className="hover:text-sky-700">By state</Link></nav>
-      <h1 className="mt-2 text-3xl font-extrabold text-stone-900">{s.name} per diem rates (FY{FISCAL_YEAR})</h1>
+    <Container className="py-12 sm:py-16">
+      <nav className="text-sm text-muted">
+        <Link href="/states" className="hover:text-accent">By state</Link>
+      </nav>
+
+      <Eyebrow className="mt-4">By state</Eyebrow>
+      <h1 className="mt-3 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+        {s.name} per diem rates (FY{FISCAL_YEAR})
+      </h1>
 
       {s.oconus ? (
-        <p className="mt-3 max-w-2xl rounded-xl bg-amber-50 p-4 text-sm text-amber-800">
+        <p className="mt-5 max-w-2xl rounded-xl bg-clay/10 p-4 text-sm text-clay">
           {s.name} is outside the continental US (OCONUS). Its per diem rates are set by the Department of
           Defense, not the GSA CONUS table, so they aren&apos;t listed here. The standard CONUS rate does not apply.
         </p>
       ) : (
-        <p className="mt-2 max-w-2xl text-stone-600">
+        <p className="mt-3 max-w-2xl text-ink-soft">
           {cities.length > 0
             ? `${s.name} has ${cities.length} ${cities.length === 1 ? "city" : "cities"} with their own GSA rate. Everywhere else in the state uses the standard rate.`
             : `${s.name} has no separately listed GSA cities — the whole state uses the standard CONUS rate.`}
@@ -49,23 +56,33 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
       )}
 
       {!s.oconus && (
-        <div className="mt-4 rounded-xl border border-stone-200 bg-stone-50 p-4 text-sm">
-          <strong className="text-stone-900">Standard rate (everywhere not listed):</strong> {usd(STANDARD_LODGING)} lodging + {usd(STANDARD_MIE)} M&amp;IE per day ({usd(firstLastForMie(STANDARD_MIE))} first/last day).
+        <div className="mt-5 max-w-2xl rounded-xl border border-line bg-paper-2/50 p-4 text-sm">
+          <strong className="text-ink">Standard rate (everywhere not listed):</strong>{" "}
+          <span className="tnum">{usd(STANDARD_LODGING)}</span> lodging + <span className="tnum">{usd(STANDARD_MIE)}</span> M&amp;IE per day (<span className="tnum">{usd(firstLastForMie(STANDARD_MIE))}</span> first/last day).
         </div>
       )}
 
       {cities.length > 0 && (
-        <div className="mt-6 overflow-hidden rounded-xl border border-stone-200">
+        <div className="mt-8 overflow-hidden rounded-xl border border-line">
           <table className="w-full text-sm">
-            <thead className="bg-stone-50 text-left text-stone-500"><tr><th className="px-4 py-2 font-medium">City / county</th><th className="px-4 py-2 font-medium">Lodging</th><th className="px-4 py-2 font-medium">M&amp;IE</th></tr></thead>
+            <thead className="bg-paper-2/50 text-left">
+              <tr>
+                <th className="px-4 py-2.5 font-mono text-[11px] uppercase tracking-wide text-muted">City / county</th>
+                <th className="px-4 py-2.5 font-mono text-[11px] uppercase tracking-wide text-muted">Lodging</th>
+                <th className="px-4 py-2.5 font-mono text-[11px] uppercase tracking-wide text-muted">M&amp;IE</th>
+              </tr>
+            </thead>
             <tbody>
               {cities.map((l) => {
                 const peak = Math.max(...l.lodging), low = Math.min(...l.lodging);
                 return (
-                  <tr key={l.slug} className="border-t border-stone-100 hover:bg-stone-50">
-                    <td className="px-4 py-2"><Link href={`/per-diem/${l.slug}`} className="font-medium text-sky-700 hover:underline">{l.city}</Link>{l.county ? <span className="text-stone-400"> · {l.county}</span> : null}</td>
-                    <td className="px-4 py-2">{peak === low ? usd(peak) : `${usd(low)}–${usd(peak)}`}</td>
-                    <td className="px-4 py-2">{usd(l.mie)}</td>
+                  <tr key={l.slug} className="border-t border-line hover:bg-paper-2/40">
+                    <td className="px-4 py-2.5">
+                      <Link href={`/per-diem/${l.slug}`} className="font-medium text-accent hover:underline">{l.city}</Link>
+                      {l.county ? <span className="text-muted"> · {l.county}</span> : null}
+                    </td>
+                    <td className="tnum px-4 py-2.5 text-ink-soft">{peak === low ? usd(peak) : `${usd(low)}–${usd(peak)}`}</td>
+                    <td className="tnum px-4 py-2.5 text-ink-soft">{usd(l.mie)}</td>
                   </tr>
                 );
               })}
@@ -73,7 +90,10 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
           </table>
         </div>
       )}
-      <p className="mt-8 text-sm text-stone-500"><Link href="/calculators/per-diem-calculator" className="text-sky-700 hover:underline">Calculate a trip →</Link></p>
-    </div>
+
+      <p className="mt-10 text-sm text-muted">
+        <Link href="/calculators/per-diem-calculator" className="text-accent hover:underline">Calculate a trip →</Link>
+      </p>
+    </Container>
   );
 }
