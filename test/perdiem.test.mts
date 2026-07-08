@@ -3,6 +3,9 @@ import { calculateTrip, dayCount, resolveLocation } from "../lib/perdiem.ts";
 import { LOCATIONS, MIE_BREAKDOWN, STANDARD_LODGING, STANDARD_MIE, firstLastForMie, getLocation, tierForMie, mieAfterMeals, mealDeduction } from "../lib/gsa.ts";
 import { calculateMileage } from "../lib/mileage.ts";
 import { US_STATES, locationsInState } from "../lib/states.ts";
+import { buildReport } from "../lib/report.ts";
+import { toCsv } from "../lib/csv.ts";
+import type { CloudTrip } from "../lib/trips-remote.ts";
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -150,6 +153,51 @@ test("no provided meals = zero deduction (back-compat)", () => {
   const r = calculateTrip({ locationSlug: null, startDate: "2026-03-10", endDate: "2026-03-12" });
   assert.equal(r.mealsDeducted, 0);
   assert.equal(r.total, 390);
+});
+
+console.log("Expense-report builder (Pro export)");
+const trip = (over: Partial<CloudTrip> & { data: Record<string, unknown> }): CloudTrip => ({
+  id: over.id ?? "t1", kind: over.kind ?? "perdiem", name: over.name ?? "Trip", total: over.total ?? 0,
+  data: over.data, created_at: "2026-01-01T00:00:00Z",
+});
+test("per-diem trips are recomputed against live GSA data, not the stored total", () => {
+  const r = buildReport([trip({ total: 999999, data: { locationSlug: null, locationLabel: "Standard", start: "2026-03-10", end: "2026-03-12" } })]);
+  assert.equal(r.perDiem.length, 1);
+  assert.equal(r.perDiem[0].result.total, 390); // recomputed, ignores the bogus 999999
+  assert.equal(r.perDiemTotal, 390);
+  assert.equal(r.grandTotal, 390);
+});
+test("mileage trips compute amount = miles × IRS rate", () => {
+  const r = buildReport([trip({ kind: "mileage", data: { miles: 240, category: "business" } })]);
+  assert.equal(r.mileage.length, 1);
+  assert.equal(r.mileage[0].amount, 174); // 240 × 0.725
+  assert.equal(r.mileageTotal, 174);
+});
+test("mixed report sums per-diem + mileage into the grand total", () => {
+  const r = buildReport([
+    trip({ id: "a", data: { locationSlug: null, start: "2026-03-10", end: "2026-03-12" } }),
+    trip({ id: "b", kind: "mileage", data: { miles: 100, category: "charity" } }),
+  ]);
+  assert.equal(r.grandTotal, 390 + 14);
+});
+test("invalid per-diem rows are skipped, never fabricated", () => {
+  const r = buildReport([trip({ data: { locationSlug: null, start: "", end: "" } })]);
+  assert.equal(r.perDiem.length, 0);
+  assert.equal(r.grandTotal, 0);
+});
+
+console.log("CSV export");
+test("escapes quotes, commas and newlines", () => {
+  const csv = toCsv(["A", "B"], [["he said \"hi\"", "x,y"], ["line1\nline2", "z"]]);
+  assert.ok(csv.includes('"he said ""hi"""'));
+  assert.ok(csv.includes('"x,y"'));
+  assert.ok(csv.includes('"line1\nline2"'));
+});
+test("defuses CSV-injection formula triggers", () => {
+  const csv = toCsv(["X"], [["=SUM(A1:A9)"], ["+1"], ["@cmd"]]);
+  assert.ok(csv.includes("'=SUM(A1:A9)"));
+  assert.ok(csv.includes("'+1"));
+  assert.ok(csv.includes("'@cmd"));
 });
 
 console.log(`\n${passed} checks passed.`);

@@ -24,8 +24,11 @@ the `.tnum` class). Tokens live in `app/globals.css` (`@theme`); reusable primit
 single source of truth for layout and styling across every page.
 
 ## Stack
-Next.js 16 (App Router, SSG/ISR) · Tailwind CSS 4 · TypeScript · `tsx` tests · `next/font` ·
-env-gated Stripe checkout. The free product needs no database (saved trips use localStorage).
+Next.js 16 (App Router, SSG/ISR, `proxy.ts`) · Tailwind CSS 4 · TypeScript · `tsx` tests ·
+`next/font` · **Supabase** (auth + Postgres, RLS) · **Stripe** (subscriptions + webhook +
+billing portal). Marketing/city pages stay fully static; only `/account`, `/login` and the
+API routes are dynamic — the auth session proxy is scoped to those, so the SEO surface never
+pays a per-request auth cost.
 
 ## Develop
 ```bash
@@ -53,25 +56,35 @@ robots, JSON-LD and canonical URLs included.
 - **Copy summary** — copies an itemised voucher-ready breakdown (with a selectable-box
   fallback if the clipboard API is blocked).
 
-## Environment
-- `NEXT_PUBLIC_SITE_URL` — canonical/OG/sitemap base. **Defaults to the live Vercel URL**
-  so everything resolves today. **When you connect `perdiemwise.com`, set
-  `NEXT_PUBLIC_SITE_URL=https://perdiemwise.com` in Vercel and redeploy** so canonicals
-  point at the custom domain.
-- `STRIPE_SECRET_KEY` + `STRIPE_PRICE_ID` — enable Pro checkout. Absent → checkout
-  degrades to a 503 early-access note; the free tools are unaffected.
+## Pro tier (accounts + subscription)
+Signed-in users get a passwordless (magic-link) account; **Pro** ($9/mo or $90/yr) unlocks:
+- **Cloud-synced trips** — save from either calculator to your account; they follow you across
+  devices (Supabase `trips` table, RLS-scoped; writes require an active Pro plan).
+- **Professional expense report** — a print-perfect, IRS/GSA-compliant PDF at `/account/report`
+  (per-diem day-by-day + mileage log + grand total), recomputed live from GSA data so the export
+  is always internally consistent. "Download / Print PDF" uses the browser's print-to-PDF (zero deps).
+- **CSV export** and **batch** of multiple trips into one report.
+- **Billing self-service** via the Stripe Billing Portal.
 
-## What works live now vs. what needs your keys
-- **Live now (no setup):** the full premium marketing site, all three calculators, provided-meal
-  deductions, OCONUS awareness, copy-ready summaries, and **saved trips (localStorage)** — a real,
-  working freemium product.
-- **Needs your Stripe account (env vars above):** live Pro payments. The checkout, env-gating and
-  graceful fallback are fully built; add `STRIPE_SECRET_KEY` + `STRIPE_PRICE_ID` and it works.
-- **Needs a Supabase project (documented, not yet wired):** user accounts + **cloud-synced trips
-  across devices** + team sharing. This is the natural Pro backend; until it exists, saved trips
-  live on-device via localStorage (which is genuinely useful on its own).
+Free stays fully useful: all calculators, provided-meal deductions, OCONUS awareness, copy-ready
+summaries, and on-device (localStorage) saved trips.
+
+### Architecture
+`lib/supabase/{client,server,admin}.ts` (browser / SSR / service-role) · `proxy.ts` refreshes the
+session on auth routes · `lib/account.ts` is the server "who am I + am I Pro" source of truth ·
+`lib/stripe.ts` the price registry. Checkout (`/api/checkout`) ties the subscription to the user;
+the **webhook** (`/api/stripe/webhook`) is the *only* path that can set `plan = 'pro'` (users have
+no write policy on that column). Schema: `supabase/migrations/0001_accounts_and_trips.sql`.
+
+## Environment
+- `NEXT_PUBLIC_SITE_URL` — canonical/OG/sitemap base. **When you connect `perdiemwise.com`, set
+  `NEXT_PUBLIC_SITE_URL=https://perdiemwise.com` in Vercel and redeploy.**
+- `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` — auth + DB.
+- `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_PRICE_ID_MONTHLY`,
+  `STRIPE_PRICE_ID_ANNUAL`, `STRIPE_WEBHOOK_SECRET` — subscriptions. Absent → checkout degrades to a
+  503 early-access note; the free tools are unaffected. Use **test** keys locally (`stripe listen`
+  for the webhook secret), **live** keys in Vercel production.
 
 ## Roadmap (next)
-Supabase auth + cloud-synced trips (the "sign-up" product); custom employer rate with
-taxable-excess flag; multi-destination trips; expense-report PDF + CSV export;
-OCONUS/international rate data; historical fiscal-year rates.
+Google OAuth sign-in; team plans / seat sharing; custom employer rate with taxable-excess flag;
+multi-destination trips; OCONUS/international rate data; historical fiscal-year rates.

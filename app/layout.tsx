@@ -4,6 +4,7 @@ import Link from "next/link";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { Button, Container } from "@/components/ui";
+import AuthNav from "@/components/AuthNav";
 
 const display = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap", axes: ["opsz"] });
 const sans = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken", display: "swap" });
@@ -48,7 +49,8 @@ function Header() {
         <nav className="hidden items-center gap-7 text-sm text-ink-soft md:flex">
           {NAV.map((n) => <Link key={n.href} href={n.href} className="transition-colors hover:text-ink">{n.label}</Link>)}
         </nav>
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-4 md:flex">
+          <AuthNav />
           <Button href="/calculators/per-diem-calculator" size="sm">Open the calculator</Button>
         </div>
         <details className="relative md:hidden">
@@ -57,6 +59,7 @@ function Header() {
           </summary>
           <div className="absolute right-0 top-12 w-56 rounded-2xl border border-line bg-surface p-2 shadow-xl">
             {NAV.map((n) => <Link key={n.href} href={n.href} className="block rounded-lg px-3 py-2 text-sm text-ink-soft hover:bg-paper-2">{n.label}</Link>)}
+            <AuthNav variant="mobile" />
             <Link href="/calculators/per-diem-calculator" className="mt-1 block rounded-lg bg-accent px-3 py-2 text-center text-sm font-medium text-white">Open the calculator</Link>
           </div>
         </details>

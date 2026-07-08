@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import CheckoutButton from "@/components/CheckoutButton";
+import UpgradePanel from "@/components/UpgradePanel";
 import { Badge, Container, Eyebrow } from "@/components/ui";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Pricing — Free & Pro",
-  description: "PerDiemWise is free for the per diem and mileage calculators. Pro adds IRS/GSA-compliant expense-report PDFs, cloud-synced trips, team rates, CSV export and OCONUS rates.",
+  description: "PerDiemWise is free for the per diem and mileage calculators. Pro adds IRS/GSA-compliant expense-report & mileage-log PDFs, cloud-synced trips, batch reports and CSV export.",
   alternates: { canonical: "/pricing" },
 };
 
 const FREE = ["GSA FY2026 per diem trip calculator", "2026 IRS mileage reimbursement calculator", "Provided-meal deductions & the 75% rule", "Per diem rates for every GSA city & state", "Save & reuse trips on this device", "Copy-ready itemised breakdowns"];
-const PRO = ["Everything in Free", "Cloud-synced trips across your devices", "IRS/GSA-compliant expense-report & mileage-log PDF", "Multi-traveler & multi-trip batches", "CSV / spreadsheet export", "OCONUS & international (DoD/State Dept) rates", "Historical fiscal-year rates"];
+const PRO = ["Everything in Free", "Cloud-synced trips across your devices", "IRS/GSA-compliant expense-report PDF", "Mileage-log PDF for your tax records", "Batch multiple trips into one report", "CSV / spreadsheet export", "Priority email support"];
 
 function Check() {
   return <svg className="mt-0.5 shrink-0 text-accent" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>;
@@ -43,12 +43,10 @@ export default function Pricing() {
           <div className="absolute -top-3 left-8"><Badge>Most popular</Badge></div>
           <h2 className="font-display text-2xl font-semibold text-ink">Pro</h2>
           <p className="mt-1 text-sm text-muted">For accountants, contractors & teams</p>
-          <p className="mt-5 flex items-baseline gap-1"><span className="tnum text-4xl font-semibold text-ink">$9</span><span className="text-muted">/ month</span></p>
-          <ul className="mt-7 flex-1 space-y-3 text-sm text-ink-soft">
+          <ul className="mt-5 flex-1 space-y-3 text-sm text-ink-soft">
             {PRO.map((f) => <li key={f} className="flex gap-2.5"><Check />{f}</li>)}
           </ul>
-          <div className="mt-8"><CheckoutButton label="Get PerDiemWise Pro" /></div>
-          <p className="mt-3 text-center text-xs text-muted">Cancel anytime · billed via Stripe</p>
+          <div className="mt-7 border-t border-line pt-6"><UpgradePanel nextPath="/pricing" /></div>
         </div>
       </div>
 

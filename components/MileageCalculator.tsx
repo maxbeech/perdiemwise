@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { MILEAGE_PURPOSES, calculateMileage, type MileagePurpose } from "@/lib/mileage";
 import { IRS_MILEAGE_2026 } from "@/lib/site";
+import SaveToAccountButton from "@/components/SaveToAccountButton";
+import type { NewCloudTrip } from "@/lib/trips-remote";
 
 const usd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -13,6 +15,11 @@ export default function MileageCalculator() {
   const numericLegs = legs.map((l) => parseFloat(l)).filter((n) => Number.isFinite(n) && n > 0);
   const result = calculateMileage(numericLegs, purpose);
   const active = MILEAGE_PURPOSES.find((p) => p.id === purpose)!;
+
+  const buildCloudTrip = (): NewCloudTrip | null =>
+    result.miles > 0
+      ? { kind: "mileage", name: `${result.miles.toLocaleString("en-US")} mi · ${active.label}`, total: result.amount, data: { miles: result.miles, category: purpose, legs: numericLegs } }
+      : null;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_1px_0_rgba(0,0,0,0.02),0_24px_60px_-30px_rgba(24,23,18,0.25)]">
@@ -52,6 +59,11 @@ export default function MileageCalculator() {
           <Stat label="Total miles" value={result.miles.toLocaleString("en-US")} />
           <Stat label={`IRS rate (${IRS_MILEAGE_2026.taxYear})`} value={`${(result.rate * 100).toFixed(1)}¢`} />
           <Stat label="Reimbursement" value={usd(result.amount)} highlight />
+        </div>
+
+        <div className="mt-4 flex items-center justify-between border-t border-line pt-4">
+          <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">Mileage log</span>
+          <SaveToAccountButton buildTrip={buildCloudTrip} />
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@
 
 import { useSyncExternalStore } from "react";
 import { subscribeTrips, getTripsSnapshot, getServerTripsSnapshot, saveTrip, removeTrip, type SavedTrip } from "@/lib/saved-trips";
+import SaveToAccountButton from "@/components/SaveToAccountButton";
+import type { NewCloudTrip } from "@/lib/trips-remote";
 
 const usd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -17,20 +19,27 @@ export interface CurrentTrip {
 export default function SavedTrips({ current, onRestore }: { current: CurrentTrip | null; onRestore: (t: SavedTrip) => void }) {
   const trips = useSyncExternalStore(subscribeTrips, getTripsSnapshot, getServerTripsSnapshot);
 
+  const tripName = current ? `${current.locationLabel || "Standard rate"} · ${current.start}` : "";
+
   function save() {
     if (!current) return;
-    const label = current.locationLabel || "Standard rate";
-    saveTrip({ ...current, name: `${label} · ${current.start}` });
+    saveTrip({ ...current, name: tripName });
   }
+
+  const buildCloudTrip = (): NewCloudTrip | null =>
+    current ? { kind: "perdiem", name: tripName, total: current.total, data: { locationSlug: current.locationSlug, locationLabel: current.locationLabel, start: current.start, end: current.end, meals: current.meals } } : null;
 
   return (
     <div className="mt-4 border-t border-line pt-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="font-mono text-xs uppercase tracking-[0.14em] text-muted">Saved trips</h3>
-        <button type="button" onClick={save} disabled={!current}
-          className="rounded-full border border-line-strong bg-surface px-3 py-1 text-xs font-medium text-ink transition hover:border-accent hover:text-accent disabled:opacity-40">
-          + Save this trip
-        </button>
+        <div className="flex items-center gap-2">
+          <SaveToAccountButton buildTrip={buildCloudTrip} />
+          <button type="button" onClick={save} disabled={!current}
+            className="rounded-full border border-line-strong bg-surface px-3 py-1 text-xs font-medium text-ink transition hover:border-accent hover:text-accent disabled:opacity-40">
+            + Save on device
+          </button>
+        </div>
       </div>
       {trips.length === 0 ? (
         <p className="mt-2 text-xs text-muted">Save a calculated trip and it&apos;ll stay here on this device — handy for recurring routes and expense reports.</p>
