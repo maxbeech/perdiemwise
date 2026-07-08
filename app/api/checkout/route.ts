@@ -1,7 +1,28 @@
 import { NextResponse } from "next/server";
+import type Stripe from "stripe";
 import { getAccount } from "@/lib/account";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe, priceFor, stripeConfigured, type BillingInterval } from "@/lib/stripe";
+
+// Create a fresh Stripe customer for this user and persist its id.
+async function createCustomer(stripe: Stripe, userId: string, email: string | null | undefined): Promise<string> {
+  const customer = await stripe.customers.create({
+    email: email ?? undefined,
+    metadata: { user_id: userId },
+  });
+  await createAdminClient()
+    .from("profiles")
+    .update({ stripe_customer_id: customer.id, updated_at: new Date().toISOString() })
+    .eq("id", userId);
+  return customer.id;
+}
+
+// Stripe throws this when a stored customer id no longer resolves — e.g. the id
+// was created in a different mode (test vs live) or the customer was deleted.
+function isMissingCustomer(e: unknown): boolean {
+  const err = e as { code?: string; param?: string };
+  return err?.code === "resource_missing" && err?.param === "customer";
+}
 
 // Creates a Stripe Checkout session for PerDiemWise Pro for the signed-in user.
 // Requires an account (so the subscription is tied to a user the webhook can
@@ -28,24 +49,10 @@ export async function POST(request: Request) {
   const price = priceFor(interval);
   if (!price) return NextResponse.json({ error: "That plan isn't available." }, { status: 400 });
 
-  try {
-    // Reuse the customer if we already have one, else create + persist it.
-    let customerId = account.profile?.stripe_customer_id ?? undefined;
-    if (!customerId) {
-      const customer = await stripe.customers.create({
-        email: account.user.email ?? undefined,
-        metadata: { user_id: account.user.id },
-      });
-      customerId = customer.id;
-      await createAdminClient()
-        .from("profiles")
-        .update({ stripe_customer_id: customerId, updated_at: new Date().toISOString() })
-        .eq("id", account.user.id);
-    }
-
-    const session = await stripe.checkout.sessions.create({
+  const openSession = (customer: string) =>
+    stripe.checkout.sessions.create({
       mode: "subscription",
-      customer: customerId,
+      customer,
       line_items: [{ price, quantity: 1 }],
       client_reference_id: account.user.id,
       subscription_data: { metadata: { user_id: account.user.id } },
@@ -53,7 +60,21 @@ export async function POST(request: Request) {
       success_url: `${base}/account?checkout=success`,
       cancel_url: `${base}/pricing?checkout=cancel`,
     });
-    return NextResponse.json({ url: session.url });
+
+  try {
+    // Reuse the stored customer if we have one, else create + persist it.
+    let customerId = account.profile?.stripe_customer_id
+      ?? (await createCustomer(stripe, account.user.id, account.user.email));
+    try {
+      const session = await openSession(customerId);
+      return NextResponse.json({ url: session.url });
+    } catch (e) {
+      // Stored id is stale (mode switch / deleted customer) — mint a new one once.
+      if (!isMissingCustomer(e)) throw e;
+      customerId = await createCustomer(stripe, account.user.id, account.user.email);
+      const session = await openSession(customerId);
+      return NextResponse.json({ url: session.url });
+    }
   } catch (e) {
     const message = e instanceof Error ? e.message : "Could not reach Stripe.";
     return NextResponse.json({ error: message }, { status: 502 });
