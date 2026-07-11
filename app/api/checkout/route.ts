@@ -44,7 +44,7 @@ export async function POST(request: Request) {
   }
 
   const stripe = getStripe()!;
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? new URL(request.url).origin;
+  const base = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
   const { interval = "monthly" } = (await request.json().catch(() => ({}))) as { interval?: BillingInterval };
   const price = priceFor(interval);
   if (!price) return NextResponse.json({ error: "That plan isn't available." }, { status: 400 });

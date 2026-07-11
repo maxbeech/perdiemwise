@@ -1,7 +1,7 @@
 // Canonical/OG base. Defaults to the live Vercel URL so canonicals, sitemaps and
 // OG images all resolve TODAY; once the custom domain is connected, set
 // NEXT_PUBLIC_SITE_URL=https://perdiemwise.com (inlined at build) and redeploy.
-const URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://perdiemwise.vercel.app").replace(/\/$/, "");
+const URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://perdiemwise.vercel.app").replace(/\/$/, "");
 
 export const SITE = {
   name: "PerDiemWise",
