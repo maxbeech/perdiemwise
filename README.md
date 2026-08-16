@@ -11,8 +11,13 @@ Built by the MaxedLabs Product Factory (Plan 38).
 ## Real data, no fabrication
 - **Per diem:** GSA FY2026 CONUS dataset (`lib/gsa-rates.json`) — 298 non-standard cities
   + the standard rate, retrieved from the GSA per diem API. See `/methodology`.
-- **Mileage:** 2026 IRS optional standard mileage rates (72.5¢ business · 20.5¢ medical
-  · 14¢ charitable), `lib/site.ts`.
+- **Mileage:** 2026 IRS optional standard mileage rates, date-aware across both 2026
+  periods — 72.5¢ business / 20.5¢ medical / 14¢ charitable (Jan 1–Jun 30), then
+  76¢ / 23.5¢ / 14¢ from Jul 1 after a mid-year IRS adjustment. See
+  `IRS_MILEAGE_2026_PERIODS` and `mileageRateForDate()` in `lib/site.ts`.
+- **Blog:** 40 hand-authored SEO posts (`lib/posts.ts`) across Academy/News/Reviews
+  categories, each with a featured image (`public/images/blog/`), FAQ/HowTo JSON-LD,
+  and internal links — no CMS.
 - Destinations not separately listed by GSA fall back to the standard CONUS rate, and the
   UI says so explicitly — never a guessed number.
 

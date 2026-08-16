@@ -43,6 +43,13 @@ export async function POST(request: Request) {
     );
   }
 
+  if (account.isPro) {
+    return NextResponse.json(
+      { error: "You already have an active Pro subscription. Manage it from your account.", alreadyPro: true },
+      { status: 409 },
+    );
+  }
+
   const stripe = getStripe()!;
   const base = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
   const { interval = "monthly" } = (await request.json().catch(() => ({}))) as { interval?: BillingInterval };

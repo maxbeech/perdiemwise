@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import ManageBillingButton from "@/components/ManageBillingButton";
 import UpgradePanel from "@/components/UpgradePanel";
 import { Badge, Container, Eyebrow } from "@/components/ui";
+import { getAccount } from "@/lib/account";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -17,7 +19,9 @@ function Check() {
   return <svg className="mt-0.5 shrink-0 text-accent" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>;
 }
 
-export default function Pricing() {
+export default async function Pricing() {
+  const account = await getAccount();
+  const isPro = account?.isPro ?? false;
   return (
     <Container className="py-16 sm:py-20">
       <div className="mx-auto max-w-2xl text-center">
@@ -46,7 +50,16 @@ export default function Pricing() {
           <ul className="mt-5 flex-1 space-y-3 text-sm text-ink-soft">
             {PRO.map((f) => <li key={f} className="flex gap-2.5"><Check />{f}</li>)}
           </ul>
-          <div className="mt-7 border-t border-line pt-6"><UpgradePanel nextPath="/pricing" /></div>
+          <div className="mt-7 border-t border-line pt-6">
+            {isPro ? (
+              <div className="text-center">
+                <p className="text-sm text-ink-soft">You&rsquo;re already on Pro — manage your plan from your account.</p>
+                <div className="mt-4 flex justify-center"><ManageBillingButton /></div>
+              </div>
+            ) : (
+              <UpgradePanel nextPath="/pricing" />
+            )}
+          </div>
         </div>
       </div>
 

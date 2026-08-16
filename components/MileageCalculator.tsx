@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MILEAGE_PURPOSES, calculateMileage, type MileagePurpose } from "@/lib/mileage";
+import { mileagePurposes, calculateMileage, type MileagePurpose } from "@/lib/mileage";
 import { IRS_MILEAGE_2026 } from "@/lib/site";
 import SaveToAccountButton from "@/components/SaveToAccountButton";
 import type { NewCloudTrip } from "@/lib/trips-remote";
@@ -14,7 +14,8 @@ export default function MileageCalculator() {
 
   const numericLegs = legs.map((l) => parseFloat(l)).filter((n) => Number.isFinite(n) && n > 0);
   const result = calculateMileage(numericLegs, purpose);
-  const active = MILEAGE_PURPOSES.find((p) => p.id === purpose)!;
+  const purposes = mileagePurposes();
+  const active = purposes.find((p) => p.id === purpose)!;
 
   const buildCloudTrip = (): NewCloudTrip | null =>
     result.miles > 0
@@ -25,12 +26,12 @@ export default function MileageCalculator() {
     <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-[0_1px_0_rgba(0,0,0,0.02),0_24px_60px_-30px_rgba(24,23,18,0.25)]">
       <div className="flex items-center justify-between border-b border-line bg-paper-2/40 px-5 py-3">
         <span className="font-mono text-xs uppercase tracking-[0.14em] text-muted">Mileage</span>
-        <span className="font-mono text-xs text-muted">IRS {IRS_MILEAGE_2026.taxYear} rates</span>
+        <span className="font-mono text-xs text-muted">IRS {IRS_MILEAGE_2026.taxYear} rates · eff. {IRS_MILEAGE_2026.current.effective}</span>
       </div>
       <div className="p-5">
         <label className="mb-1.5 block text-sm font-medium text-ink-soft">Purpose</label>
         <div className="flex flex-wrap gap-2">
-          {MILEAGE_PURPOSES.map((p) => (
+          {purposes.map((p) => (
             <button key={p.id} type="button" onClick={() => setPurpose(p.id)}
               className={`rounded-full border px-3.5 py-1.5 text-sm transition ${purpose === p.id ? "border-accent bg-accent-tint text-accent-dark" : "border-line-strong text-ink-soft hover:border-ink/30"}`}>
               {p.label} · <span className="tnum">{(p.rate * 100).toFixed(1)}¢</span>

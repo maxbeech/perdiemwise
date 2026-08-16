@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { getAccount } from "@/lib/account";
 import { getStripe, stripeConfigured } from "@/lib/stripe";
 
+function isMissingCustomer(e: unknown): boolean {
+  const err = e as { code?: string; param?: string };
+  return err?.code === "resource_missing" && err?.param === "customer";
+}
+
 // Opens the Stripe Billing Portal so a Pro user can update their card, view
 // invoices, or cancel — no bespoke billing UI to build or keep secure.
 export async function POST(request: Request) {
@@ -18,6 +23,13 @@ export async function POST(request: Request) {
     });
     return NextResponse.json({ url: session.url });
   } catch (e) {
+    // Stale customer id (mode switch / deleted customer) — same recovery as checkout.
+    if (isMissingCustomer(e)) {
+      return NextResponse.json(
+        { error: "Your billing record needs to be reconnected. Please email hello@perdiemwise.com to sort this out." },
+        { status: 409 },
+      );
+    }
     const message = e instanceof Error ? e.message : "Could not open billing.";
     return NextResponse.json({ error: message }, { status: 502 });
   }

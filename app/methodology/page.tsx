@@ -83,21 +83,22 @@ export default function Methodology() {
         <section>
           <h2 className="font-display text-xl font-semibold text-ink">Mileage rates — IRS</h2>
           <ul className="mt-3 space-y-2 text-sm leading-relaxed text-ink-soft">
-            <li><strong className="text-ink">Source:</strong> IRS 2026 optional standard mileage rates, effective {IRS_MILEAGE_2026.effective}.</li>
-            <li>
-              <strong className="text-ink">Business:</strong>{" "}
-              <span className="tnum">{(IRS_MILEAGE_2026.rates.business * 100).toFixed(1)}¢/mi</span>
-              {" · "}
-              <strong className="text-ink">Medical/moving:</strong>{" "}
-              <span className="tnum">{(IRS_MILEAGE_2026.rates.medical * 100).toFixed(1)}¢/mi</span>
-              {" · "}
-              <strong className="text-ink">Charitable:</strong>{" "}
-              <span className="tnum">{(IRS_MILEAGE_2026.rates.charity * 100).toFixed(1)}¢/mi</span>.
-            </li>
-            <li>
-              <strong className="text-ink">Reference:</strong>{" "}
-              <a href={IRS_MILEAGE_2026.sourceUrl} className="text-accent hover:underline" rel="nofollow">irs.gov — 2026 standard mileage rates</a>.
-            </li>
+            <li>2026 had a rare mid-year rate change — the IRS raised the standard mileage rate on {IRS_MILEAGE_2026.periods[1].effective} in response to rising fuel costs, on top of the usual annual update. We apply the rate for the period that covers today&apos;s date.</li>
+            {IRS_MILEAGE_2026.periods.map((p) => (
+              <li key={p.from}>
+                <strong className="text-ink">{p.from} – {p.to}</strong> (effective {p.effective}):{" "}
+                <strong className="text-ink">Business:</strong>{" "}
+                <span className="tnum">{(p.rates.business * 100).toFixed(1)}¢/mi</span>
+                {" · "}
+                <strong className="text-ink">Medical/moving:</strong>{" "}
+                <span className="tnum">{(p.rates.medical * 100).toFixed(1)}¢/mi</span>
+                {" · "}
+                <strong className="text-ink">Charitable:</strong>{" "}
+                <span className="tnum">{(p.rates.charity * 100).toFixed(1)}¢/mi</span>
+                {" · "}
+                <a href={p.sourceUrl} className="text-accent hover:underline" rel="nofollow">source</a>.
+              </li>
+            ))}
           </ul>
         </section>
 

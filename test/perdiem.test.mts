@@ -98,23 +98,30 @@ test("dayCount is inclusive", () => {
   assert.equal(dayCount("2026-03-10", "2026-03-12"), 3);
 });
 
-console.log("Mileage engine (2026 IRS rates)");
-test("240 business miles = $174.00 at 72.5¢", () => {
-  assert.equal(calculateMileage([240], "business").amount, 174);
+console.log("Mileage engine (2026 IRS rates — split by the Jul 1 mid-year change)");
+test("240 business miles = $174.00 at 72.5¢ (Jan-Jun 2026)", () => {
+  assert.equal(calculateMileage([240], "business", "2026-03-01").amount, 174);
 });
-test("200 medical miles = $41.00 at 20.5¢", () => {
-  assert.equal(calculateMileage([200], "medical").amount, 41);
+test("240 business miles = $182.40 at 76¢ (Jul-Dec 2026)", () => {
+  assert.equal(calculateMileage([240], "business", "2026-08-01").amount, 182.4);
 });
-test("100 charitable miles = $14.00 at 14¢", () => {
-  assert.equal(calculateMileage([100], "charity").amount, 14);
+test("200 medical miles = $41.00 at 20.5¢ (Jan-Jun 2026)", () => {
+  assert.equal(calculateMileage([200], "medical", "2026-03-01").amount, 41);
+});
+test("200 medical miles = $47.00 at 23.5¢ (Jul-Dec 2026)", () => {
+  assert.equal(calculateMileage([200], "medical", "2026-08-01").amount, 47);
+});
+test("100 charitable miles = $14.00 at 14¢ (fixed by statute, both periods)", () => {
+  assert.equal(calculateMileage([100], "charity", "2026-03-01").amount, 14);
+  assert.equal(calculateMileage([100], "charity", "2026-08-01").amount, 14);
 });
 test("multi-leg legs sum before applying the rate", () => {
-  const r = calculateMileage([100, 140], "business");
+  const r = calculateMileage([100, 140], "business", "2026-03-01");
   assert.equal(r.miles, 240);
   assert.equal(r.amount, 174);
 });
 test("negative / NaN legs are ignored", () => {
-  assert.equal(calculateMileage([-5, NaN, 40], "business").amount, 29); // 40 x 0.725
+  assert.equal(calculateMileage([-5, NaN, 40], "business", "2026-03-01").amount, 29); // 40 x 0.725
 });
 
 console.log("State helpers");
@@ -167,11 +174,15 @@ test("per-diem trips are recomputed against live GSA data, not the stored total"
   assert.equal(r.perDiemTotal, 390);
   assert.equal(r.grandTotal, 390);
 });
-test("mileage trips compute amount = miles × IRS rate", () => {
+test("mileage trips compute amount = miles × today's IRS rate", () => {
+  // Saved mileage trips have no stored date, so buildReport always prices them
+  // at today's rate. This assertion assumes "today" falls on or after the Jul 1
+  // 2026 mid-year change (76¢); update if the test suite is still running once
+  // 2027 rates supersede these.
   const r = buildReport([trip({ kind: "mileage", data: { miles: 240, category: "business" } })]);
   assert.equal(r.mileage.length, 1);
-  assert.equal(r.mileage[0].amount, 174); // 240 × 0.725
-  assert.equal(r.mileageTotal, 174);
+  assert.equal(r.mileage[0].amount, 182.4); // 240 × 0.76
+  assert.equal(r.mileageTotal, 182.4);
 });
 test("mixed report sums per-diem + mileage into the grand total", () => {
   const r = buildReport([

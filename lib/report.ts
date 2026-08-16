@@ -1,5 +1,5 @@
 import { calculateTrip, type TripResult } from "@/lib/perdiem";
-import { IRS_MILEAGE_2026 } from "@/lib/site";
+import { rateFor } from "@/lib/mileage";
 import type { CloudTrip } from "@/lib/trips-remote";
 
 // Turns stored trip rows into fully-computed report items. Per-diem trips are
@@ -41,7 +41,11 @@ export function buildReport(trips: CloudTrip[]): ReportData {
     if (t.kind === "mileage") {
       const d = t.data as { miles?: number; category?: MileageReportItem["category"] };
       const category = d.category ?? "business";
-      const rate = IRS_MILEAGE_2026.rates[category];
+      // Saved mileage trips don't currently store a trip date, so this uses
+      // today's rate — correct for the common case of logging a trip as it
+      // happens, but not for retroactively logging an older trip that falls
+      // in a different rate period.
+      const rate = rateFor(category);
       const miles = Number(d.miles) || 0;
       mileage.push({ id: t.id, name: t.name, miles, category, rate, amount: round2(miles * rate) });
       continue;

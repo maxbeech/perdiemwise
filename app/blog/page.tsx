@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { POSTS } from "@/lib/posts";
-import { Container, Eyebrow } from "@/components/ui";
+import { Container, Eyebrow, Badge } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "Per Diem & Mileage Guides",
@@ -21,10 +22,18 @@ export default function BlogIndex() {
       </p>
       <div className="mt-10 space-y-3">
         {POSTS.map((p) => (
-          <Link key={p.slug} href={`/blog/${p.slug}`} className="block rounded-2xl border border-line bg-surface p-5 transition hover:border-accent/40 hover:shadow-sm">
-            <h2 className="font-display text-xl font-semibold text-ink">{p.title}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">{p.description}</p>
-            <p className="mt-2 font-mono text-xs text-muted">{p.readMins} min read</p>
+          <Link key={p.slug} href={`/blog/${p.slug}`} className="flex gap-5 rounded-2xl border border-line bg-surface p-5 transition hover:border-accent/40 hover:shadow-sm">
+            {p.featuredImage && (
+              <div className="relative hidden h-24 w-36 flex-none overflow-hidden rounded-xl border border-line sm:block">
+                <Image src={p.featuredImage.src} alt={p.featuredImage.alt} fill sizes="144px" className="object-cover" />
+              </div>
+            )}
+            <div className="min-w-0">
+              {p.category && <Badge tone="accent">{p.category}</Badge>}
+              <h2 className="mt-2 font-display text-xl font-semibold text-ink">{p.title}</h2>
+              <p className="mt-2 text-sm leading-relaxed text-muted">{p.description}</p>
+              <p className="mt-2 font-mono text-xs text-muted">{p.readMins} min read</p>
+            </div>
           </Link>
         ))}
       </div>

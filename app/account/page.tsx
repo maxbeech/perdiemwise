@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Badge, Container } from "@/components/ui";
+import CheckoutPending from "@/components/CheckoutPending";
 import ManageBillingButton from "@/components/ManageBillingButton";
 import UpgradePanel from "@/components/UpgradePanel";
 import { getAccount } from "@/lib/account";
@@ -52,7 +53,7 @@ export default async function AccountPage({
           </form>
         </div>
 
-        {checkout === "success" && (
+        {checkout === "success" && isPro && (
           <p className="mt-6 rounded-xl bg-accent-tint px-4 py-3 text-sm text-accent-dark">🎉 Welcome to Pro! Your subscription is active — your trips now sync across devices and expense-report exports are unlocked below.</p>
         )}
 
@@ -86,7 +87,7 @@ export default async function AccountPage({
                 </ul>
               </div>
               <div className="rounded-2xl border border-line bg-paper-2/40 p-5">
-                <UpgradePanel nextPath="/account" />
+                {checkout === "success" ? <CheckoutPending /> : <UpgradePanel nextPath="/account" />}
               </div>
             </div>
           )}

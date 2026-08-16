@@ -104,7 +104,7 @@ export default async function ReportPage() {
           )}
 
           <footer className="mt-10 border-t border-line pt-4 text-[11px] leading-relaxed text-muted">
-            Prepared with {SITE.name} using official GSA {FISCAL_YEAR_LABEL.split(" (")[0]} lodging &amp; M&amp;IE rates and the {IRS_MILEAGE_2026.effective} IRS standard mileage rates. M&amp;IE is paid at 75% on the first and last travel day (FTR §301-11.101). An independent tool — not affiliated with the GSA or IRS. Verify final amounts against your organisation&apos;s travel policy.
+            Prepared with {SITE.name} using official GSA {FISCAL_YEAR_LABEL.split(" (")[0]} lodging &amp; M&amp;IE rates and the current IRS standard mileage rates (effective {IRS_MILEAGE_2026.current.effective}). M&amp;IE is paid at 75% on the first and last travel day (FTR §301-11.101). An independent tool — not affiliated with the GSA or IRS. Verify final amounts against your organisation&apos;s travel policy.
           </footer>
         </article>
       </div>
