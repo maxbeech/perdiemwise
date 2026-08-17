@@ -89,6 +89,9 @@ no write policy on that column). Schema: `supabase/migrations/0001_accounts_and_
   `STRIPE_PRICE_ID_ANNUAL`, `STRIPE_WEBHOOK_SECRET` — subscriptions. Absent → checkout degrades to a
   503 early-access note; the free tools are unaffected. Use **test** keys locally (`stripe listen`
   for the webhook secret), **live** keys in Vercel production.
+- `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` — error monitoring (org `maxed-labs`, project
+  `perdiemwise_web`). Not secret; absent → the SDK is a silent no-op. `SENTRY_AUTH_TOKEN` is
+  optional (source-map upload only — the build succeeds without it, just unsymbolicated).
 
 ## Roadmap (next)
 Google OAuth sign-in; team plans / seat sharing; custom employer rate with taxable-excess flag;

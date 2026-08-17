@@ -10,6 +10,7 @@
     "test": "tsx test/perdiem.test.mts"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.70.0",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.110.1",
     "next": "16.2.9",
