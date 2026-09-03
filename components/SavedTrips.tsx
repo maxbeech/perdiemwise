@@ -1,7 +1,7 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
-import { subscribeTrips, getTripsSnapshot, getServerTripsSnapshot, saveTrip, removeTrip, type SavedTrip } from "@/lib/saved-trips";
+import { useState, useSyncExternalStore } from "react";
+import { subscribeTrips, getTripsSnapshot, getServerTripsSnapshot, saveTrip, removeTrip, MAX_FREE_DEVICE_TRIPS, type SavedTrip } from "@/lib/saved-trips";
 import SaveToAccountButton from "@/components/SaveToAccountButton";
 import type { NewCloudTrip } from "@/lib/trips-remote";
 
@@ -18,12 +18,13 @@ export interface CurrentTrip {
 
 export default function SavedTrips({ current, onRestore }: { current: CurrentTrip | null; onRestore: (t: SavedTrip) => void }) {
   const trips = useSyncExternalStore(subscribeTrips, getTripsSnapshot, getServerTripsSnapshot);
+  const [limitReached, setLimitReached] = useState(false);
 
   const tripName = current ? `${current.locationLabel || "Standard rate"} · ${current.start}` : "";
 
   function save() {
     if (!current) return;
-    saveTrip({ ...current, name: tripName });
+    setLimitReached(!saveTrip({ ...current, name: tripName }));
   }
 
   const buildCloudTrip = (): NewCloudTrip | null =>
@@ -41,6 +42,7 @@ export default function SavedTrips({ current, onRestore }: { current: CurrentTri
           </button>
         </div>
       </div>
+      {limitReached && <p className="mt-2 rounded-xl bg-accent-tint px-3 py-2 text-xs text-accent-dark">Free device storage is limited to {MAX_FREE_DEVICE_TRIPS} trips. <a href="/pricing" className="font-medium underline">Pro keeps your full ledger in the cloud.</a></p>}
       {trips.length === 0 ? (
         <p className="mt-2 text-xs text-muted">Save a calculated trip and it&apos;ll stay here on this device — handy for recurring routes and expense reports.</p>
       ) : (

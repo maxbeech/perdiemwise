@@ -5,6 +5,7 @@ import { CALCS, getCalc } from "@/lib/calculators";
 import PerDiemCalculator from "@/components/PerDiemCalculator";
 import MileageCalculator from "@/components/MileageCalculator";
 import MieCalculator from "@/components/MieCalculator";
+import TruckDriverCalculator from "@/components/TruckDriverCalculator";
 import { Container, Eyebrow } from "@/components/ui";
 
 export const dynamicParams = false;
@@ -40,6 +41,7 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
         {c.tool === "perdiem" && <PerDiemCalculator />}
         {c.tool === "mileage" && <MileageCalculator />}
         {c.tool === "mie" && <MieCalculator />}
+        {c.tool === "trucker" && <TruckDriverCalculator />}
       </div>
 
       <div className="mt-10 flex flex-wrap gap-3 text-sm">

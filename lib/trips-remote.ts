@@ -5,7 +5,7 @@ import type { SavedTrip } from "@/lib/saved-trips";
 // Supabase client — RLS scopes every row to the signed-in user, and the
 // insert/update policies additionally require an active Pro plan.
 
-export type TripKind = "perdiem" | "mileage";
+export type TripKind = "perdiem" | "mileage" | "trucker";
 
 export interface CloudTrip {
   id: string;

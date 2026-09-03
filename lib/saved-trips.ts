@@ -18,7 +18,7 @@ export interface SavedTrip {
 }
 
 const KEY = "perdiemwise.trips.v1";
-const MAX = 25;
+export const MAX_FREE_DEVICE_TRIPS = 10;
 const SERVER_SNAPSHOT: SavedTrip[] = [];
 
 let snapshot: SavedTrip[] = SERVER_SNAPSHOT;
@@ -65,10 +65,12 @@ export function getServerTripsSnapshot(): SavedTrip[] {
   return SERVER_SNAPSHOT;
 }
 
-export function saveTrip(trip: Omit<SavedTrip, "id" | "savedAt">): void {
+export function saveTrip(trip: Omit<SavedTrip, "id" | "savedAt">): boolean {
+  if (getTripsSnapshot().length >= MAX_FREE_DEVICE_TRIPS) return false;
   const id = `${Date.now().toString(36)}-${(getTripsSnapshot().length + 1).toString(36)}`;
   const full: SavedTrip = { ...trip, id, savedAt: new Date().toISOString() };
-  commit([full, ...getTripsSnapshot()].slice(0, MAX));
+  commit([full, ...getTripsSnapshot()]);
+  return true;
 }
 
 export function removeTrip(id: string): void {

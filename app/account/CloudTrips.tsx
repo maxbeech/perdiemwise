@@ -63,6 +63,10 @@ export default function CloudTrips() {
     downloadCsv("perdiemwise-trips.csv", toCsv(["Trip", "Destination", "Depart", "Return", "Total (USD)"], rows));
   }
 
+  const reportYear = new Date().getUTCFullYear();
+  const yearTrips = (trips ?? []).filter((t) => String((t.data as { start?: string }).start ?? t.created_at).startsWith(String(reportYear)));
+  const yearTotal = yearTrips.reduce((sum, t) => sum + (Number(t.total) || 0), 0);
+
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -76,6 +80,8 @@ export default function CloudTrips() {
 
       {note && <p className="mt-3 text-sm text-accent-dark">{note}</p>}
       {error && <p className="mt-3 rounded-xl bg-clay/10 px-3 py-2 text-sm text-clay" role="alert">{error}</p>}
+
+      {trips && <div className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-3"><div className="bg-surface p-3.5"><p className="text-[11px] uppercase tracking-wide text-muted">{reportYear} running total</p><p className="tnum mt-1 text-xl font-semibold text-accent-dark">{usd(yearTotal)}</p></div><div className="bg-surface p-3.5"><p className="text-[11px] uppercase tracking-wide text-muted">{reportYear} saved trips</p><p className="tnum mt-1 text-xl font-semibold text-ink">{yearTrips.length}</p></div><div className="col-span-2 bg-surface p-3.5 sm:col-span-1"><p className="text-[11px] uppercase tracking-wide text-muted">Ongoing workflow</p><p className="mt-1 text-sm text-ink-soft">Save as you travel, export when you report.</p></div></div>}
 
       {trips === null ? (
         <p className="mt-4 text-sm text-muted">Loading your trips…</p>

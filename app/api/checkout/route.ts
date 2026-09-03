@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getAccount } from "@/lib/account";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { getStripe, priceFor, stripeConfigured, type BillingInterval } from "@/lib/stripe";
+import { getStripe, priceFor, stripeConfigured, teamPriceFor, type BillingInterval, type BillingProduct } from "@/lib/stripe";
 
 // Create a fresh Stripe customer for this user and persist its id.
 async function createCustomer(stripe: Stripe, userId: string, email: string | null | undefined): Promise<string> {
@@ -36,14 +36,16 @@ export async function POST(request: Request) {
     );
   }
 
-  if (!stripeConfigured()) {
+  const body = (await request.json().catch(() => ({}))) as { interval?: BillingInterval; product?: BillingProduct };
+  const product = body.product ?? "pro";
+  if ((product === "pro" && !stripeConfigured()) || !getStripe()) {
     return NextResponse.json(
-      { error: "PerDiemWise Pro is launching shortly. Email hello@perdiemwise.com for early access." },
+      { error: `${product === "team" ? "The Team plan" : "PerDiemWise Pro"} is not configured for checkout yet. Email hello@perdiemwise.com for early access.` },
       { status: 503 },
     );
   }
 
-  if (account.isPro) {
+  if (account.isPro && (product === "pro" || account.isTeam)) {
     return NextResponse.json(
       { error: "You already have an active Pro subscription. Manage it from your account.", alreadyPro: true },
       { status: 409 },
@@ -52,8 +54,8 @@ export async function POST(request: Request) {
 
   const stripe = getStripe()!;
   const base = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
-  const { interval = "monthly" } = (await request.json().catch(() => ({}))) as { interval?: BillingInterval };
-  const price = priceFor(interval);
+  const { interval = "monthly" } = body;
+  const price = product === "team" ? teamPriceFor(interval) : priceFor(interval);
   if (!price) return NextResponse.json({ error: "That plan isn't available." }, { status: 400 });
 
   const openSession = (customer: string) =>
@@ -62,7 +64,7 @@ export async function POST(request: Request) {
       customer,
       line_items: [{ price, quantity: 1 }],
       client_reference_id: account.user.id,
-      subscription_data: { metadata: { user_id: account.user.id } },
+      subscription_data: { metadata: { user_id: account.user.id, plan: product } },
       allow_promotion_codes: true,
       success_url: `${base}/account?checkout=success`,
       cancel_url: `${base}/pricing?checkout=cancel`,

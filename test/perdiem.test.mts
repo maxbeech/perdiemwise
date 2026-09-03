@@ -6,6 +6,7 @@ import { US_STATES, locationsInState } from "../lib/states.ts";
 import { buildReport } from "../lib/report.ts";
 import { toCsv } from "../lib/csv.ts";
 import type { CloudTrip } from "../lib/trips-remote.ts";
+import { calculateTruckerPerDiem, TRANSPORTATION_PER_DIEM } from "../lib/truckers.ts";
 
 let passed = 0;
 function test(name: string, fn: () => void) {
@@ -124,6 +125,24 @@ test("negative / NaN legs are ignored", () => {
   assert.equal(calculateMileage([-5, NaN, 40], "business", "2026-03-01").amount, 29); // 40 x 0.725
 });
 
+console.log("Transportation-industry per diem (IRS Notice 2025-54)");
+test("10 CONUS qualifying days use $80/day and 80% deduction", () => {
+  const r = calculateTruckerPerDiem({ startDate: "2026-03-01", endDate: "2026-03-10", region: "conus" });
+  assert.equal(r.days, 10);
+  assert.equal(r.grossPerDiem, 800);
+  assert.equal(r.deductibleAmount, 640);
+  assert.equal(r.nonDeductibleAmount, 160);
+});
+test("OCONUS uses the verified $86 rate", () => {
+  const r = calculateTruckerPerDiem({ startDate: "2026-08-01", endDate: "2026-08-02", region: "oconus" });
+  assert.equal(r.grossPerDiem, 172);
+  assert.equal(r.deductibleAmount, 137.6);
+});
+test("unverified dates fail explicitly instead of guessing a rate", () => {
+  assert.throws(() => calculateTruckerPerDiem({ startDate: "2026-09-30", endDate: "2026-10-01", region: "conus" }), /No verified transportation-industry rate/);
+  assert.equal(TRANSPORTATION_PER_DIEM.source, "https://www.irs.gov/pub/irs-drop/n-25-54.pdf");
+});
+
 console.log("State helpers");
 test("50 states + DC, each with a slug", () => {
   assert.equal(US_STATES.length, 51);
@@ -195,6 +214,12 @@ test("invalid per-diem rows are skipped, never fabricated", () => {
   const r = buildReport([trip({ data: { locationSlug: null, start: "", end: "" } })]);
   assert.equal(r.perDiem.length, 0);
   assert.equal(r.grandTotal, 0);
+});
+test("trucker rows contribute only their verified deductible amount", () => {
+  const r = buildReport([trip({ kind: "trucker", total: 999, data: { start: "2026-03-01", end: "2026-03-10", region: "conus", days: 10, gross: 800, deductible: 640 } })]);
+  assert.equal(r.trucker.length, 1);
+  assert.equal(r.truckerTotal, 640);
+  assert.equal(r.grandTotal, 640);
 });
 
 console.log("CSV export");

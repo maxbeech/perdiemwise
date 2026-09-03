@@ -2,6 +2,19 @@
 
 All notable changes to PerDiemWise are documented here.
 
+## [Unreleased] — 2026-08-24 — Persona paths, ongoing Pro ledger & team workspace
+
+### Added
+- Verified truck-driver calculator using IRS Notice 2025-54 transportation-industry rates: $80 CONUS / $86 OCONUS, 80% deductible, with an explicit error outside the verified period.
+- Dedicated `/for/truck-drivers` and `/for/bookkeepers` acquisition pages plus the truck-driver calculator in the calculator registry and sitemap.
+- Pro running-year totals on the account dashboard and truck-driver records in expense reports.
+- Team workspace and expiring invite-link flow for bookkeepers and finance teams, with a migration for teams, members and invites.
+- Team Stripe checkout plumbing using `STRIPE_PRICE_ID_TEAM_MONTHLY` / `STRIPE_PRICE_ID_TEAM_ANNUAL`; missing configuration returns a visible availability error.
+
+### Changed
+- Free device storage is capped at 10 saved trips with an explicit Pro upgrade prompt; no calculator math was removed from Free.
+- Existing profile billing state now supports `team` alongside `free` and `pro`.
+
 ## [0.3.0] — 2026-07-25 — Blog expansion, featured images & mid-year mileage-rate fix
 
 ### Fixed

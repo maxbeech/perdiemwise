@@ -2,18 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import ManageBillingButton from "@/components/ManageBillingButton";
 import UpgradePanel from "@/components/UpgradePanel";
+import TeamUpgradePanel from "@/components/TeamUpgradePanel";
 import { Badge, Container, Eyebrow } from "@/components/ui";
 import { getAccount } from "@/lib/account";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Pricing — Free & Pro",
-  description: "PerDiemWise is free for the per diem and mileage calculators. Pro adds IRS/GSA-compliant expense-report & mileage-log PDFs, cloud-synced trips, batch reports and CSV export.",
+  title: "Pricing — Free, Pro & Team",
+  description: "PerDiemWise is free for calculations. Pro adds an ongoing cloud ledger and compliant exports; Team adds shared review for bookkeepers and travel desks.",
   alternates: { canonical: "/pricing" },
 };
 
 const FREE = ["GSA FY2026 per diem trip calculator", "2026 IRS mileage reimbursement calculator", "Provided-meal deductions & the 75% rule", "Per diem rates for every GSA city & state", "Save & reuse trips on this device", "Copy-ready itemised breakdowns"];
-const PRO = ["Everything in Free", "Cloud-synced trips across your devices", "IRS/GSA-compliant expense-report PDF", "Mileage-log PDF for your tax records", "Batch multiple trips into one report", "CSV / spreadsheet export", "Priority email support"];
+const PRO = ["Everything in Free", "Cloud-synced trips across your devices", "Running-year totals as you log", "IRS/GSA-compliant expense-report PDF", "Mileage-log & driver tax records", "Batch multiple trips into one report", "CSV / spreadsheet export", "Priority email support"];
 
 function Check() {
   return <svg className="mt-0.5 shrink-0 text-accent" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8.5l3 3 7-7.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>;
@@ -26,11 +27,11 @@ export default async function Pricing() {
     <Container className="py-16 sm:py-20">
       <div className="mx-auto max-w-2xl text-center">
         <Eyebrow>Pricing</Eyebrow>
-        <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Free to calculate. Pro to operate.</h1>
-        <p className="mt-4 text-lg text-muted">The calculators are free forever. Pro adds the export, sync and compliance tools that teams and contractors need at expense time.</p>
+        <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Free to calculate. Pro to keep the work moving.</h1>
+        <p className="mt-4 text-lg text-muted">The calculators stay free. Pro turns individual calculations into an ongoing cloud ledger; Team gives bookkeepers a shared review workspace.</p>
       </div>
 
-      <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-2">
+      <div className="mx-auto mt-12 grid max-w-6xl gap-6 md:grid-cols-3">
         {/* Free */}
         <div className="flex flex-col rounded-3xl border border-line bg-surface p-8">
           <h2 className="font-display text-2xl font-semibold text-ink">Free</h2>
@@ -60,6 +61,15 @@ export default async function Pricing() {
               <UpgradePanel nextPath="/pricing" />
             )}
           </div>
+        </div>
+
+        <div className="relative flex flex-col rounded-3xl border border-ink/20 bg-ink p-8 text-paper shadow-[0_24px_60px_-30px_rgba(24,23,18,0.5)]">
+          <h2 className="font-display text-2xl font-semibold">Team</h2>
+          <p className="mt-1 text-sm text-paper/65">For bookkeepers &amp; travel desks</p>
+          <ul className="mt-5 flex-1 space-y-3 text-sm text-paper/80">
+            {["Everything in Pro", "Invite travellers and reviewers", "One combined team ledger", "Member-level trip source data", "Monthly reimbursement workflow"].map((f) => <li key={f} className="flex gap-2.5"><Check />{f}</li>)}
+          </ul>
+          <div className="mt-7 border-t border-paper/15 pt-6"><TeamUpgradePanel /></div>
         </div>
       </div>
 

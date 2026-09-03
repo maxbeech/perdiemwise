@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { Container } from "@/components/ui";
 import { getAccount } from "@/lib/account";
 import { createClient } from "@/lib/supabase/server";
-import { buildReport, type PerDiemReportItem } from "@/lib/report";
+import { buildReport, type PerDiemReportItem, type TruckerReportItem } from "@/lib/report";
 import { FISCAL_YEAR_LABEL } from "@/lib/gsa";
 import { IRS_MILEAGE_2026, SITE } from "@/lib/site";
 import type { CloudTrip } from "@/lib/trips-remote";
@@ -57,7 +57,7 @@ export default async function ReportPage() {
             </dl>
           </header>
 
-          {report.perDiem.length === 0 && report.mileage.length === 0 ? (
+          {report.perDiem.length === 0 && report.mileage.length === 0 && report.trucker.length === 0 ? (
             <p className="mt-8 text-sm text-muted">No trips to report yet. Save trips in the calculator and import them on your <Link href="/account" className="text-accent underline">account</Link>.</p>
           ) : (
             <>
@@ -90,11 +90,14 @@ export default async function ReportPage() {
                 </section>
               )}
 
+              {report.trucker.length > 0 && <section className="mt-10"><h2 className="font-mono text-xs uppercase tracking-[0.16em] text-muted">Transportation-industry per diem — 80% deduction</h2><table className="mt-3 w-full border-collapse text-sm"><thead><tr className="border-y border-line text-left text-xs uppercase tracking-wide text-muted"><th className="py-2 font-medium">Log</th><th className="font-medium">Region</th><th className="py-2 text-right font-medium">Days</th><th className="text-right font-medium">Gross</th><th className="py-2 pl-3 text-right font-medium">Deductible</th></tr></thead><tbody>{report.trucker.map((item) => <TruckerRow key={item.id} item={item} />)}</tbody></table></section>}
+
               {/* Grand total */}
               <section className="mt-10 border-t-2 border-ink pt-4">
                 <dl className="ml-auto max-w-xs space-y-1.5 text-sm">
                   {report.perDiemTotal > 0 && <Row label="Per diem subtotal" value={usd(report.perDiemTotal)} />}
                   {report.mileageTotal > 0 && <Row label="Mileage subtotal" value={usd(report.mileageTotal)} />}
+                  {report.truckerTotal > 0 && <Row label="Driver per diem deduction" value={usd(report.truckerTotal)} />}
                   <div className="flex items-baseline justify-between border-t border-line pt-2 text-base font-semibold text-ink">
                     <dt>Total reimbursement</dt><dd className="tnum">{usd(report.grandTotal)}</dd>
                   </div>
@@ -144,4 +147,8 @@ function PerDiemBlock({ item }: { item: PerDiemReportItem }) {
       </table>
     </div>
   );
+}
+
+function TruckerRow({ item }: { item: TruckerReportItem }) {
+  return <tr className="border-b border-line"><td className="py-2 text-ink">{item.name}<span className="ml-2 text-xs text-muted">{fmtDate(item.start)} → {fmtDate(item.end)}</span></td><td className="capitalize text-muted">{item.region}</td><td className="tnum py-2 text-right text-ink">{item.days}</td><td className="tnum text-right text-muted">{usd(item.gross)}</td><td className="tnum py-2 pl-3 text-right text-ink">{usd(item.deductible)}</td></tr>;
 }

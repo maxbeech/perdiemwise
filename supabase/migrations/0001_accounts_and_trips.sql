@@ -10,7 +10,7 @@ create table if not exists public.profiles (
   email               text,
   full_name           text,
   stripe_customer_id  text unique,
-  plan                text not null default 'free',      -- 'free' | 'pro'
+  plan                text not null default 'free',      -- 'free' | 'pro' | 'team'
   subscription_status text,                              -- stripe status mirror
   current_period_end  timestamptz,
   created_at          timestamptz not null default now(),
@@ -29,7 +29,7 @@ create policy "profiles_select_own" on public.profiles
 create table if not exists public.trips (
   id         uuid primary key default gen_random_uuid(),
   user_id    uuid not null references auth.users (id) on delete cascade,
-  kind       text not null default 'perdiem',            -- 'perdiem' | 'mileage'
+  kind       text not null default 'perdiem',            -- 'perdiem' | 'mileage' | 'trucker'
   name       text not null,
   data       jsonb not null,                             -- inputs + result snapshot
   total      numeric not null default 0,

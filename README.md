@@ -69,10 +69,13 @@ Signed-in users get a passwordless (magic-link) account; **Pro** ($9/mo or $90/y
   (per-diem day-by-day + mileage log + grand total), recomputed live from GSA data so the export
   is always internally consistent. "Download / Print PDF" uses the browser's print-to-PDF (zero deps).
 - **CSV export** and **batch** of multiple trips into one report.
+- **Running-year ledger** — the account dashboard totals saved records for the current year as they are logged.
+- **Truck-driver records** — the IRS transportation-industry $80 CONUS / $86 OCONUS rate and 80% deduction are available on the dedicated driver calculator; saved records appear in Pro reports.
+- **Team workspace** — bookkeepers can create a workspace, issue expiring invite links and review member trip totals in one ledger. Team billing uses real Stripe price IDs when configured.
 - **Billing self-service** via the Stripe Billing Portal.
 
 Free stays fully useful: all calculators, provided-meal deductions, OCONUS awareness, copy-ready
-summaries, and on-device (localStorage) saved trips.
+summaries, and up to 10 on-device (localStorage) saved trips. Pro keeps the ongoing ledger in the cloud.
 
 ### Architecture
 `lib/supabase/{client,server,admin}.ts` (browser / SSR / service-role) · `proxy.ts` refreshes the
@@ -86,7 +89,7 @@ no write policy on that column). Schema: `supabase/migrations/0001_accounts_and_
   `NEXT_PUBLIC_SITE_URL=https://perdiemwise.com` in Vercel and redeploy.**
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` — auth + DB.
 - `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_PRICE_ID_MONTHLY`,
-  `STRIPE_PRICE_ID_ANNUAL`, `STRIPE_WEBHOOK_SECRET` — subscriptions. Absent → checkout degrades to a
+  `STRIPE_PRICE_ID_ANNUAL`, `STRIPE_PRICE_ID_TEAM_MONTHLY`, `STRIPE_PRICE_ID_TEAM_ANNUAL`, `STRIPE_WEBHOOK_SECRET` — subscriptions. Absent → checkout degrades to a
   503 early-access note; the free tools are unaffected. Use **test** keys locally (`stripe listen`
   for the webhook secret), **live** keys in Vercel production.
 - `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` — error monitoring (org `maxed-labs`, project
@@ -94,5 +97,5 @@ no write policy on that column). Schema: `supabase/migrations/0001_accounts_and_
   optional (source-map upload only — the build succeeds without it, just unsymbolicated).
 
 ## Roadmap (next)
-Google OAuth sign-in; team plans / seat sharing; custom employer rate with taxable-excess flag;
+Google OAuth sign-in; custom employer rate with taxable-excess flag;
 multi-destination trips; OCONUS/international rate data; historical fiscal-year rates.

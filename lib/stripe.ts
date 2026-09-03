@@ -13,12 +13,17 @@ export function getStripe(): Stripe | null {
 }
 
 export type BillingInterval = "monthly" | "annual";
+export type BillingProduct = "pro" | "team";
 
 /** Resolve the configured Stripe price id for a billing interval. */
 export function priceFor(interval: BillingInterval): string | undefined {
   return interval === "annual"
     ? process.env.STRIPE_PRICE_ID_ANNUAL
     : process.env.STRIPE_PRICE_ID_MONTHLY;
+}
+
+export function teamPriceFor(interval: BillingInterval): string | undefined {
+  return interval === "annual" ? process.env.STRIPE_PRICE_ID_TEAM_ANNUAL : process.env.STRIPE_PRICE_ID_TEAM_MONTHLY;
 }
 
 /** Whether checkout can run at all (keys + at least the monthly price present). */
@@ -31,4 +36,6 @@ export function stripeConfigured(): boolean {
 export const PRICING = {
   monthly: { amount: 9, label: "$9", per: "/ month" },
   annual: { amount: 90, label: "$90", per: "/ year", note: "2 months free" },
+  teamMonthly: { amount: 49, label: "$49", per: "/ month" },
+  teamAnnual: { amount: 490, label: "$490", per: "/ year", note: "2 months free" },
 } as const;

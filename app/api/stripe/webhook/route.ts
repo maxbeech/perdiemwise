@@ -50,8 +50,9 @@ async function syncSubscription(stripe: Stripe, sub: Stripe.Subscription) {
   const active = sub.status === "active" || sub.status === "trialing";
   const periodEnd = subscriptionPeriodEnd(sub);
   const admin = createAdminClient();
+  const requestedPlan = sub.metadata?.plan === "team" ? "team" : "pro";
   const patch = {
-    plan: active ? "pro" : "free",
+    plan: active ? requestedPlan : "free",
     subscription_status: sub.status,
     current_period_end: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
     updated_at: new Date().toISOString(),

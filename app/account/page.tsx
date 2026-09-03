@@ -93,6 +93,10 @@ export default async function AccountPage({
           )}
         </section>
 
+        <section className="mt-8 rounded-3xl border border-line bg-paper-2/40 p-6 sm:p-8">
+          <div className="flex flex-wrap items-center justify-between gap-4"><div><p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">For recurring team work</p><h2 className="mt-2 font-display text-xl font-semibold text-ink">Bookkeeper team workspace</h2><p className="mt-2 max-w-xl text-sm text-muted">Invite travellers and reviewers, then review their saved trip records in one ledger.</p></div><Link href="/team" className="rounded-full border border-line-strong bg-surface px-4 py-2 text-sm font-medium text-ink transition hover:border-accent hover:text-accent">Open workspace →</Link></div>
+        </section>
+
         {/* Pro tools */}
         <section className="mt-8 rounded-3xl border border-line bg-surface p-6 sm:p-8">
           {isPro ? (

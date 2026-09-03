@@ -25,19 +25,43 @@ export interface MileageReportItem {
   amount: number;
 }
 
+export interface TruckerReportItem {
+  id: string;
+  name: string;
+  start: string;
+  end: string;
+  region: "conus" | "oconus";
+  days: number;
+  gross: number;
+  deductible: number;
+}
+
 export interface ReportData {
   perDiem: PerDiemReportItem[];
   mileage: MileageReportItem[];
+  trucker: TruckerReportItem[];
   perDiemTotal: number;
   mileageTotal: number;
+  truckerTotal: number;
   grandTotal: number;
 }
 
 export function buildReport(trips: CloudTrip[]): ReportData {
   const perDiem: PerDiemReportItem[] = [];
   const mileage: MileageReportItem[] = [];
+  const trucker: TruckerReportItem[] = [];
 
   for (const t of trips) {
+    if (t.kind === "trucker") {
+      const d = t.data as Partial<TruckerReportItem>;
+      if (!d.start || !d.end || (d.region !== "conus" && d.region !== "oconus")) continue;
+      const days = Number(d.days) || 0;
+      const gross = Number(d.gross) || 0;
+      const deductible = Number(d.deductible) || 0;
+      if (days <= 0 || gross < 0 || deductible < 0) continue;
+      trucker.push({ id: t.id, name: t.name, start: d.start, end: d.end, region: d.region, days, gross, deductible });
+      continue;
+    }
     if (t.kind === "mileage") {
       const d = t.data as { miles?: number; category?: MileageReportItem["category"] };
       const category = d.category ?? "business";
@@ -74,7 +98,8 @@ export function buildReport(trips: CloudTrip[]): ReportData {
 
   const perDiemTotal = round2(perDiem.reduce((s, i) => s + i.result.total, 0));
   const mileageTotal = round2(mileage.reduce((s, i) => s + i.amount, 0));
-  return { perDiem, mileage, perDiemTotal, mileageTotal, grandTotal: round2(perDiemTotal + mileageTotal) };
+  const truckerTotal = round2(trucker.reduce((s, i) => s + i.deductible, 0));
+  return { perDiem, mileage, trucker, perDiemTotal, mileageTotal, truckerTotal, grandTotal: round2(perDiemTotal + mileageTotal + truckerTotal) };
 }
 
 function round2(n: number): number {

@@ -3,7 +3,7 @@
 // each page foregrounds its own topic (title/intro/keyword) so it is a distinct,
 // relevant landing page rather than one generic calculator repeated.
 
-export type ToolKey = "perdiem" | "mileage" | "mie";
+export type ToolKey = "perdiem" | "mileage" | "mie" | "trucker";
 
 export interface Calc {
   slug: string;
@@ -16,6 +16,15 @@ export interface Calc {
 }
 
 export const CALCS: Calc[] = [
+  {
+    slug: "truck-driver-per-diem-calculator",
+    tool: "trucker",
+    title: "Truck Driver Per Diem Calculator (IRS 2025–26 rate)",
+    h1: "Truck Driver Per Diem Calculator",
+    keyword: "truck driver per diem calculator",
+    description: "Calculate the verified IRS transportation-industry per diem for DOT-regulated truck drivers: $80 CONUS or $86 OCONUS, with the 80% deduction applied.",
+    intro: "Log qualifying days away from home using the IRS special transportation-industry rate. This is separate from the GSA employer reimbursement table and applies only to workers subject to DOT hours-of-service rules.",
+  },
   {
     slug: "per-diem-calculator",
     tool: "perdiem",

@@ -10,7 +10,7 @@ export interface Profile {
   email: string | null;
   full_name: string | null;
   stripe_customer_id: string | null;
-  plan: "free" | "pro";
+  plan: "free" | "pro" | "team";
   subscription_status: string | null;
   current_period_end: string | null;
 }
@@ -19,6 +19,7 @@ export interface Account {
   user: User;
   profile: Profile | null;
   isPro: boolean;
+  isTeam: boolean;
 }
 
 /** Returns the signed-in account (user + profile) or null when signed out. */
@@ -35,5 +36,5 @@ export async function getAccount(): Promise<Account | null> {
     .eq("id", user.id)
     .maybeSingle<Profile>();
 
-  return { user, profile: profile ?? null, isPro: profile?.plan === "pro" };
+  return { user, profile: profile ?? null, isPro: profile?.plan === "pro" || profile?.plan === "team", isTeam: profile?.plan === "team" };
 }
