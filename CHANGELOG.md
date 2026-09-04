@@ -5,6 +5,13 @@ All notable changes to PerDiemWise are documented here.
 ## [Unreleased] — 2026-09-04 — Thin-content fixes & pricing contrast bug
 
 ### Fixed
+- **Thin programmatic pages**: the 298 `/per-diem/[city]` pages and 51
+  `/states/[state]` pages had a rate table and calculator but almost no
+  unique prose. Added a data-driven "About" section and a 2–3 item FAQ
+  (with FAQPage JSON-LD) to both templates, computed per-page from the real
+  GSA dataset — lodging vs. the standard rate, seasonal peak/low months,
+  and (state pages) the highest/lowest listed city — rather than templated
+  filler text repeated across pages.
 - **Thin blog content**: 25 of 40 posts in `lib/posts.ts` (the original `POSTS`
   and `WEEK2_POSTS` batches) were 143–1,000 words with no TL;DR, table, quote
   or FAQ block, well under the content brief's 1,200–2,500 word target. All
