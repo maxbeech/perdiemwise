@@ -2,6 +2,27 @@
 
 All notable changes to PerDiemWise are documented here.
 
+## [Unreleased] — 2026-09-04 — Thin-content fixes & pricing contrast bug
+
+### Fixed
+- **Thin blog content**: 25 of 40 posts in `lib/posts.ts` (the original `POSTS`
+  and `WEEK2_POSTS` batches) were 143–1,000 words with no TL;DR, table, quote
+  or FAQ block, well under the content brief's 1,200–2,500 word target. All
+  25 rewritten in place (same slug/title/date/keyword) to full spec — TL;DR
+  callout, 5+ H2 sections, a data table, a cited GSA/IRS quote, an FAQ block,
+  and 3+ internal links — while differentiating topics that overlapped (e.g.
+  `standard-conus-per-diem-rate-explained` vs `conus-per-diem-rates-standard`,
+  `how-to-set-per-diem-policy` vs `per-diem-policy-example`). Featured images
+  were already fully compliant across all 40 posts (verified: every image
+  file exists, every post has alt text and a credit).
+- **Thin calculator/landing pages**: the 4 `/calculators/[slug]` pages and
+  the `/for/bookkeepers` and `/for/truck-drivers` landing pages had almost
+  no unique copy beyond the embedded tool. Added an "about" section and an
+  FAQ block (with FAQPage JSON-LD) to each.
+- **Pricing page contrast bug**: `TeamUpgradePanel`'s `$49/month` price used
+  `text-ink` (near-black) on the Team card's own `bg-ink` (near-black)
+  background, making it unreadable. Changed to `text-paper`/`text-paper/65`.
+
 ## [Unreleased] — 2026-08-24 — Persona paths, ongoing Pro ledger & team workspace
 
 ### Added
