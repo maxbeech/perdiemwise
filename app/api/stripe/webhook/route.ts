@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { guardStripeEvent } from "../../../../lib/gate";
 
 // Stripe → PerDiemWise source of truth for billing state. Verifies the raw-body
 // signature, then mirrors the subscription onto profiles.plan. This is the ONLY
@@ -19,6 +20,16 @@ export async function POST(request: Request) {
   } catch (e) {
     const message = e instanceof Error ? e.message : "bad signature";
     return NextResponse.json({ error: message }, { status: 400 });
+  }
+
+  // A Stripe webhook endpoint is registered on an ACCOUNT, so on a shared
+  // account this handler is delivered every other product's events too.
+  // Establish that this one is OURS — by price id, never by metadata or
+  // customer — before anything below acts on it. See lib/gate.ts.
+  const ownership = await guardStripeEvent(stripe, event);
+  if (!ownership.ok) {
+    console.log(ownership.message);
+    return NextResponse.json({ received: true, ignored: ownership.reason });
   }
 
   try {
