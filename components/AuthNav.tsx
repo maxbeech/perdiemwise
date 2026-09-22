@@ -12,7 +12,13 @@ export default function AuthNav({ variant = "desktop" }: { variant?: "desktop" |
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setState(data.user ? "in" : "out"));
+    // Supabase's own promise can reject (not just resolve with `{ error }`) on
+    // an internal auth-client fault, and an uncaught rejection here becomes an
+    // unhandled promise rejection that Sentry reports from every page this nav
+    // renders on. Treat that the same as "signed out" rather than crashing.
+    supabase.auth.getUser()
+      .then(({ data }) => setState(data.user ? "in" : "out"))
+      .catch(() => setState("out"));
     const { data: sub } = supabase.auth.onAuthStateChange((_e, session) =>
       setState(session?.user ? "in" : "out"),
     );

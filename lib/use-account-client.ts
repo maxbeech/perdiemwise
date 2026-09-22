@@ -20,10 +20,19 @@ export function useAccountClient(): AccountClientState {
     const supabase = createClient();
 
     async function load() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) { if (!cancelled) setState({ loading: false, userId: null, isPro: false }); return; }
-      const { data: profile } = await supabase.from("profiles").select("plan").eq("id", user.id).maybeSingle<{ plan: string }>();
-      if (!cancelled) setState({ loading: false, userId: user.id, isPro: profile?.plan === "pro" });
+      // Supabase's own promise can reject (not just resolve with `{ error }`)
+      // on an internal auth-client fault. `load()` is fired without an
+      // `await` below, so an uncaught rejection here becomes an unhandled
+      // promise rejection reported from every page that uses this hook.
+      // Treat that the same as "signed out" rather than crashing.
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) { if (!cancelled) setState({ loading: false, userId: null, isPro: false }); return; }
+        const { data: profile } = await supabase.from("profiles").select("plan").eq("id", user.id).maybeSingle<{ plan: string }>();
+        if (!cancelled) setState({ loading: false, userId: user.id, isPro: profile?.plan === "pro" });
+      } catch {
+        if (!cancelled) setState({ loading: false, userId: null, isPro: false });
+      }
     }
 
     load();
