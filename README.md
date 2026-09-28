@@ -95,6 +95,7 @@ no write policy on that column). Schema: `supabase/migrations/0001_accounts_and_
 - `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` — error monitoring (org `maxed-labs`, project
   `perdiemwise_web`). Not secret; absent → the SDK is a silent no-op. `SENTRY_AUTH_TOKEN` is
   optional (source-map upload only — the build succeeds without it, just unsymbolicated).
+  Known non-actionable browser noise is filtered in `lib/sentry-filters.ts`.
 
 ## Roadmap (next)
 Google OAuth sign-in; custom employer rate with taxable-excess flag;

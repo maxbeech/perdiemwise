@@ -2,6 +2,26 @@
 
 All notable changes to PerDiemWise are documented here.
 
+## [Unreleased] — 2026-09-28 — Sentry backlog: auth-client rejection (PERDIEMWISE_WEB-1)
+
+### Fixed
+- **`TypeError: Cannot add property __isAuthError, object is not extensible`
+  (PERDIEMWISE_WEB-1)**: last seen 2026-09-27 on release `fb30299`, i.e. before
+  the local fix `b4cf6d6` (catch `getUser()` rejections in `AuthNav` and
+  `useAccountClient`) was ever deployed. Audit of every client-side
+  `supabase.auth.*` call reachable from `/calculators/:slug`: `AuthNav` and
+  `useAccountClient` (`getUser`, both now caught), `addCloudTrip`'s `getUser`
+  (caught by `SaveToAccountButton`), and the two `onAuthStateChange`
+  subscriptions. The last one cannot be caught in app code: auth-js runs
+  `_emitInitialSession()` in an un-awaited async IIFE, which is the exact top
+  frame of the reported stack. Root cause is not Supabase or Next: auth-js sets
+  `__isAuthError` on `this` in the `AuthError` constructor, which only throws
+  when the visitor's browser hands back a non-extensible `Error` (extension or
+  hardened runtime). The nav falls back to "Sign in", so there is no user
+  impact; the message is now dropped via `ignoreErrors`
+  (`lib/sentry-filters.ts`, wired into `instrumentation-client.ts`), with tests
+  that reproduce the mechanism.
+
 ## [Unreleased] — 2026-09-04 — Thin-content fixes & pricing contrast bug
 
 ### Fixed
