@@ -2,6 +2,20 @@
 
 All notable changes to PerDiemWise are documented here.
 
+## [Unreleased] — 2026-09-30 — Hosting moved from Vercel to Helm7
+
+### Changed
+- **Hosting moved from Vercel to Helm7.** Supabase (database, auth) and Stripe stay
+  where they are. Nothing in the repository depended on Vercel packages, headers or
+  `VERCEL_*` variables; what remained was wording and one fallback:
+  - `lib/site.ts` falls back to `https://www.perdiemwise.com` instead of the
+    `perdiemwise.vercel.app` preview address when `NEXT_PUBLIC_SITE_URL` is unset;
+  - README hosting and environment wording, and the Stripe webhook must be registered
+    on `https://www.perdiemwise.com/api/stripe/webhook` (the apex redirects);
+  - the `.vercel/**` ESLint ignore is gone.
+- Tests: `no-vercel` keeps Vercel-only packages, scripts, `maxDuration` and any mention of
+  Vercel out of application code (generated service clients excepted).
+
 ## [Unreleased] — 2026-09-28 — Sentry backlog: auth-client rejection (PERDIEMWISE_WEB-1)
 
 ### Fixed

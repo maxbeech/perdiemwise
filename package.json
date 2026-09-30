@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx test/perdiem.test.mts && tsx test/sentry-filters.test.mts"
+    "test": "tsx test/perdiem.test.mts && tsx test/sentry-filters.test.mts && tsx test/no-vercel.test.mts"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.70.0",

@@ -84,14 +84,19 @@ session on auth routes · `lib/account.ts` is the server "who am I + am I Pro" s
 the **webhook** (`/api/stripe/webhook`) is the *only* path that can set `plan = 'pro'` (users have
 no write policy on that column). Schema: `supabase/migrations/0001_accounts_and_trips.sql`.
 
+## Hosting
+Hosted on Helm7 (a Next.js container behind Helm7's ingress; `npm start` honours `$PORT`).
+Supabase (database, auth) and Stripe stay where they are. Point the Stripe webhook at
+`https://www.perdiemwise.com/api/stripe/webhook` (the apex redirects, and a webhook does not follow redirects).
+
 ## Environment
-- `NEXT_PUBLIC_SITE_URL` — canonical/OG/sitemap base. **When you connect `perdiemwise.com`, set
-  `NEXT_PUBLIC_SITE_URL=https://perdiemwise.com` in Vercel and redeploy.**
+- `NEXT_PUBLIC_SITE_URL` — canonical/OG/sitemap base (`https://www.perdiemwise.com` in production).
+  Inlined at build, so it is a Helm7 build variable: change it and redeploy.
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` — auth + DB.
 - `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_PRICE_ID_MONTHLY`,
   `STRIPE_PRICE_ID_ANNUAL`, `STRIPE_PRICE_ID_TEAM_MONTHLY`, `STRIPE_PRICE_ID_TEAM_ANNUAL`, `STRIPE_WEBHOOK_SECRET` — subscriptions. Absent → checkout degrades to a
   503 early-access note; the free tools are unaffected. Use **test** keys locally (`stripe listen`
-  for the webhook secret), **live** keys in Vercel production.
+  for the webhook secret), **live** keys in Helm7 production.
 - `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` — error monitoring (org `maxed-labs`, project
   `perdiemwise_web`). Not secret; absent → the SDK is a silent no-op. `SENTRY_AUTH_TOKEN` is
   optional (source-map upload only — the build succeeds without it, just unsymbolicated).
