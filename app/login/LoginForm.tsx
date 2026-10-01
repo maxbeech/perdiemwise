@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { trackEvent } from "@/lib/analytics-events";
 
 // Passwordless sign-in. We send a magic link that lands on /auth/callback and
 // forwards to `next`. No passwords to manage; same flow signs up new users.
@@ -15,6 +16,7 @@ export default function LoginForm({ next }: { next: string }) {
     if (!email) return;
     setStatus("sending");
     setMessage(null);
+    trackEvent("login_link_requested", {});
     const supabase = createClient();
     const redirect = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
     const { error } = await supabase.auth.signInWithOtp({
@@ -22,6 +24,7 @@ export default function LoginForm({ next }: { next: string }) {
       options: { emailRedirectTo: redirect },
     });
     if (error) {
+      trackEvent("login_failed", { reason: error.status === 429 ? "rate_limited" : "otp_request" });
       setStatus("error");
       setMessage(error.message);
     } else {

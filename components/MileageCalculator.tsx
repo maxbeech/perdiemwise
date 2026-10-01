@@ -5,6 +5,7 @@ import { mileagePurposes, calculateMileage, type MileagePurpose } from "@/lib/mi
 import { IRS_MILEAGE_2026 } from "@/lib/site";
 import SaveToAccountButton from "@/components/SaveToAccountButton";
 import type { NewCloudTrip } from "@/lib/trips-remote";
+import { useTrackCalculation } from "@/lib/analytics-events";
 
 const usd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -14,6 +15,7 @@ export default function MileageCalculator() {
 
   const numericLegs = legs.map((l) => parseFloat(l)).filter((n) => Number.isFinite(n) && n > 0);
   const result = calculateMileage(numericLegs, purpose);
+  useTrackCalculation("mileage", result.miles > 0 ? `${purpose}|${result.miles}` : null, false);
   const purposes = mileagePurposes();
   const active = purposes.find((p) => p.id === purpose)!;
 

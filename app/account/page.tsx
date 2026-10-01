@@ -5,7 +5,11 @@ import { Badge, Container } from "@/components/ui";
 import CheckoutPending from "@/components/CheckoutPending";
 import ManageBillingButton from "@/components/ManageBillingButton";
 import UpgradePanel from "@/components/UpgradePanel";
+import PurchaseTracker from "@/components/PurchaseTracker";
+import TrackFailure from "@/components/TrackFailure";
 import { getAccount } from "@/lib/account";
+import { analyticsUserRef, purchaseFromSession, type PaidPlanId } from "@/lib/analytics-contract";
+import { getStripe } from "@/lib/stripe";
 import CloudTrips from "./CloudTrips";
 
 export const metadata: Metadata = {
@@ -24,6 +28,20 @@ const PRO_BENEFITS = [
   "Priority email support",
 ];
 
+// On the return from Stripe, ask Stripe whether this session was really paid
+// and belongs to this user, so `purchase` is only sent for a real payment.
+async function checkPaidSession(sessionId: string | undefined, userId: string) {
+  const stripe = getStripe();
+  if (!sessionId || !stripe) return null;
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const plan: PaidPlanId = session.metadata?.plan === "team" ? "team" : "pro";
+    return purchaseFromSession(session, userId, plan);
+  } catch {
+    return null;
+  }
+}
+
 function fmtDate(iso: string | null) {
   if (!iso) return null;
   return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
@@ -32,13 +50,14 @@ function fmtDate(iso: string | null) {
 export default async function AccountPage({
   searchParams,
 }: {
-  searchParams: Promise<{ checkout?: string }>;
+  searchParams: Promise<{ checkout?: string; session_id?: string }>;
 }) {
   const account = await getAccount();
   if (!account) redirect("/login?next=/account");
-  const { checkout } = await searchParams;
+  const { checkout, session_id: sessionId } = await searchParams;
   const { user, profile, isPro } = account;
   const renews = fmtDate(profile?.current_period_end ?? null);
+  const purchase = checkout === "success" ? await checkPaidSession(sessionId, user.id) : null;
 
   return (
     <Container className="py-14 sm:py-16">
@@ -53,6 +72,9 @@ export default async function AccountPage({
           </form>
         </div>
 
+        {checkout === "success" && (purchase
+          ? <PurchaseTracker purchase={purchase} userRef={await analyticsUserRef(user.id)} />
+          : <TrackFailure reason="payment_unverified" />)}
         {checkout === "success" && isPro && (
           <p className="mt-6 rounded-xl bg-accent-tint px-4 py-3 text-sm text-accent-dark">🎉 Welcome to Pro! Your subscription is active — your trips now sync across devices and expense-report exports are unlocked below.</p>
         )}

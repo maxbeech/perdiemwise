@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { trackEvent } from "@/lib/analytics-events";
 
 const MAX_ATTEMPTS = 5;
 
@@ -21,6 +22,10 @@ export default function CheckoutPending() {
     }, 1500);
     return () => clearTimeout(timer);
   }, [attempts, router]);
+
+  useEffect(() => {
+    if (attempts >= MAX_ATTEMPTS) trackEvent("purchase_confirmation_failed", { reason: "plan_not_active" });
+  }, [attempts]);
 
   if (attempts >= MAX_ATTEMPTS) {
     return (

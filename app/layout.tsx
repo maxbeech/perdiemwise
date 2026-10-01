@@ -6,6 +6,7 @@ import { SITE } from "@/lib/site";
 import { Button, Container } from "@/components/ui";
 import AuthNav from "@/components/AuthNav";
 import { OpenHelmAnalytics } from "../lib/openhelm-analytics";
+import AnalyticsSession from "@/components/AnalyticsSession";
 
 const display = Fraunces({ subsets: ["latin"], variable: "--font-fraunces", display: "swap", axes: ["opsz"] });
 const sans = Hanken_Grotesk({ subsets: ["latin"], variable: "--font-hanken", display: "swap" });
@@ -111,6 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <Footer />
         <OpenHelmAnalytics />
+        <AnalyticsSession />
       </body>
     </html>
   );

@@ -4,6 +4,7 @@ import { useState } from "react";
 import SaveToAccountButton from "@/components/SaveToAccountButton";
 import { calculateTruckerPerDiem, TRANSPORTATION_PER_DIEM, type TransportationRegion } from "@/lib/truckers";
 import type { NewCloudTrip } from "@/lib/trips-remote";
+import { useTrackCalculation } from "@/lib/analytics-events";
 
 const usd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -22,6 +23,8 @@ export default function TruckDriverCalculator() {
       error = e instanceof Error ? e.message : "Could not calculate this period.";
     }
   }
+
+  useTrackCalculation("truck_driver", result ? `${region}|${startDate}|${endDate}` : null, Boolean(error));
 
   const buildCloudTrip = (): NewCloudTrip | null => result ? {
     kind: "trucker",
