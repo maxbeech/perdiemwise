@@ -6,6 +6,7 @@ import SavedTrips, { type CurrentTrip } from "@/components/SavedTrips";
 import { FISCAL_YEAR_LABEL, getLocation, type GsaLocation } from "@/lib/gsa";
 import { calculateTrip, type TripResult } from "@/lib/perdiem";
 import type { SavedTrip } from "@/lib/saved-trips";
+import { useTrackCalculation } from "@/lib/analytics-events";
 
 const usd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 const DAY_LABEL: Record<string, string> = { first: "Travel day · 75% M&IE", full: "Full day", last: "Return day · 75% M&IE", single: "Same-day trip · 75% M&IE" };
@@ -28,6 +29,8 @@ export default function PerDiemCalculator({ initialSlug }: { initialSlug?: strin
     try { result = calculateTrip({ locationSlug: loc?.slug ?? null, startDate: start, endDate: end, providedMeals: meals }); }
     catch (e) { error = e instanceof Error ? e.message : "Could not calculate this trip."; }
   }
+
+  useTrackCalculation("per_diem", result ? `${loc?.slug}|${start}|${end}|${JSON.stringify(meals)}` : null, Boolean(error));
 
   const current: CurrentTrip | null = result ? {
     locationSlug: loc?.slug ?? null, locationLabel: loc ? `${loc.city}, ${loc.state}` : "Standard rate",

@@ -2,6 +2,23 @@
 
 All notable changes to PerDiemWise are documented here.
 
+## [Unreleased] — 2026-10-01 — User journeys for OpenHelm
+
+### Added
+- GA4 journey events: `sign_up`, `login`, `login_link_requested`, `login_failed`,
+  `calculation_completed`, `calculation_failed`, `trip_saved`, `trip_save_failed`,
+  `begin_checkout`, `checkout_sign_in_required`, `checkout_failed`,
+  `checkout_cancelled`, `purchase`, `purchase_confirmation_failed`.
+- User properties `oh_user_ref` (16 hex chars of SHA-256 of the Supabase user id,
+  computed server-side) and `oh_plan` (`free` or `paid`), set once the visitor is
+  signed in and again after a confirmed payment.
+- `GET /api/analytics/identity`, the auth callback's `oh_auth` marker and the
+  checkout `session_id` return parameter that feed the above.
+
+### Changed
+- `lib/openhelm-analytics*.ts[x]` updated to the current shared client, which pushes
+  `arguments` into `dataLayer` (plain arrays are ignored by gtag.js).
+
 ## [Unreleased] — 2026-09-30 — Hosting moved from Vercel to Helm7
 
 ### Changed

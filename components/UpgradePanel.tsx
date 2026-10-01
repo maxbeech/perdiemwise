@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PRICING } from "@/lib/stripe";
+import { trackCheckoutResponse, trackEvent } from "@/lib/analytics-events";
 
 type Interval = "monthly" | "annual";
 
@@ -24,10 +25,12 @@ export default function UpgradePanel({ nextPath = "/pricing" }: { nextPath?: str
         body: JSON.stringify({ interval }),
       });
       const data = await res.json();
+      trackCheckoutResponse("pro", interval, res, data);
       if (data.url) { window.location.href = data.url; return; }
       if (data.needsAuth) { window.location.href = `/login?next=${encodeURIComponent(nextPath)}`; return; }
       setMsg(data.error ?? "Checkout isn't available yet — please check back soon.");
     } catch {
+      trackEvent("checkout_failed", { plan: "pro", reason: "network" });
       setMsg("Could not start checkout. Please try again.");
     } finally {
       setLoading(false);
