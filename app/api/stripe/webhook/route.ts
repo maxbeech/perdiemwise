@@ -3,6 +3,7 @@ import type Stripe from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { guardStripeEvent } from "../../../../lib/gate";
+import { captureServerError, logEvent } from "@/lib/observability";
 
 // Stripe → PerDiemWise source of truth for billing state. Verifies the raw-body
 // signature, then mirrors the subscription onto profiles.plan. This is the ONLY
@@ -18,6 +19,9 @@ export async function POST(request: Request) {
   try {
     event = await stripe.webhooks.constructEventAsync(body, sig ?? "", secret);
   } catch (e) {
+    // Unsigned or forged calls are expected noise from the open internet: a
+    // structured log, not an Issue.
+    logEvent("warn", "stripe webhook signature rejected");
     const message = e instanceof Error ? e.message : "bad signature";
     return NextResponse.json({ error: message }, { status: 400 });
   }
@@ -28,7 +32,7 @@ export async function POST(request: Request) {
   // customer — before anything below acts on it. See lib/gate.ts.
   const ownership = await guardStripeEvent(stripe, event);
   if (!ownership.ok) {
-    console.log(ownership.message);
+    logEvent("info", "stripe webhook ignored", { reason: ownership.reason, eventType: event.type });
     return NextResponse.json({ received: true, ignored: ownership.reason });
   }
 
@@ -48,7 +52,9 @@ export async function POST(request: Request) {
         await syncSubscription(stripe, event.data.object as Stripe.Subscription);
         break;
     }
+    logEvent("info", "stripe webhook handled", { eventType: event.type, eventId: event.id });
   } catch (e) {
+    captureServerError(e, { scope: "stripe-webhook", eventType: event.type, eventId: event.id });
     const message = e instanceof Error ? e.message : "handler error";
     return NextResponse.json({ error: message }, { status: 500 });
   }
@@ -73,9 +79,12 @@ async function syncSubscription(stripe: Stripe, sub: Stripe.Subscription) {
   if (userId) {
     const { error } = await admin.from("profiles").update(patch).eq("id", userId);
     if (!error) return;
+    captureServerError(error, { scope: "stripe-webhook", step: "update-by-user-id", subscriptionId: sub.id });
   }
   const customerId = typeof sub.customer === "string" ? sub.customer : sub.customer.id;
-  await admin.from("profiles").update(patch).eq("stripe_customer_id", customerId);
+  const { error: customerError } = await admin.from("profiles").update(patch).eq("stripe_customer_id", customerId);
+  // A billing state that did not land must be loud: the shop paid and stays on the free plan.
+  if (customerError) throw customerError;
 }
 
 // current_period_end lives on the subscription in older API versions and on the

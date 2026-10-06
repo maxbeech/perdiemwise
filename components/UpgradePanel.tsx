@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PRICING } from "@/lib/stripe";
 import { trackCheckoutResponse, trackEvent } from "@/lib/analytics-events";
+import { captureServerError } from "@/lib/observability";
 
 type Interval = "monthly" | "annual";
 
@@ -29,7 +30,8 @@ export default function UpgradePanel({ nextPath = "/pricing" }: { nextPath?: str
       if (data.url) { window.location.href = data.url; return; }
       if (data.needsAuth) { window.location.href = `/login?next=${encodeURIComponent(nextPath)}`; return; }
       setMsg(data.error ?? "Checkout isn't available yet — please check back soon.");
-    } catch {
+    } catch (e) {
+      captureServerError(e, { scope: "upgrade-panel", plan: "pro" });
       trackEvent("checkout_failed", { plan: "pro", reason: "network" });
       setMsg("Could not start checkout. Please try again.");
     } finally {

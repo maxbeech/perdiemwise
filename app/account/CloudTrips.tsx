@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getTripsSnapshot } from "@/lib/saved-trips";
 import { listCloudTrips, addCloudPerDiemTrip, deleteCloudTrip, type CloudTrip } from "@/lib/trips-remote";
 import { toCsv, downloadCsv } from "@/lib/csv";
+import { captureServerError } from "@/lib/observability";
 
 const usd = (n: number) => n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
@@ -19,7 +20,7 @@ export default function CloudTrips() {
 
   async function refresh() {
     try { setTrips(await listCloudTrips()); }
-    catch (e) { setError(e instanceof Error ? e.message : "Could not load trips."); }
+    catch (e) { captureServerError(e, { scope: "cloud-trips", step: "refresh" }); setError(e instanceof Error ? e.message : "Could not load trips."); }
   }
 
   useEffect(() => {
@@ -29,6 +30,7 @@ export default function CloudTrips() {
         const rows = await listCloudTrips();
         if (active) setTrips(rows);
       } catch (e) {
+        captureServerError(e, { scope: "cloud-trips", step: "load" });
         if (active) setError(e instanceof Error ? e.message : "Could not load trips.");
       }
     })();
@@ -45,6 +47,7 @@ export default function CloudTrips() {
       await refresh();
       setNote(toAdd.length ? `Imported ${toAdd.length} trip${toAdd.length === 1 ? "" : "s"} from this device.` : "No new device trips to import.");
     } catch (e) {
+      captureServerError(e, { scope: "cloud-trips", step: "import" });
       setError(e instanceof Error ? e.message : "Import failed.");
     } finally { setBusy(false); }
   }
@@ -52,7 +55,7 @@ export default function CloudTrips() {
   async function remove(id: string) {
     setError(null);
     try { await deleteCloudTrip(id); setTrips((t) => (t ?? []).filter((x) => x.id !== id)); }
-    catch (e) { setError(e instanceof Error ? e.message : "Delete failed."); }
+    catch (e) { captureServerError(e, { scope: "cloud-trips", step: "delete", tripId: id }); setError(e instanceof Error ? e.message : "Delete failed."); }
   }
 
   function exportCsv() {

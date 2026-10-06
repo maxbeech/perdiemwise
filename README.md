@@ -97,10 +97,22 @@ Supabase (database, auth) and Stripe stay where they are. Point the Stripe webho
   `STRIPE_PRICE_ID_ANNUAL`, `STRIPE_PRICE_ID_TEAM_MONTHLY`, `STRIPE_PRICE_ID_TEAM_ANNUAL`, `STRIPE_WEBHOOK_SECRET` — subscriptions. Absent → checkout degrades to a
   503 early-access note; the free tools are unaffected. Use **test** keys locally (`stripe listen`
   for the webhook secret), **live** keys in Helm7 production.
-- `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` — error monitoring (org `maxed-labs`, project
-  `perdiemwise_web`). Not secret; absent → the SDK is a silent no-op. `SENTRY_AUTH_TOKEN` is
-  optional (source-map upload only — the build succeeds without it, just unsymbolicated).
-  Known non-actionable browser noise is filtered in `lib/sentry-filters.ts`.
+- `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` — error monitoring, logs and user feedback (org `maxed-labs`,
+  project `perdiemwise_web`). Not secret; set both in Helm7 (the public one is inlined at build).
+  Absent → reporting is off and production logs a console error saying so. `SENTRY_ORG` and
+  `SENTRY_PROJECT` default to the values above. `SENTRY_AUTH_TOKEN` is optional (source-map upload
+  only). See `.env.example`.
+
+## Observability
+- Init: `instrumentation.ts` (server + edge) and `instrumentation-client.ts` (browser), both using
+  `lib/sentry-options.ts`. Browser traffic goes through a tunnel route chosen per build.
+- Report failures with `captureServerError(err, { scope, ...ids })` from `lib/observability.ts`;
+  pass ids, codes and counts only (anything else is replaced). Use `logEvent` for structured logs.
+- `lib/scrub.ts` is the one scrubber for errors, logs, breadcrumbs and transactions. It fails closed.
+- The feedback control is `components/FeedbackButton.tsx` (header, mobile menu, footer).
+- Known non-actionable browser noise is filtered in `lib/sentry-filters.ts`.
+- `lib/openhelm-mail.ts` and `lib/openhelm-analytics-mp.ts` are generated shared clients; their console
+  output reaches Sentry as logs, and callers decide whether a failure is an Issue.
 
 ## Roadmap (next)
 Google OAuth sign-in; custom employer rate with taxable-excess flag;

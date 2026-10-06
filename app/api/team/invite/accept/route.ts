@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
 import { getAccount } from "@/lib/account";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { captureServerError } from "@/lib/observability";
 
 export async function POST(request: Request) {
   const account = await getAccount();
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
   if (!invite || invite.accepted_at || new Date(invite.expires_at).getTime() < Date.now()) return NextResponse.json({ error: "This invitation is missing, expired, or already used." }, { status: 410 });
   if (invite.email.toLowerCase() !== (account.user.email ?? "").toLowerCase()) return NextResponse.json({ error: `Sign in with ${invite.email} to accept this invitation.` }, { status: 403 });
   const { error: memberError } = await admin.from("team_members").upsert({ team_id: invite.team_id, user_id: account.user.id, role: "member" });
-  if (memberError) return NextResponse.json({ error: memberError.message }, { status: 502 });
+  if (memberError) { captureServerError(memberError, { scope: "team-invite-accept", teamId: invite.team_id }); return NextResponse.json({ error: memberError.message }, { status: 502 }); }
   await admin.from("team_invites").update({ accepted_at: new Date().toISOString() }).eq("id", invite.id);
   return NextResponse.json({ accepted: true, teamId: invite.team_id });
 }

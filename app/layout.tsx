@@ -5,6 +5,7 @@ import "./globals.css";
 import { SITE } from "@/lib/site";
 import { Button, Container } from "@/components/ui";
 import AuthNav from "@/components/AuthNav";
+import FeedbackButton from "@/components/FeedbackButton";
 import { OpenHelmAnalytics } from "../lib/openhelm-analytics";
 import AnalyticsSession from "@/components/AnalyticsSession";
 
@@ -52,6 +53,7 @@ function Header() {
           {NAV.map((n) => <Link key={n.href} href={n.href} className="transition-colors hover:text-ink">{n.label}</Link>)}
         </nav>
         <div className="hidden items-center gap-4 md:flex">
+          <FeedbackButton />
           <AuthNav />
           <Button href="/calculators/per-diem-calculator" size="sm">Open the calculator</Button>
         </div>
@@ -62,6 +64,7 @@ function Header() {
           <div className="absolute right-0 top-12 w-56 rounded-2xl border border-line bg-surface p-2 shadow-xl">
             {NAV.map((n) => <Link key={n.href} href={n.href} className="block rounded-lg px-3 py-2 text-sm text-ink-soft hover:bg-paper-2">{n.label}</Link>)}
             <AuthNav variant="mobile" />
+            <FeedbackButton variant="menu" />
             <Link href="/calculators/per-diem-calculator" className="mt-1 block rounded-lg bg-accent px-3 py-2 text-center text-sm font-medium text-white">Open the calculator</Link>
           </div>
         </details>
@@ -74,7 +77,7 @@ function Footer() {
   const cols = [
     { h: "Calculators", links: [["/calculators/per-diem-calculator", "Per diem calculator"], ["/calculators/mileage-reimbursement-calculator", "Mileage calculator"], ["/calculators/meals-and-incidentals-calculator", "M&IE calculator"]] },
     { h: "Rates", links: [["/per-diem", "Rates by city"], ["/states", "Rates by state"], ["/methodology", "Methodology & sources"]] },
-    { h: "Company", links: [["/blog", "Guides"], ["/pricing", "Pricing"], [`mailto:${SITE.email}`, "Contact"]] },
+    { h: "Company", links: [["/blog", "Guides"], ["/pricing", "Pricing"], [`mailto:${SITE.email}`, "Contact"]], extra: true },
   ];
   return (
     <footer className="mt-24 border-t border-line bg-paper-2/60">
@@ -91,6 +94,7 @@ function Footer() {
                 {c.links.map(([href, label]) => (
                   <li key={href}><Link href={href} className="text-ink-soft transition-colors hover:text-accent">{label}</Link></li>
                 ))}
+                {"extra" in c && <li><FeedbackButton variant="footer" /></li>}
               </ul>
             </div>
           ))}

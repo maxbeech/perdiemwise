@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useAccountClient } from "@/lib/use-account-client";
 import { addCloudTrip, type NewCloudTrip } from "@/lib/trips-remote";
 import { trackEvent } from "@/lib/analytics-events";
+import { captureServerError } from "@/lib/observability";
 
 // Pro-gated "save this to your account (cloud)" control shared by both
 // calculators. Free/signed-out users see a link to Pro; Pro users get a real
@@ -36,6 +37,7 @@ export default function SaveToAccountButton({ buildTrip }: { buildTrip: () => Ne
       setStatus("saved");
       setTimeout(() => setStatus("idle"), 2500);
     } catch (e) {
+      captureServerError(e, { scope: "save-trip", kind: trip.kind });
       trackEvent("trip_save_failed", { kind: trip.kind });
       setStatus("error");
       setMsg(e instanceof Error ? e.message : "Could not save.");

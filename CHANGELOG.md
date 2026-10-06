@@ -2,7 +2,33 @@
 
 All notable changes to PerDiemWise are documented here.
 
-## [Unreleased] — 2026-10-01 — User journeys for OpenHelm
+## [Unreleased] — 2026-10-06 — Sentry standard
+
+### Added
+- "Send feedback" control in the header, the mobile menu and the footer. It opens Sentry's
+  feedback form (our own button, no injected widget), pre-fills name and email for signed-in
+  people, and lands in the `perdiemwise_web` project as User Feedback.
+- Structured logs (`enableLogs`, console forwarding, `logEvent`) on client, server and edge.
+- One shared scrubber (`lib/scrub.ts`) behind `beforeSend`, `beforeSendLog`, `beforeBreadcrumb`
+  and `beforeSendTransaction`: emails, phone numbers, JWTs, bearer tokens, API keys and
+  password/secret/token fields are redacted, query strings are stripped from URLs, strings are
+  cut at 10k characters before matching, patterns are linear-time, and any scrubber failure
+  drops the event instead of sending it raw.
+- `lib/observability.ts`: `captureServerError`/`captureServerMessage` keep ids, codes, counts and
+  enum values only. Checkout, billing portal, Stripe webhook, team routes, the report builder,
+  the account return from Stripe and the client save/upgrade/billing/team flows now report
+  failures as Sentry Issues instead of swallowing them.
+- Tests for the scrubber (including a long adversarial string and fail-closed), the feedback
+  control and the capture helper.
+
+### Changed
+- Sentry init lives in `instrumentation.ts` / `instrumentation-client.ts` with shared options
+  (`lib/sentry-options.ts`); `sentry.server.config.ts` and `sentry.edge.config.ts` are gone.
+- Browser requests go through a randomised tunnel route, so ad blockers do not drop reports.
+- A failed profile update in the Stripe webhook now returns 500 (so Stripe retries) instead of
+  being ignored.
+
+## 2026-10-01 — 2026-10-01 — User journeys for OpenHelm
 
 ### Added
 - GA4 journey events: `sign_up`, `login`, `login_link_requested`, `login_failed`,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { captureServerError } from "@/lib/observability";
 
 // Opens the Stripe Billing Portal for the signed-in Pro user.
 export default function ManageBillingButton() {
@@ -15,7 +16,8 @@ export default function ManageBillingButton() {
       const data = await res.json();
       if (data.url) { window.location.href = data.url; return; }
       setMsg(data.error ?? "Could not open billing.");
-    } catch {
+    } catch (e) {
+      captureServerError(e, { scope: "manage-billing" });
       setMsg("Could not open billing. Please try again.");
     } finally {
       setLoading(false);

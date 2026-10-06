@@ -3,6 +3,7 @@ import type Stripe from "stripe";
 import { getAccount } from "@/lib/account";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getStripe, priceFor, stripeConfigured, teamPriceFor, type BillingInterval, type BillingProduct } from "@/lib/stripe";
+import { captureServerError } from "@/lib/observability";
 
 // Create a fresh Stripe customer for this user and persist its id.
 async function createCustomer(stripe: Stripe, userId: string, email: string | null | undefined): Promise<string> {
@@ -86,6 +87,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ url: session.url });
     }
   } catch (e) {
+    captureServerError(e, { scope: "checkout", product, interval, userId: account.user.id });
     const message = e instanceof Error ? e.message : "Could not reach Stripe.";
     return NextResponse.json({ error: message }, { status: 502 });
   }

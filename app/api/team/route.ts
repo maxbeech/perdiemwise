@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import { getAccount } from "@/lib/account";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { captureServerError } from "@/lib/observability";
 
 export async function GET() {
   const account = await getAccount();
   if (!account) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
   const admin = createAdminClient();
   const { data, error } = await admin.from("team_members").select("team_id, role, teams(id, name, owner_id, created_at)").eq("user_id", account.user.id);
-  if (error) return NextResponse.json({ error: error.message }, { status: 502 });
+  if (error) { captureServerError(error, { scope: "team-list", userId: account.user.id }); return NextResponse.json({ error: error.message }, { status: 502 }); }
   return NextResponse.json({ teams: data ?? [] });
 }
 
@@ -19,9 +20,11 @@ export async function POST(request: Request) {
   if (!name) return NextResponse.json({ error: "Enter a team name." }, { status: 400 });
   const admin = createAdminClient();
   const { data: team, error } = await admin.from("teams").insert({ owner_id: account.user.id, name }).select("id, name, owner_id, created_at").single();
+  if (error || !team) captureServerError(error ?? new Error("team insert returned no row"), { scope: "team-create", userId: account.user.id });
   if (error || !team) return NextResponse.json({ error: error?.message ?? "Could not create the team." }, { status: 502 });
   const { error: memberError } = await admin.from("team_members").insert({ team_id: team.id, user_id: account.user.id, role: "owner" });
   if (memberError) {
+    captureServerError(memberError, { scope: "team-create", step: "add-owner", teamId: team.id });
     await admin.from("teams").delete().eq("id", team.id);
     return NextResponse.json({ error: memberError.message }, { status: 502 });
   }

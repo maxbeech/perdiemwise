@@ -11,6 +11,7 @@ import { getAccount } from "@/lib/account";
 import { analyticsUserRef, purchaseFromSession, type PaidPlanId } from "@/lib/analytics-contract";
 import { getStripe } from "@/lib/stripe";
 import CloudTrips from "./CloudTrips";
+import { captureServerError } from "@/lib/observability";
 
 export const metadata: Metadata = {
   title: "Your account",
@@ -37,7 +38,8 @@ async function checkPaidSession(sessionId: string | undefined, userId: string) {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     const plan: PaidPlanId = session.metadata?.plan === "team" ? "team" : "pro";
     return purchaseFromSession(session, userId, plan);
-  } catch {
+  } catch (e) {
+    captureServerError(e, { scope: "account-checkout-return", userId });
     return null;
   }
 }

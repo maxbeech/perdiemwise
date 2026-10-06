@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { authEventFor, withAuthEvent } from "@/lib/analytics-contract";
+import { logEvent } from "@/lib/observability";
 
 // Magic-link / OAuth landing. Supabase sends users here either with a PKCE
 // `code` (browser-initiated sign-in) or a `token_hash` + `type` (OTP / email
@@ -28,9 +29,11 @@ export async function GET(request: Request) {
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) return signedIn();
+    logEvent("warn", "auth callback rejected", { step: "exchange-code", code: error.code });
   } else if (tokenHash && type) {
     const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
     if (!error) return signedIn();
+    logEvent("warn", "auth callback rejected", { step: "verify-otp", code: error.code });
   }
 
   return NextResponse.redirect(`${origin}/login?error=link`);

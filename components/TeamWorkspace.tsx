@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { captureServerError } from "@/lib/observability";
 
 type Team = { id: string; name: string; owner_id: string; created_at: string };
 type TeamTrip = { id: string; user_id: string; kind: string; name: string; total: number; data: Record<string, unknown>; created_at: string };
@@ -24,12 +25,12 @@ export default function TeamWorkspace() {
       const next = (data.teams ?? []).map((row: { teams: Team }) => row.teams).filter(Boolean);
       setTeams(next);
       if (next[0]) setSelected((current) => current ?? next[0]);
-    }).catch((e) => { if (active) setMessage(e instanceof Error ? e.message : "Could not load teams."); });
+    }).catch((e) => { captureServerError(e, { scope: "team-workspace", step: "load-teams" }); if (active) setMessage(e instanceof Error ? e.message : "Could not load teams."); });
     return () => { active = false; };
   }, []);
   useEffect(() => {
     if (!selected) return;
-    fetch(`/api/team/${selected.id}/trips`).then(async (res) => { const data = await res.json(); if (!res.ok) throw new Error(data.error ?? "Could not load team trips."); setTrips(data.trips ?? []); }).catch((e) => setMessage(e instanceof Error ? e.message : "Could not load team trips."));
+    fetch(`/api/team/${selected.id}/trips`).then(async (res) => { const data = await res.json(); if (!res.ok) throw new Error(data.error ?? "Could not load team trips."); setTrips(data.trips ?? []); }).catch((e) => { captureServerError(e, { scope: "team-workspace", step: "load-trips", teamId: selected.id }); setMessage(e instanceof Error ? e.message : "Could not load team trips."); });
   }, [selected]);
 
   async function createTeam() {

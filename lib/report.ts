@@ -1,6 +1,7 @@
 import { calculateTrip, type TripResult } from "@/lib/perdiem";
 import { rateFor } from "@/lib/mileage";
 import type { CloudTrip } from "@/lib/trips-remote";
+import { captureServerError } from "@/lib/observability";
 
 // Turns stored trip rows into fully-computed report items. Per-diem trips are
 // recomputed from their inputs against the live GSA data (never a stale stored
@@ -91,8 +92,9 @@ export function buildReport(trips: CloudTrip[]): ReportData {
         end: d.end,
         result,
       });
-    } catch {
-      /* skip un-recomputable rows rather than emit a fabricated line */
+    } catch (e) {
+      // Skip un-recomputable rows rather than emit a fabricated line, but tell us.
+      captureServerError(e, { scope: "report", tripId: t.id });
     }
   }
 
