@@ -152,9 +152,40 @@ function scrubBreadcrumbUnsafe(b: Breadcrumb): Breadcrumb | null {
 }
 
 function scrubErrorEventUnsafe(event: ErrorEvent): ErrorEvent {
-  // A person who chose to send feedback keeps their name, email and message.
-  if ((event as { type?: string }).type === "feedback") return event;
+  // A person who chose to send feedback keeps their own name, email and message
+  // (contexts.feedback and user) and nothing else: stash those two, run the
+  // normal scrub over everything (breadcrumbs, request, tags, extra, other
+  // contexts), then restore them. There is deliberately no early return.
+  if ((event as { type?: string }).type === "feedback") {
+    const feedback = event.contexts?.feedback;
+    const user = event.user;
+    scrubCommon(event);
+    scrubExceptions(event);
+    if (feedback) event.contexts = { ...event.contexts, feedback: capFeedback(feedback) } as typeof event.contexts;
+    if (user) {
+      const { id, email, username, name } = user as Record<string, unknown>;
+      event.user = Object.fromEntries(
+        Object.entries({ id, email, username, name }).filter(([, v]) => typeof v === "string" || typeof v === "number"),
+      ) as typeof event.user;
+    }
+    return event;
+  }
   scrubCommon(event);
+  scrubExceptions(event);
+  return event;
+}
+
+/** Keep only the reporter's own fields, as strings, cut to the scan limit. */
+function capFeedback(feedback: Record<string, unknown>): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  for (const key of ["name", "contact_email", "email", "message", "url", "associated_event_id"]) {
+    const v = feedback[key];
+    if (typeof v === "string") out[key] = v.length > MAX_SCAN_CHARS ? v.slice(0, MAX_SCAN_CHARS) : v;
+  }
+  return out;
+}
+
+function scrubExceptions(event: ErrorEvent): void {
   for (const ex of event.exception?.values ?? []) {
     if (typeof ex.value === "string") ex.value = scrubString(ex.value);
     for (const frame of ex.stacktrace?.frames ?? []) {
@@ -163,7 +194,6 @@ function scrubErrorEventUnsafe(event: ErrorEvent): ErrorEvent {
       if (frame.abs_path) frame.abs_path = stripQuery(frame.abs_path);
     }
   }
-  return event;
 }
 
 function scrubTransactionUnsafe(event: TransactionEvent): TransactionEvent {

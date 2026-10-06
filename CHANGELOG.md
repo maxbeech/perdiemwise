@@ -2,6 +2,13 @@
 
 All notable changes to PerDiemWise are documented here.
 
+## [Unreleased] — 2026-10-07 — Scrubber fix
+
+### Security
+- Feedback events no longer skip the Sentry scrubber. They keep only the reporter's own
+  `contexts.feedback` and `user` (name, email, message); breadcrumbs, request, tags, extra and
+  every other context are scrubbed as normal. Added tests for both, including fail-closed.
+
 ## [Unreleased] — 2026-10-06 — Sentry standard
 
 ### Added

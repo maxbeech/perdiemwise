@@ -72,10 +72,39 @@ test("beforeSend: scrubs message, exception, extras, headers, request body, user
   assert.equal(ev.extra?.count, 3);
 });
 
-test("feedback events keep name and email", () => {
-  const fb = { type: "feedback", contexts: { feedback: { name: "Jane", contact_email: "jane@example.com", message: "Lovely tool" } } };
-  const out = scrubEvent(fb as never);
-  assert.equal(JSON.stringify(out), JSON.stringify(fb));
+test("feedback events keep ONLY contexts.feedback and user; everything else is still scrubbed", () => {
+  const feedback = { name: "Jane", contact_email: "jane@example.com", message: "Lovely tool, mail me at jane@example.com" };
+  const fb = {
+    type: "feedback",
+    user: { id: "u1", email: "jane@example.com", name: "Jane", ip_address: "1.2.3.4" },
+    contexts: { feedback: { ...feedback }, device: { owner_email: "other@example.com" } },
+    breadcrumbs: [{ category: "navigation", message: "go", data: { url: "https://perdiemwise.com/app?token=abc", to: "/x?token=abc" } }],
+    request: {
+      url: "https://perdiemwise.com/app?token=abc",
+      query_string: "token=abc",
+      cookies: { sid: "abc" },
+      headers: { cookie: "sid=abc123", Authorization: "Bearer abcdefgh12345678", "user-agent": "ua" },
+    },
+    tags: { owner: "other@example.com" },
+    extra: { api_key: "zzz999" },
+  };
+  const out = scrubEvent(fb as never) as unknown as typeof fb;
+  assert.ok(out, "feedback event must not be dropped");
+  assert.deepEqual(out.contexts.feedback, feedback);
+  assert.equal(out.user.email, "jane@example.com");
+  assert.equal(out.user.name, "Jane");
+  assert.equal((out.user as Record<string, unknown>).ip_address, undefined);
+  const rest = JSON.stringify({ ...out, contexts: { ...out.contexts, feedback: undefined }, user: undefined });
+  for (const leak of ["token=abc", "abc123", "abcdefgh12345678", "zzz999", "other@example.com"]) assert.ok(!rest.includes(leak), `${leak} leaked: ${rest}`);
+  assert.equal(out.breadcrumbs[0].data.url, "https://perdiemwise.com/app");
+  assert.equal(out.request.query_string, undefined);
+  assert.equal(out.request.cookies, undefined);
+  assert.equal(out.request.headers.cookie, "[redacted]");
+});
+
+test("feedback events fail closed too", () => {
+  const bad = { type: "feedback", get contexts(): never { throw new Error("boom"); } };
+  assert.equal(scrubEvent(bad as never), null);
 });
 
 test("beforeBreadcrumb: scrubs message and data, strips query strings", () => {
