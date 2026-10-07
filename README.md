@@ -114,6 +114,8 @@ Supabase (database, auth) and Stripe stay where they are. Point the Stripe webho
 - `lib/openhelm-mail.ts` and `lib/openhelm-analytics-mp.ts` are generated shared clients; their console
   output reaches Sentry as logs, and callers decide whether a failure is an Issue.
 
+The Sentry scrubber (`lib/scrub.ts`) redacts secrets of any length, backs up to a clean boundary when it truncates, and fails closed; its regression tests are in `test/scrub-hardening.test.mts`.
+
 ## Roadmap (next)
 Google OAuth sign-in; custom employer rate with taxable-excess flag;
 multi-destination trips; OCONUS/international rate data; historical fiscal-year rates.
