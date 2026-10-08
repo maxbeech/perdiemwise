@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { SITE } from "@/lib/site";
 import type Stripe from "stripe";
 import { getAccount } from "@/lib/account";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -54,7 +55,7 @@ export async function POST(request: Request) {
   }
 
   const stripe = getStripe()!;
-  const base = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
+  const base = SITE.url;
   const { interval = "monthly" } = body;
   const price = product === "team" ? teamPriceFor(interval) : priceFor(interval);
   if (!price) return NextResponse.json({ error: "That plan isn't available." }, { status: 400 });

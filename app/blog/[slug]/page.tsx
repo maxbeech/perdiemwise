@@ -233,6 +233,21 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           {p.body.map((b, i) => renderBlock(b, i))}
         </div>
 
+        {p.sources && p.sources.length > 0 && (
+          <section className="mt-10 border-t border-line pt-6" aria-labelledby="sources-heading">
+            <h2 id="sources-heading" className="font-display text-xl font-semibold text-ink">Sources and further reading</h2>
+            <ul className="mt-3 list-disc space-y-2 pl-5 text-sm text-ink-soft">
+              {p.sources.map((source) => (
+                <li key={source.url}>
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">
+                    {source.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         {p.supportingKeywords && p.supportingKeywords.length > 0 && (
           <div className="mt-10 flex flex-wrap gap-2">
             {p.supportingKeywords.slice(0, 8).map((k) => <Badge key={k} tone="ink">{k}</Badge>)}

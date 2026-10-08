@@ -1,12 +1,13 @@
-// Canonical/OG base. NEXT_PUBLIC_SITE_URL is inlined at build, so it must be set
-// as a build variable; the fallback is the production origin so a build without
-// it still emits canonicals, sitemaps and OG images that point at the live site.
-const URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://www.perdiemwise.com").replace(/\/$/, "");
+// One public origin for every indexable URL, structured-data reference and
+// customer-facing return URL. Do not make this build-configurable: a stale apex
+// value here would make the sitemap and canonical tags disagree with the ingress
+// redirect. Local development still serves normally; only absolute URLs use this.
+export const CANONICAL_ORIGIN = "https://www.perdiemwise.com";
 
 export const SITE = {
   name: "PerDiemWise",
-  domain: URL.replace(/^https?:\/\//, ""),
-  url: URL,
+  domain: "www.perdiemwise.com",
+  url: CANONICAL_ORIGIN,
   tagline: "Free GSA per diem & IRS mileage calculator",
   description:
     "Free per diem calculator using the official GSA FY2026 lodging and M&IE rates — with the 75% first-and-last-day rule built in — plus an IRS 2026 mileage reimbursement calculator. Real government rates, itemized day by day.",

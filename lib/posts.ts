@@ -22,6 +22,11 @@ export interface FeaturedImage {
   creditUrl: string;
 }
 
+export interface ExternalSource {
+  label: string;
+  url: string;
+}
+
 export interface ReviewMeta {
   itemName: string;
   itemType: "SoftwareApplication" | "Product" | "Service";
@@ -43,6 +48,8 @@ export interface Post {
   schemaType?: SchemaType;
   review?: ReviewMeta; // required when schemaType === "Review"
   featuredImage?: FeaturedImage;
+  /** Primary official references displayed with the article. */
+  sources?: ExternalSource[];
   body: Block[];
 }
 
@@ -1642,12 +1649,12 @@ const WEEK2_POSTS: Post[] = [
 
 POSTS.push(...WEEK2_POSTS);
 
-const WEEK3_POSTS: Post[] = [
+export const WEEK3_POSTS: Post[] = [
   {
     slug: "federal-travel-regulation-explained",
-    title: "What Is the Federal Travel Regulation (FTR)? The Complete Guide",
+    title: "Federal Travel Regulation (FTR): A Practical Guide",
     description:
-      "A plain-English guide to the Federal Travel Regulation (41 CFR Chapters 300-304): what it covers, who must follow it, how it differs from the JTR and DSSR, and how it sets the per diem ceilings contractors and civil servants live by.",
+      "Understand the Federal Travel Regulation: who follows it, how it sets per diem limits, and how it differs from the JTR and DSSR.",
     keyword: "federal travel regulation",
     supportingKeywords: [
       "41 CFR Chapters 300-304",
@@ -1668,7 +1675,7 @@ const WEEK3_POSTS: Post[] = [
       "how does the FAR limit contractor travel reimbursement",
     ],
     category: "Academy",
-    date: "2026-07-19",
+    date: "2026-10-01",
     readMins: 11,
     schemaType: "Article",
     featuredImage: {
@@ -1730,7 +1737,7 @@ const WEEK3_POSTS: Post[] = [
     slug: "per-diem-rates-2026-conus-table",
     title: "Per Diem Rates 2026: The Full CONUS Table, Explained",
     description:
-      "FY2026 per diem rates run $110 lodging plus $68 M&IE for most of the US, but seasonal cities like DC and NYC swing far higher. Here's the full breakdown, with real numbers.",
+      "See how FY2026 CONUS per diem rates work, when seasonal city rates apply, and how to check the right rate for your trip.",
     keyword: "per diem rates 2026",
     supportingKeywords: [
       "FY2026 per diem rates",
@@ -1750,12 +1757,12 @@ const WEEK3_POSTS: Post[] = [
       "GSA FY2026 per diem effective dates",
     ],
     category: "News",
-    date: "2026-07-19",
+    date: "2026-10-01",
     readMins: 8,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/per-diem-rates-2026-conus-table.jpg",
-      alt: "A US map overlaid with pins marking cities alongside a calculator and hotel receipt, representing FY2026 per diem rate lookups",
+      alt: "A US map and hotel receipt for checking per diem rates 2026",
       credit: "Photo by Beate Vogl on Pexels",
       creditUrl: "https://www.pexels.com/@beate-vogl-852640107",
     },
@@ -1805,7 +1812,7 @@ const WEEK3_POSTS: Post[] = [
     slug: "per-diem-vs-mileage-reimbursement",
     title: "Per Diem vs. Mileage Reimbursement: What's the Difference?",
     description:
-      "Per diem covers lodging and meals; mileage reimbursement covers driving your own car. Learn the difference, when each applies, and how to claim both on one trip.",
+      "Compare per diem and mileage reimbursement, see when each applies, and learn how both can be claimed on one business trip.",
     keyword: "per diem vs mileage reimbursement",
     supportingKeywords: [
       "can I claim per diem and mileage",
@@ -1824,12 +1831,12 @@ const WEEK3_POSTS: Post[] = [
       "does per diem include driving costs",
     ],
     category: "Academy",
-    date: "2026-07-20",
+    date: "2026-10-02",
     readMins: 7,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/per-diem-vs-mileage-reimbursement.jpg",
-      alt: "A car on a highway during a road trip, representing a combined driving and overnight business trip",
+      alt: "A car on a highway illustrating per diem vs mileage reimbursement on a business trip",
       credit: "Photo by Gabriel Rissi on Pexels",
       creditUrl: "https://www.pexels.com/@gabrielrissi",
     },
@@ -1860,6 +1867,7 @@ const WEEK3_POSTS: Post[] = [
         ["Total reimbursement", "$136.80 + $110 + $68", "$314.80"],
       ] },
       { type: "p", text: "That $314.80 is the full, legitimate reimbursement for one overnight trip: driving costs and staying costs, added together rather than chosen between. Neither figure reduces the other. (The same trip taken before 1 July 2026 uses the earlier 72.5¢ mileage rate instead — $130.50 mileage, $308.50 total.)" },
+      { type: "p", text: "There is one useful admin check before approving a combined claim: make sure the traveller has recorded the business purpose and route for the mileage, then record the overnight destination and travel dates for per diem. A client visit in Richmond followed by a conference hotel in Washington, DC can create both claims, but the file should make the two cost categories easy to trace. That small bit of structure saves the familiar end-of-month hunt through calendar invites and fuel-card transactions." },
       { type: "quote", text: "We establish the per diem rates that federal agencies use to reimburse their employees for lodging and meals and incidental expenses incurred while on official travel within the continental United States.", attribution: "U.S. General Services Administration, gsa.gov" },
       { type: "h2", text: "When does each one apply?" },
       { type: "ul", items: [
@@ -1882,7 +1890,7 @@ const WEEK3_POSTS: Post[] = [
     slug: "gsa-per-diem-rates-explained",
     title: "GSA Per Diem Rates Explained: How CONUS Rates Are Set",
     description:
-      "How the General Services Administration actually calculates GSA per diem rates: the hotel survey data behind the numbers, standard versus non-standard locations, and the annual publishing cycle.",
+      "Learn how GSA sets CONUS per diem rates, from hotel surveys and non-standard locations to the annual rate cycle.",
     keyword: "gsa per diem rates",
     supportingKeywords: [
       "GSA per diem rate methodology",
@@ -1902,7 +1910,7 @@ const WEEK3_POSTS: Post[] = [
       "when does GSA update per diem rates each year",
     ],
     category: "Academy",
-    date: "2026-07-20",
+    date: "2026-10-02",
     readMins: 9,
     schemaType: "Article",
     featuredImage: {
@@ -1951,9 +1959,9 @@ const WEEK3_POSTS: Post[] = [
   },
   {
     slug: "washington-dc-per-diem-rate",
-    title: "Washington DC Per Diem Rate: The Non-Standard Lodging Table Explained",
+    title: "Washington DC Per Diem Rate: A Practical Guide",
     description:
-      "The GSA's Washington DC per diem rate covers far more than the District. Here's the full FY2026 lodging table, the $92 M&IE breakdown, and why rates swing by season.",
+      "Check the FY2026 Washington DC per diem area, M&IE allowance and seasonal lodging caps before booking a business trip.",
     keyword: "washington dc per diem rate",
     supportingKeywords: [
       "dc per diem rate 2026",
@@ -1973,12 +1981,12 @@ const WEEK3_POSTS: Post[] = [
       "gsa per diem rate for alexandria virginia",
     ],
     category: "Academy",
-    date: "2026-07-20",
+    date: "2026-10-02",
     readMins: 8,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/washington-dc-per-diem-rate.jpg",
-      alt: "The U.S. Capitol dome in Washington DC, anchor of the GSA's non-standard per diem rate area covering DC, Northern Virginia and suburban Maryland",
+      alt: "The U.S. Capitol for the Washington DC per diem rate area",
       credit: "Photo by Mark Direen on Pexels",
       creditUrl: "https://www.pexels.com/@mark-direen-622749",
     },
@@ -2060,9 +2068,9 @@ const WEEK3_POSTS: Post[] = [
   },
   {
     slug: "expense-report-software-compared",
-    title: "Expense Report Software: What SMBs Actually Need (7 Must-Have Features)",
+    title: "Expense Report Software: 7 Features SMBs Need",
     description:
-      "Most expense report software reviews compare tools built for finance teams with dedicated headcount. Here's what a small or mid-sized business actually needs, and which category of tool fits.",
+      "Compare the seven expense-report features that matter to small businesses, from compliant exports to approval trails.",
     keyword: "expense report software",
     supportingKeywords: [
       "expense report software for small business",
@@ -2083,7 +2091,7 @@ const WEEK3_POSTS: Post[] = [
       "expense report software without a subscription",
     ],
     category: "Reviews",
-    date: "2026-07-21",
+    date: "2026-10-03",
     readMins: 8,
     schemaType: "Article",
     featuredImage: {
@@ -2144,7 +2152,7 @@ const WEEK3_POSTS: Post[] = [
     slug: "per-diem-nyc-seasonal-rates",
     title: "Per Diem in NYC: How New York's Seasonal GSA Rates Work",
     description:
-      "New York City's GSA per diem lodging cap swings from $179 to $342 a night across the year. A worked case study shows what that seasonal gap actually costs a real business trip.",
+      "See how New York City's FY2026 GSA lodging caps vary by season and what the difference means for a business trip.",
     keyword: "per diem nyc",
     supportingKeywords: [
       "nyc per diem rate",
@@ -2162,12 +2170,12 @@ const WEEK3_POSTS: Post[] = [
       "how much is per diem in nyc for a business trip",
     ],
     category: "Academy",
-    date: "2026-07-21",
+    date: "2026-10-03",
     readMins: 8,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/per-diem-nyc-seasonal-rates.jpg",
-      alt: "Manhattan skyline at dusk, representing New York City's steeply seasonal GSA per diem lodging rates",
+      alt: "Manhattan skyline for the per diem NYC seasonal GSA rate guide",
       credit: "Photo by Denil Dominic on Pexels",
       creditUrl: "https://www.pexels.com/@denil",
     },
@@ -2225,9 +2233,9 @@ const WEEK3_POSTS: Post[] = [
   },
   {
     slug: "conus-per-diem-rates-standard",
-    title: "CONUS Per Diem Rates: How the Standard Rate Applies Nationwide",
+    title: "CONUS Per Diem Rates: How the Standard Rate Works",
     description:
-      "CONUS covers the 48 contiguous states plus DC. Here's how the GSA standard per diem rate works as the default across nearly all of it, and when a non-standard rate takes over instead.",
+      "Learn when the GSA standard CONUS per diem rate applies and when a destination has its own non-standard rate.",
     keyword: "conus per diem rates",
     supportingKeywords: [
       "conus meaning per diem",
@@ -2246,12 +2254,12 @@ const WEEK3_POSTS: Post[] = [
       "how many non-standard per diem locations does gsa list",
     ],
     category: "Academy",
-    date: "2026-07-22",
+    date: "2026-10-04",
     readMins: 7,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/conus-per-diem-rates-standard.jpg",
-      alt: "Map of the continental United States illustrating how the GSA standard per diem rate covers the large majority of counties",
+      alt: "Map explaining where CONUS per diem rates and the standard rate apply",
       credit: "Photo by Giant Asparagus on Pexels",
       creditUrl: "https://www.pexels.com/@giantasparagus",
     },
@@ -2306,9 +2314,9 @@ const WEEK3_POSTS: Post[] = [
   },
   {
     slug: "printable-mileage-log-template",
-    title: "Printable Mileage Log Template: Free IRS-Compliant Log + How to Use It",
+    title: "Printable Mileage Log: A Free IRS-Compliant Template",
     description:
-      "A free printable mileage log template that meets IRS recordkeeping rules, plus a step-by-step guide to filling it in, totalling it, and keeping it audit-ready.",
+      "Download a practical mileage-log template and learn the IRS recordkeeping details needed to keep your business miles audit-ready.",
     keyword: "printable mileage log",
     supportingKeywords: [
       "mileage log template",
@@ -2327,12 +2335,12 @@ const WEEK3_POSTS: Post[] = [
       "what does the IRS require in a mileage log",
     ],
     category: "Academy",
-    date: "2026-07-22",
+    date: "2026-10-04",
     readMins: 7,
     schemaType: "HowTo",
     featuredImage: {
       src: "/images/blog/printable-mileage-log-template.jpg",
-      alt: "A printed mileage log template on a clipboard resting on a car dashboard, with a pen ready to record a trip",
+      alt: "A printable mileage log template on a clipboard in a car",
       credit: "Photo by MART PRODUCTION on Pexels",
       creditUrl: "https://www.pexels.com/@mart-production",
     },
@@ -2390,7 +2398,7 @@ const WEEK3_POSTS: Post[] = [
     slug: "are-provided-meals-deducted-from-per-diem",
     title: "Are Provided Meals Deducted From Your Per Diem?",
     description:
-      "Yes — a provided meal is deducted from your GSA per diem, but only that meal's exact dollar value, and incidentals are never touched. Here's how the maths works.",
+      "See when a provided meal reduces a GSA per diem claim, how meal deductions work, and why incidentals are retained.",
     keyword: "are provided meals deducted from per diem",
     supportingKeywords: [
       "per diem meal deduction",
@@ -2410,12 +2418,12 @@ const WEEK3_POSTS: Post[] = [
       "are incidentals deducted when meals are provided",
     ],
     category: "Academy",
-    date: "2026-07-22",
+    date: "2026-10-04",
     readMins: 7,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/are-provided-meals-deducted-from-per-diem.jpg",
-      alt: "Business traveller at a conference buffet, illustrating how a provided meal gets deducted from a daily per diem",
+      alt: "Conference buffet: are provided meals deducted from per diem?",
       credit: "Photo by Ana Paula on Pexels",
       creditUrl: "https://www.pexels.com/@ana-paula-34806524",
     },
@@ -2443,6 +2451,8 @@ const WEEK3_POSTS: Post[] = [
       { type: "p", text: "If dinner had also been provided that same day, you'd subtract the $28 dinner figure too: $68 − $19 − $28 = $21, still carrying the full $5 for incidentals inside it." },
       { type: "h2", text: "The $5 incidentals allowance is never deducted" },
       { type: "p", text: "Even if all three meals are free that day, you still keep the incidentals portion. On the standard tier, deducting breakfast, lunch and dinner is $16 + $19 + $28 = $63, leaving exactly $5 — your untouched incidentals allowance. This is a built-in safeguard: meal deductions can reduce your M&IE claim right down to the incidentals figure, but never below it." },
+      { type: "p", text: "In practice, the awkward cases are the ones where the agenda is vague. If an event says ‘lunch available’ but the traveller had to buy their own meal because a client call ran over, leave a note with the claim rather than guessing. Similarly, a hosted reception with drinks and snacks is not automatically dinner: use the programme, the actual meal supplied and your organisation’s written policy. A clear, contemporaneous note is far more useful than trying to reconstruct the day from memory several weeks later." },
+      { type: "p", text: "For a team, make the decision repeatable. Add a short field to the expense form for the meal name, who supplied it and the agenda reference, then let finance apply the published GSA breakdown. That gives a manager enough evidence to approve a claim quickly and gives the traveller a consistent answer on the next trip. It also avoids the most frustrating outcome: different people claiming different amounts for the same conference lunch." },
       { type: "h2", text: "What actually counts as a 'provided' meal" },
       { type: "p", text: "Not every free bite of food triggers a deduction. The test is simple: was the meal furnished to you directly, at no separate cost, with no real option to skip it and buy your own instead?" },
       { type: "ul", items: [
@@ -2469,9 +2479,9 @@ const WEEK3_POSTS: Post[] = [
   },
   {
     slug: "best-mileage-tracking-apps-compared",
-    title: "Best Mileage Tracking Apps Compared: MileIQ vs Everlance vs Free Alternatives",
+    title: "Best Mileage Tracking Apps: Paid vs Free Tools",
     description:
-      "An honest, researched comparison of MileIQ, Everlance, Stride, QuickBooks and Driversnote — pricing, automatic tracking and IRS-compliant exports, plus when a free calculator beats them all.",
+      "Compare major mileage apps on pricing, automatic tracking and exports, then decide whether a free calculator is enough.",
     keyword: "best mileage tracking app",
     supportingKeywords: [
       "MileIQ vs Everlance",
@@ -2489,12 +2499,12 @@ const WEEK3_POSTS: Post[] = [
       "do I need a mileage tracking app or just a calculator",
     ],
     category: "Reviews",
-    date: "2026-07-23",
+    date: "2026-10-05",
     readMins: 10,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/best-mileage-tracking-apps-compared.jpg",
-      alt: "A close-up of a smartphone displaying GPS navigation in a modern car interior, representing automatic mileage tracking apps",
+      alt: "A phone navigation screen for comparing the best mileage tracking app options",
       credit: "Photo by iddea photo on Pexels",
       creditUrl: "https://www.pexels.com/@alena",
     },
@@ -2546,7 +2556,7 @@ const WEEK3_POSTS: Post[] = [
     slug: "oconus-vs-conus-per-diem",
     title: "OCONUS vs. CONUS Per Diem: What's the Difference?",
     description:
-      "CONUS and OCONUS per diem rates are set by different agencies and can vary widely. Here's who sets each rate, why OCONUS often pays more, and where to look yours up.",
+      "Understand CONUS and OCONUS per diem: which agency sets each rate, why they differ, and where to find the current amount.",
     keyword: "oconus vs conus per diem",
     supportingKeywords: [
       "what is OCONUS per diem",
@@ -2566,12 +2576,12 @@ const WEEK3_POSTS: Post[] = [
       "why is OCONUS per diem higher than CONUS",
     ],
     category: "Academy",
-    date: "2026-07-23",
+    date: "2026-10-05",
     readMins: 8,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/oconus-vs-conus-per-diem.jpg",
-      alt: "Hands marking destinations on a world map surrounded by travel essentials like passport and camera, representing CONUS and OCONUS travel",
+      alt: "World map explaining OCONUS vs CONUS per diem travel",
       credit: "Photo by Vlada Karpovich on Pexels",
       creditUrl: "https://www.pexels.com/@vlada-karpovich",
     },
@@ -2630,7 +2640,7 @@ const WEEK3_POSTS: Post[] = [
     slug: "mileage-reimbursement-2026-employer-guide",
     title: "Mileage Reimbursement 2026: What Employers Need to Know",
     description:
-      "The 2026 IRS mileage rate changed mid-year. Here's what employers need to update in payroll, policy and reimbursement method before year end.",
+      "See the 2026 IRS mileage rate changes and the payroll, policy and recordkeeping actions employers should take.",
     keyword: "mileage reimbursement 2026",
     supportingKeywords: [
       "IRS mileage rate 2026",
@@ -2651,12 +2661,12 @@ const WEEK3_POSTS: Post[] = [
       "is a car allowance taxable",
     ],
     category: "News",
-    date: "2026-07-24",
+    date: "2026-10-06",
     readMins: 8,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/mileage-reimbursement-2026-employer-guide.jpg",
-      alt: "Woman accountant calculating financial documents at office desk, representing employer mileage reimbursement policy for 2026",
+      alt: "Accountant reviewing a mileage reimbursement 2026 policy",
       credit: "Photo by Mikhail Nilov on Pexels",
       creditUrl: "https://www.pexels.com/@mikhail-nilov",
     },
@@ -2715,9 +2725,9 @@ const WEEK3_POSTS: Post[] = [
   },
   {
     slug: "mileage-rate-2026-trend-analysis",
-    title: "The 2026 Mileage Rate Has Already Moved Twice — Here's What That Means",
+    title: "2026 Mileage Rate Changes: What They Mean",
     description:
-      "The IRS mileage rate for 2026 didn't just rise once in January — it jumped again in July. A look at the five-year trend, why the rate keeps climbing, and what it costs employers and self-employed drivers.",
+      "Track the 2026 mileage-rate changes, their five-year context, and the effect on employer reimbursements and deductions.",
     keyword: "mileage rate 2026",
     supportingKeywords: [
       "IRS mileage rate 2026",
@@ -2739,12 +2749,12 @@ const WEEK3_POSTS: Post[] = [
       "IRS mileage rate trend by year",
     ],
     category: "News",
-    date: "2026-07-24",
+    date: "2026-10-06",
     readMins: 8,
     schemaType: "Article",
     featuredImage: {
       src: "/images/blog/mileage-rate-2026-trend-analysis.jpg",
-      alt: "Close-up of a trading screen showing an increasing chart, representing the rising 2026 mileage rate trend",
+      alt: "Rising chart showing the mileage rate 2026 trend",
       credit: "Photo by AlphaTradeZone on Pexels",
       creditUrl: "https://www.pexels.com/@alphatradezone",
     },
@@ -2808,9 +2818,9 @@ const WEEK3_POSTS: Post[] = [
   },
   {
     slug: "favr-mileage-reimbursement-explained",
-    title: "FAVR Mileage Reimbursement: The Alternative to the IRS Standard Rate",
+    title: "FAVR Mileage Reimbursement: An Employer Guide",
     description:
-      "FAVR (Fixed and Variable Rate) reimbursement pays employees a monthly amount for fixed vehicle costs plus a variable per-mile rate for fuel and maintenance. Here's how it works, who needs it, and why most small businesses don't.",
+      "Learn how FAVR mileage reimbursement works, its IRS conditions, and when it makes sense instead of the standard mileage rate.",
     keyword: "favr mileage reimbursement",
     supportingKeywords: [
       "fixed and variable rate reimbursement",
@@ -2828,7 +2838,7 @@ const WEEK3_POSTS: Post[] = [
       "FAVR vs flat car allowance tax treatment",
     ],
     category: "Academy",
-    date: "2026-07-25",
+    date: "2026-10-07",
     readMins: 10,
     schemaType: "Article",
     featuredImage: {
@@ -2892,5 +2902,72 @@ const WEEK3_POSTS: Post[] = [
     ],
   },
 ];
+
+const WEEK3_SOURCES: Record<string, ExternalSource[]> = {
+  "federal-travel-regulation-explained": [
+    { label: "Federal Travel Regulation, 41 CFR chapter 301", url: "https://www.ecfr.gov/current/title-41/subtitle-F/chapter-301" },
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+  ],
+  "per-diem-rates-2026-conus-table": [
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+    { label: "GSA M&IE breakdowns", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates/mie-breakdown" },
+  ],
+  "per-diem-vs-mileage-reimbursement": [
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+    { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+  ],
+  "gsa-per-diem-rates-explained": [
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+    { label: "GSA per diem rate methodology", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates/factors-influencing-lodging-rates" },
+  ],
+  "washington-dc-per-diem-rate": [
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+    { label: "GSA per diem boundaries", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates/per-diem-boundaries" },
+  ],
+  "expense-report-software-compared": [
+    { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+  ],
+  "per-diem-nyc-seasonal-rates": [
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+    { label: "GSA per diem boundaries", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates/per-diem-boundaries" },
+  ],
+  "conus-per-diem-rates-standard": [
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+    { label: "GSA M&IE breakdowns", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates/mie-breakdown" },
+  ],
+  "printable-mileage-log-template": [
+    { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+    { label: "IRS standard mileage rates", url: "https://www.irs.gov/tax-professionals/standard-mileage-rates" },
+  ],
+  "are-provided-meals-deducted-from-per-diem": [
+    { label: "GSA M&IE breakdowns", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates/mie-breakdown" },
+    { label: "Federal Travel Regulation, 41 CFR part 301-11", url: "https://www.ecfr.gov/current/title-41/subtitle-F/chapter-301/subchapter-B/part-301-11" },
+  ],
+  "best-mileage-tracking-apps-compared": [
+    { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+    { label: "IRS standard mileage rates", url: "https://www.irs.gov/tax-professionals/standard-mileage-rates" },
+  ],
+  "oconus-vs-conus-per-diem": [
+    { label: "GSA per diem rates", url: "https://www.gsa.gov/travel/plan-book/per-diem-rates" },
+    { label: "U.S. Department of State foreign per diem rates", url: "https://allowances.state.gov/web920/per_diem.asp" },
+  ],
+  "mileage-reimbursement-2026-employer-guide": [
+    { label: "IRS standard mileage rates", url: "https://www.irs.gov/tax-professionals/standard-mileage-rates" },
+    { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+  ],
+  "mileage-rate-2026-trend-analysis": [
+    { label: "IRS standard mileage rates", url: "https://www.irs.gov/tax-professionals/standard-mileage-rates" },
+    { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+  ],
+  "favr-mileage-reimbursement-explained": [
+    { label: "IRS Revenue Procedure 2019-46", url: "https://www.irs.gov/pub/irs-drop/rp-19-46.pdf" },
+    { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+  ],
+};
+
+for (const post of WEEK3_POSTS) {
+  post.sources = WEEK3_SOURCES[post.slug];
+}
 
 POSTS.push(...WEEK3_POSTS);

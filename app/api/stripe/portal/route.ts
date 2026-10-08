@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { SITE } from "@/lib/site";
 import { getAccount } from "@/lib/account";
 import { getStripe, stripeConfigured } from "@/lib/stripe";
 import { captureServerError } from "@/lib/observability";
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "No billing account found." }, { status: 400 });
   }
   const stripe = getStripe()!;
-  const base = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
+  const base = SITE.url;
   try {
     const session = await stripe.billingPortal.sessions.create({
       customer: account.profile.stripe_customer_id,

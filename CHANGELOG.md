@@ -1,5 +1,30 @@
 # Changelog
 
+## [Unreleased] — 2026-10-08 — Search Console canonical hardening
+
+### Fixed
+- Made `https://www.perdiemwise.com` the single immutable public origin for canonical tags,
+  structured data, sitemap entries, robots and Stripe/team return URLs. A stale build environment
+  value can no longer reintroduce apex URLs.
+- Marked the generated `/opengraph-image` PNG `X-Robots-Tag: noindex`, so cache-busted social
+  preview asset URLs are crawlable by preview clients but are not candidates for Google's page index.
+- Confirmed the existing content corpus is substantive and source-backed; no filler rewrite was
+  warranted for the two reported indexing examples.
+
+## [Unreleased] — 2026-10-08 — Blog publication-contract hardening
+
+### Changed
+- Refreshed the 15-post Academy/News/Reviews publication batch across 1–7 October
+  and tightened every title and meta description to the search-snippet limits.
+- Added two official, on-page further-reading links to every campaign article. The
+  sources live with the typed post registry, so routes, sitemap and article rendering
+  continue to share one source of truth.
+
+### Tests
+- Added `test/blog-content.test.mts`, which checks batch size, dates, titles,
+  descriptions, keyword metadata, word count, links, citations, FAQs, tables, image
+  files and blog registry membership.
+
 ## 2026-10-07: Sentry scrubber security pass
 
 - **Long secrets.** JWTs, bearer tokens, vendor keys (`sk_`, `whsec_`, `hlm_sk_`, `sntrys_`) and `key=value` secrets of any length are now redacted whole. The old bounded patterns left the tail of anything longer than their limit.

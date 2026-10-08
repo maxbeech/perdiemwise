@@ -2,7 +2,17 @@ import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async headers() {
+    return [
+      {
+        // This generated social-preview image is an asset, not a search-result
+        // landing page. Keep it crawlable for preview fetchers but prevent
+        // arbitrary cache-busted variants from remaining in Google's page index.
+        source: "/opengraph-image",
+        headers: [{ key: "X-Robots-Tag", value: "noindex" }],
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {

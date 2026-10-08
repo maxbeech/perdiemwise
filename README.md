@@ -1,6 +1,6 @@
 # PerDiemWise
 
-Free **GSA per diem & IRS mileage calculator** — [perdiemwise.com](https://perdiemwise.com)
+Free **GSA per diem & IRS mileage calculator** — [www.perdiemwise.com](https://www.perdiemwise.com)
 
 PerDiemWise calculates a US business trip's per diem from the **official GSA FY2026
 CONUS rates** (lodging + meals & incidentals) with the **75% first-and-last-day rule**
@@ -16,8 +16,9 @@ Built by the MaxedLabs Product Factory (Plan 38).
   76¢ / 23.5¢ / 14¢ from Jul 1 after a mid-year IRS adjustment. See
   `IRS_MILEAGE_2026_PERIODS` and `mileageRateForDate()` in `lib/site.ts`.
 - **Blog:** 40 hand-authored SEO posts (`lib/posts.ts`) across Academy/News/Reviews
-  categories, each with a featured image (`public/images/blog/`), FAQ/HowTo JSON-LD,
-  and internal links — no CMS.
+  categories, each with a featured image (`public/images/blog/`), official source links,
+  FAQ/HowTo JSON-LD and internal links — no CMS. The 15-post October campaign is
+  guarded by `test/blog-content.test.mts`.
 - Destinations not separately listed by GSA fall back to the standard CONUS rate, and the
   UI says so explicitly — never a guessed number.
 
@@ -90,8 +91,9 @@ Supabase (database, auth) and Stripe stay where they are. Point the Stripe webho
 `https://www.perdiemwise.com/api/stripe/webhook` (the apex redirects, and a webhook does not follow redirects).
 
 ## Environment
-- `NEXT_PUBLIC_SITE_URL` — canonical/OG/sitemap base (`https://www.perdiemwise.com` in production).
-  Inlined at build, so it is a Helm7 build variable: change it and redeploy.
+- `https://www.perdiemwise.com` is the immutable public origin for canonical tags, XML sitemap,
+  robots, structured data and customer-facing return URLs. Helm7 must keep both apex hosts on a
+  permanent redirect to this origin.
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` — auth + DB.
 - `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_PRICE_ID_MONTHLY`,
   `STRIPE_PRICE_ID_ANNUAL`, `STRIPE_PRICE_ID_TEAM_MONTHLY`, `STRIPE_PRICE_ID_TEAM_ANNUAL`, `STRIPE_WEBHOOK_SECRET` — subscriptions. Absent → checkout degrades to a

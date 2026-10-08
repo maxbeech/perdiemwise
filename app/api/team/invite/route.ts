@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
+import { SITE } from "@/lib/site";
 import { getAccount } from "@/lib/account";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { captureServerError } from "@/lib/observability";
@@ -17,6 +18,6 @@ export async function POST(request: Request) {
   const tokenHash = createHash("sha256").update(rawToken).digest("hex");
   const { error } = await admin.from("team_invites").insert({ team_id: team.id, email, token_hash: tokenHash, expires_at: new Date(Date.now() + 7 * 86_400_000).toISOString() });
   if (error) { captureServerError(error, { scope: "team-invite", teamId: team.id }); return NextResponse.json({ error: error.message }, { status: 502 }); }
-  const base = process.env.NEXT_PUBLIC_SITE_URL || new URL(request.url).origin;
+  const base = SITE.url;
   return NextResponse.json({ inviteUrl: `${base}/team/accept?token=${rawToken}`, expiresInDays: 7, delivery: "copy_link" });
 }
