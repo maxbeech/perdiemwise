@@ -65,9 +65,9 @@ export const CALCS: Calc[] = [
     h1: "Mileage Reimbursement Calculator",
     keyword: "mileage reimbursement calculator",
     description:
-      "Work out a mileage reimbursement using the 2026 IRS standard mileage rates — 72.5¢ business, 20.5¢ medical/moving and 14¢ charitable per mile.",
+      "Work out a mileage reimbursement using the 2026 IRS standard mileage rates — 72.5¢ business before July 1 and 76¢ from July 1, 20.5¢ medical/moving (23.5¢ from July 1) and 14¢ charitable per mile.",
     intro:
-      "Enter your trip miles and PerDiemWise multiplies them by the current 2026 IRS standard mileage rate — 72.5¢ for business, 20.5¢ for medical or moving, and 14¢ for charitable driving. Add multiple legs to total a whole trip.",
+      "Enter your trip miles and PerDiemWise multiplies them by the 2026 IRS standard mileage rate for your trip date — 72.5¢ for business before July 1 and 76¢ from July 1, 20.5¢ for medical or moving (23.5¢ from July 1), and 14¢ for charitable driving. Add multiple legs to total a whole trip.",
     about: [
       "The IRS sets an optional standard mileage rate each year to value the deductible or reimbursable cost of running a personal vehicle for business, medical, moving or charitable driving. For 2026, the business rate opened at 72.5¢ per mile and rose to 76¢ per mile from July 1 after a rare mid-year adjustment driven by fuel costs — see our [full breakdown of the 2026 rate change](/blog/2026-irs-standard-mileage-rate).",
       "This calculator applies the correct half-year rate automatically based on your trip date, and totals multiple legs — office to client, client to client, client back to office — leg by leg rather than as a single straight-line distance, which is how the IRS expects mileage to be logged and reimbursed.",

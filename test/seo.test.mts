@@ -34,4 +34,41 @@ test("keeps generated Open Graph images out of the page index", () => {
   assert.match(config, /key: "X-Robots-Tag", value: "noindex"/);
 });
 
+test("names the AI crawlers explicitly and welcomes them", () => {
+  for (const bot of ["GPTBot", "ClaudeBot", "PerplexityBot", "Google-Extended", "CCBot"]) {
+    assert.ok(robots.includes(`"${bot}"`), `robots.ts does not name ${bot}`);
+  }
+  assert.match(robots, /\{ userAgent: "\*", allow: "\/" \}/);
+});
+
+test("serves llms.txt generated from the same calculator, guide, site and price data", () => {
+  const llms = readFileSync("app/llms.txt/route.ts", "utf8");
+  assert.match(llms, /from "@\/lib\/calculators"/);
+  assert.match(llms, /from "@\/lib\/posts"/);
+  assert.match(llms, /PRICING\.monthly\.label/);
+  assert.match(llms, /Content-Type": "text\/plain; charset=utf-8"/);
+});
+
+test("pricing page emits Offers from the same PRICING source the UI renders", () => {
+  const pricing = readFileSync("app/pricing/page.tsx", "utf8");
+  assert.match(pricing, /"@type": "SoftwareApplication"/);
+  assert.match(pricing, /offer\("PerDiemWise Pro \(monthly\)", PRICING\.monthly\.amount, "MON"\)/);
+  assert.match(pricing, /offer\("PerDiemWise Team \(annual\)", PRICING\.teamAnnual\.amount, "ANN"\)/);
+});
+
+test("deep calculator and state pages emit a BreadcrumbList matching their visible navigation", () => {
+  const calc = readFileSync("app/calculators/[slug]/page.tsx", "utf8");
+  const state = readFileSync("app/states/[state]/page.tsx", "utf8");
+  assert.match(calc, /"@type": "BreadcrumbList"/);
+  assert.match(calc, /name: "Calculators"/);
+  assert.match(state, /"@type": "BreadcrumbList"/);
+  assert.match(state, /name: "By state"/);
+});
+
+test("home page emits Organization and WebSite entities", () => {
+  const home = readFileSync("app/page.tsx", "utf8");
+  assert.match(home, /"@type": "Organization"/);
+  assert.match(home, /"@type": "WebSite"/);
+});
+
 console.log(`\n${passed} SEO checks passed.`);

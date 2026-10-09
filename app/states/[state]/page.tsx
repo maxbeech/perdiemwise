@@ -53,7 +53,20 @@ export default async function StatePage({ params }: { params: Promise<{ state: s
         { q: `How do I calculate per diem for a multi-city trip through ${s.name}?`, a: `Use the calculator on each city's page for the nights spent there, then add the totals together — lodging caps and M&IE tiers can differ from one ${s.name} city to the next, so a single flat rate for the whole trip would be inaccurate.` },
       ];
 
-  const jsonLd = { "@context": "https://schema.org", "@graph": [{ "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) }] };
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      { "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
+          { "@type": "ListItem", position: 2, name: "By state", item: `${SITE.url}/states` },
+          { "@type": "ListItem", position: 3, name: s.name, item: `${SITE.url}/states/${s.slug}` },
+        ],
+      },
+    ],
+  };
 
   return (
     <Container className="py-12 sm:py-16">

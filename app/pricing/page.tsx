@@ -6,6 +6,21 @@ import TeamUpgradePanel from "@/components/TeamUpgradePanel";
 import { Badge, Container, Eyebrow } from "@/components/ui";
 import { getAccount } from "@/lib/account";
 import { SITE } from "@/lib/site";
+import { PRICING } from "@/lib/stripe";
+
+const offer = (name: string, amount: number, unitCode: "MON" | "ANN") => ({
+  "@type": "Offer",
+  name,
+  price: String(amount),
+  priceCurrency: "USD",
+  url: `${SITE.url}/pricing`,
+  priceSpecification: {
+    "@type": "UnitPriceSpecification",
+    price: String(amount),
+    priceCurrency: "USD",
+    referenceQuantity: { "@type": "QuantitativeValue", value: 1, unitCode },
+  },
+});
 
 export const metadata: Metadata = {
   title: "Pricing — Free, Pro & Team",
@@ -23,8 +38,25 @@ function Check() {
 export default async function Pricing() {
   const account = await getAccount();
   const isPro = account?.isPro ?? false;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    name: SITE.name,
+    url: `${SITE.url}/pricing`,
+    applicationCategory: "FinanceApplication",
+    operatingSystem: "Web",
+    description: SITE.description,
+    offers: [
+      { "@type": "Offer", name: "Free calculators", price: "0", priceCurrency: "USD", url: `${SITE.url}/pricing` },
+      offer("PerDiemWise Pro (monthly)", PRICING.monthly.amount, "MON"),
+      offer("PerDiemWise Pro (annual)", PRICING.annual.amount, "ANN"),
+      offer("PerDiemWise Team (monthly)", PRICING.teamMonthly.amount, "MON"),
+      offer("PerDiemWise Team (annual)", PRICING.teamAnnual.amount, "ANN"),
+    ],
+  };
   return (
     <Container className="py-16 sm:py-20">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="mx-auto max-w-2xl text-center">
         <Eyebrow>Pricing</Eyebrow>
         <h1 className="mt-4 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">Free to calculate. Pro to keep the work moving.</h1>

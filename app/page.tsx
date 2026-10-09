@@ -11,7 +11,7 @@ const POPULAR = ["new-york-city-ny", "san-francisco-ca", "washington-dc", "chica
 const FAQ = [
   { q: "What is the standard per diem rate for 2026?", a: `For FY${FISCAL_YEAR} the standard CONUS per diem is $${STANDARD_LODGING} for lodging and $${STANDARD_MIE} for meals & incidentals — $${STANDARD_LODGING + STANDARD_MIE} a day combined. Higher-cost cities have their own GSA rates.` },
   { q: "How is per diem calculated on travel days?", a: "Meals & incidentals (M&IE) are paid at 75% on your first and last day of travel and 100% on each full day in between. Lodging is paid per night for each overnight stay, at the rate for that month." },
-  { q: "What is the 2026 IRS mileage rate?", a: "The 2026 IRS standard mileage rate is 72.5¢ per mile for business, 20.5¢ for medical or moving, and 14¢ for charitable driving." },
+  { q: "What is the 2026 IRS mileage rate?", a: "The 2026 IRS standard mileage rate for business is 72.5¢ per mile from January 1 to June 30 and 76¢ per mile from July 1 after a mid-year adjustment. Medical or moving is 20.5¢ then 23.5¢, and charitable driving is 14¢." },
   { q: "Is per diem taxable?", a: "Per diem within the federal rate and backed by an expense report is not taxable. Amounts above the federal rate, or paid without substantiation, become taxable income." },
 ];
 
@@ -29,6 +29,8 @@ export default function Home() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
+      { "@type": "Organization", "@id": `${SITE.url}/#organization`, name: SITE.name, url: SITE.url, logo: `${SITE.url}/icon.svg`, email: SITE.email },
+      { "@type": "WebSite", "@id": `${SITE.url}/#website`, name: SITE.name, url: SITE.url, description: SITE.description, publisher: { "@id": `${SITE.url}/#organization` } },
       { "@type": "WebApplication", name: SITE.name, url: SITE.url, applicationCategory: "FinanceApplication", operatingSystem: "Web", offers: { "@type": "Offer", price: "0", priceCurrency: "USD" }, description: SITE.description },
       { "@type": "FAQPage", mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
     ],

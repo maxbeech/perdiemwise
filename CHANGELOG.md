@@ -1,5 +1,17 @@
 # Changelog
 
+## [Unreleased] — 2026-10-09 — Machine-readability foundations
+
+### Added
+- `/llms.txt`, generated from the calculator, guide, site and price data so it cannot drift from the site.
+- Organization and WebSite structured data on the home page.
+- Pricing page SoftwareApplication structured data with one Offer per plan, taken from the same `PRICING` values the page displays.
+- BreadcrumbList structured data on calculator and state pages, matching their visible navigation.
+- Explicit `Allow: /` rules in robots.txt for GPTBot, ClaudeBot, PerplexityBot, Google-Extended and CCBot.
+
+### Fixed
+- The home FAQ and the mileage calculator copy stated the 2026 IRS business rate as 72.5¢ for the whole year. They now state the 72.5¢ (January to June) and 76¢ (from July 1) split that the rest of the site and `lib/site.ts` use.
+
 ## [Unreleased] — 2026-10-08 — Search Console canonical hardening
 
 ### Fixed

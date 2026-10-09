@@ -92,7 +92,7 @@ Supabase (database, auth) and Stripe stay where they are. Point the Stripe webho
 
 ## Environment
 - `https://www.perdiemwise.com` is the immutable public origin for canonical tags, XML sitemap,
-  robots, structured data and customer-facing return URLs. Helm7 must keep both apex hosts on a
+  robots, structured data and customer-facing return URLs. `/llms.txt` is generated from the same calculator, guide, site and price data. Helm7 must keep both apex hosts on a
   permanent redirect to this origin.
 - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` — auth + DB.
 - `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `STRIPE_PRICE_ID_MONTHLY`,

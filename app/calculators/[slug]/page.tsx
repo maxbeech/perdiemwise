@@ -56,6 +56,14 @@ export default async function CalcPage({ params }: { params: Promise<{ slug: str
     "@graph": [
       { "@type": "WebApplication", name: c.h1, url, applicationCategory: "FinanceApplication", operatingSystem: "Web", offers: { "@type": "Offer", price: "0", priceCurrency: "USD" }, description: c.description },
       { "@type": "FAQPage", mainEntity: c.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
+          { "@type": "ListItem", position: 2, name: "Calculators", item: `${SITE.url}/calculators` },
+          { "@type": "ListItem", position: 3, name: c.h1, item: url },
+        ],
+      },
     ],
   };
 
