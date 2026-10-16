@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased] — 2026-10-16 — FY2027 per diem refresh for five posts
+
+### Changed
+- Refreshed five blog posts from FY2026 to FY2027 GSA per diem rates (effective 1 October 2026 to 30 September 2027): `what-is-per-diem`, `standard-conus-per-diem-rate-explained`, `conus-per-diem-rates-standard`, `washington-dc-per-diem-rate` and `per-diem-nyc-seasonal-rates`.
+- Standard CONUS rate in those posts is now $113 lodging + $68 M&IE = $181/day (was $110 + $68 = $178). Source: GSA FY 2027 per diem highlights. The M&IE tiers are unchanged ($68–$92).
+- Washington DC and New York City monthly lodging tables, the NYC worked example and the DC worked example now use GSA FY2027 values from the GSA per diem API.
+- The conus rates post's FY2026 expert quote was replaced with a verbatim sentence from the GSA FY 2027 highlights, so the post keeps its quote block.
+
+### Known gap
+- `lib/gsa-rates.json` and the `/per-diem/*` city pages still use the FY2026 dataset (fetched 2026-06-14). Until that dataset is regenerated from GSA's FY2027 data, the calculator and these refreshed posts disagree on lodging rates.
+
 ## [Unreleased] — 2026-10-09 — Machine-readability foundations
 
 ### Added
