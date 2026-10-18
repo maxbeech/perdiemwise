@@ -1,72 +1,81 @@
 # Content Production Prioritisation Matrix
 
-Hybrid SEO/GEO reference for PerDiemWise writers. Volumes are US monthly averages, Google Ads Keyword Planner, trailing 12 months (pulled live, not estimated). PerDiemWise has no predecessor site — this is a green-field build, so there is no legacy-content section to reconcile against. Ranked by where writing effort should go first.
+Hybrid SEO/GEO reference for PerDiemWise writers. Refreshed 18 October 2026 from Google Ads Keyword Planner (US, trailing 12 months). Format: `keyword | monthly volume/competition` (L = LOW, M = MEDIUM). `unverified` means Keyword Planner returned no data; re-check before those drive effort. Ranked by where writing effort should go first.
 
-## 1. Authority Pillars — the head terms and nav pages
+## 1. Authority Pillars
 
-| Keyword | Vol/mo | Entity Category |
-|---|---|---|
-| per diem | 135,000 | Concept/Compensation Method — the hub term; too broad to win outright against GSA.gov and Wikipedia, but every other page must link back to it, and it should define what per diem is, who pays it, and how PerDiemWise fits |
-| gsa per diem rates | 60,500 | GovernmentDataset — define the GSA, how CONUS rates are set, and PerDiemWise as the calculator layer sitting over that dataset |
-| per diem meaning | 60,500 | Definition — the plain-English "what is per diem" explainer |
-| federal travel regulation | 12,100 | Legislation — the FTR as the legal backbone behind every rate and rule we quote |
-| mileage reimbursement | 12,100 | Policy/Process — the employer-side explainer, distinct from the IRS rate itself |
-| irs mileage rate | 9,900 | GovernmentRegulation — the annual cents-per-mile figures (business/medical/charity) |
-| mileage reimbursement calculator | 5,400 | SoftwareApplication — the flagship tool; multi-leg trips, three rate types |
+- per diem | 135,000/L | Concept/Compensation Method: the hub. Define what per diem is, who pays it, and link every guide and calculator back here.
+- gsa per diem rates | 60,500/L | GovernmentDataset: the GSA CONUS dataset, how rates are set, and PerDiemWise as the calculator over it.
+- per diem meaning | 60,500/L | Definition: the plain-English explainer.
+- federal travel regulation | 14,800/L | Legislation: the FTR behind every rate and rule we quote.
+- irs mileage rate | 12,100/L | GovernmentRegulation: the annual cents-per-mile figures (business, medical, charity).
+- mileage reimbursement | 9,900/L | Policy/Process: the employer-side explainer, distinct from the IRS rate itself.
+- mileage reimbursement calculator | 6,600/L | SoftwareApplication: the flagship multi-leg, three-rate tool.
 
-Note: per diem calculator (4,400/mo) narrowly misses this table on volume but is the other flagship tool — treat it as the SoftwareApplication node that the "per diem" and "gsa per diem rates" pillars link straight through to.
+## 2. Zero-Click & GEO Champions
 
-## 2. Zero-Click & GEO Champions — Q&A for AI summaries
+Name the connected entities in the first paragraph. Write for the answer, not the search bar.
 
-| Keyword | Vol/mo | Connected Entities writers must name |
-|---|---|---|
-| how is per diem calculated / how to calculate per diem | 480 | 75% first/last-day rule, M&IE tier, per-night lodging rate, standard CONUS fallback |
-| is per diem taxable income | 260 | accountable plan, IRS Section 162, taxable excess over federal rate, W-2 reporting |
-| per diem vs actual expenses | 20 | accountable plan, receipts vs flat allowance, substantiation burden |
-| per diem first and last day rule | — (GEO-only) | 75% M&IE reduction, $0 lodging on return day, definition of a travel day |
-| are provided meals deducted from per diem | — (GEO-only) | breakfast/lunch/dinner tiers, incidental retained, conference-provided meals |
-| oconus vs conus per diem | — (GEO-only) | DoD rates (OCONUS), State Department rates (foreign), GSA CONUS boundary |
-| per diem vs mileage reimbursement | — (GEO-only, but a real assistant query in our own testing) | flat daily allowance vs per-mile rate, when each applies, can both be claimed on one trip |
+- what is per diem | 22,200/L | Connected: M&IE, lodging, travel status, the reimbursement it replaces
+- how to calculate per diem | 480/L | Connected: 75% first/last-day rule, M&IE tier, per-night lodging rate, standard CONUS fallback
+- is per diem taxable income | 260/L | Connected: accountable plan, IRS Section 162, taxable excess over the federal rate, W-2 reporting
+- what does per diem cover | 170/L | Connected: lodging, meals and incidentals, provided meals, incidentals always retained
+- per diem vs actual expenses | 10/L | Connected: accountable plan, receipts vs flat allowance, substantiation burden
+- per diem first and last day rule | unverified | Connected: 75% M&IE reduction, $0 lodging on the return day, definition of a travel day
+- are provided meals deducted from per diem | unverified | Connected: breakfast, lunch and dinner tiers, incidentals retained, conference-provided meals
+- oconus vs conus per diem | unverified | Connected: DoD rates (OCONUS), State Department rates (foreign), GSA CONUS boundary
+- per diem vs mileage reimbursement | unverified | Connected: flat daily allowance vs per-mile rate, when each applies, both claimable on one trip
 
-## 3. High-Intent Closers — conversion and attribute proof
+## 3. High-Intent Closers
 
-| Keyword | Vol/mo | Attribute Entities |
-|---|---|---|
-| irs mileage rate 2026 / mileage rate 2026 | 49,500 (spikes past 100k in January when the new rate publishes) | effective date, business/medical/charity split, year-on-year change |
-| mileage reimbursement 2026 | 14,800 | current 72.5¢ business rate, how employers apply it, FAVR alternative |
-| per diem rates 2026 | 8,100 (climbs through spring as travel planning peaks) | FY2026 CONUS table, non-standard locations, standard-rate fallback |
-| expense report software | 880 (the bare term "expense report" pulls 6,600 but is dominated by Ramp/Navan/Brex-scale platforms) | PDF export, CSV export, GSA/IRS-compliant formatting — ties directly to the Pro report |
-| best mileage tracking app | 1,300 | automatic GPS logging, IRS-compliant export, free vs paid tier |
-| accountable plan irs | 320 | timely substantiation, return of excess, tax-free reimbursement threshold |
-| self employed mileage deduction | 170 | standard mileage vs actual expense method, Schedule C, commuting exclusion |
+Attribute entities are the facts a buyer checks before they trust a page.
 
-## 4. Hidden Gems — low-competition, high-narrative-control
+- irs mileage rate 2026 | 90,500/L | Attribute: effective date, business/medical/charity split, year-on-year change
+- mileage rate 2026 | 49,500/L | Attribute: 72.5¢ to 30 June, 76¢ from 1 July, the mid-year adjustment
+- mileage reimbursement 2026 | 27,100/L | Attribute: current business rate, how employers apply it, FAVR alternative
+- per diem rates 2026 | 14,800/L | Attribute: FY2027 CONUS rates (posts refreshed 16 October), non-standard locations, standard-rate fallback
+- gsa mileage rate 2026 | 5,400/L | Attribute: searchers mean the IRS rate, so answer with the IRS split and the mid-year change
+- irs standard mileage rate 2026 | 2,400/L | Attribute: optional standard rate, date-aware periods, per-mile deduction
+- per diem calculator | 3,600/L | Attribute: SoftwareApplication, the free on-page trip calculator
+- expense report software | 880/L | Attribute: PDF export, CSV export, IRS/GSA-compliant formatting (ties to the Pro report)
+- best mileage tracking app | 1,300/M | Attribute: free vs paid tier, IRS-compliant export, automatic logging
+- accountable plan irs | 320/L | Attribute: timely substantiation, return of excess, tax-free reimbursement threshold
+- self employed mileage deduction | 140/L | Attribute: standard mileage vs actual expense method, Schedule C, commuting exclusion
 
-- **washington dc per diem rate** (3,600/mo, low competition) — DC runs its own non-standard lodging table separate from the general CONUS rate; almost nobody explains this clearly, and the volume rivals a head term.
-- **per diem nyc** (1,300/mo) — a second city term with genuine head-term-adjacent volume; New York's seasonal GSA banding is a natural companion to the DC piece.
-- **conus per diem rates** (880/mo) — a narrower framing of the GSA pillar that ranks faster while feeding authority back to the main hub.
-- **favr mileage reimbursement** (30/mo, medium competition) — Fixed and Variable Rate is the main alternative to the IRS standard mileage rate for fleets and high-mileage staff; competitors barely touch it, so a clear explainer plus a comparison to our standard-rate calculator is a genuine first-mover play.
-- **per diem policy template / sample per diem policy** (70/mo combined) — HR and finance managers writing internal policy; a template plus commentary positions PerDiemWise as the compliance reference, not just a calculator.
+## 4. Hidden Gems
 
-## 5. Semantic Clusters — the long tail, grouped and prioritised
+Low competition, high narrative control. Each has a specific reason to exist.
 
-**A. Geographic Non-Standard Locations** (Parent: GSA Non-Standard Location) — specific instances of the pillar rate table, one per city/state hub page.
-per diem rates by state, per diem rates by city, california per diem rate, per diem in california, new york per diem, gsa new york per diem, per diem in dc, gsa rate washington dc, gsa lodging rates, per diem rates per state, us state department per diem, per diem state department, oconus per diem, oconus per diem rates, per diem rates international, department of state per diem rates, state of new mexico per diem rates
+- washington dc per diem rate | 3,600/L | DC runs its own non-standard lodging table. Few explain it clearly, and the volume rivals a head term.
+- per diem nyc | 1,300/L | New York's seasonal GSA banding. A natural companion to the DC page.
+- san francisco per diem | 1,900/L | 115 impressions, position 11.7, no clicks yet. Strengthen the existing /per-diem/san-francisco-ca page first.
+- conus per diem rates | 880/L | A narrower framing of the GSA pillar that ranks faster and feeds authority back to the hub.
+- favr mileage reimbursement | 30/L | Fixed and Variable Rate is the main alternative to the standard rate for fleets and high-mileage staff. Competitors barely cover it, so a clear explainer and comparison with our standard-rate calculator is a first-mover play.
+- per diem policy template | 50/L | HR and finance managers writing internal policy. A template with commentary positions PerDiemWise as the compliance reference.
+- sample per diem policy | 50/L | Same audience as the template. Pair the two on one page.
 
-**B. IRS Mileage Deep-Dive** (Parent: IRS Standard Mileage Rate) — mechanics and edge cases sitting beneath the mileage pillar.
-federal mileage rate, federal mileage reimbursement, irs mileage reimbursement rate, irs travel rate, current mileage reimbursement rate, government mileage rate, mileage rate calculator, calculate mileage reimbursement, business mileage calculator, irs mileage reimbursement rules, irs car allowance, irs standard mileage rate 2026
+## 5. Semantic Clusters
 
-**C. Mileage Tracking Tools & Apps** (Parent: Mileage Tracker Software) — competitive-intent terms pulled directly from Everlance, MileIQ and QuickBooks' own ranking footprint; useful for "alternative to" content rather than head-on ranking battles.
-mileage tracker app, free mileage tracker app, mileiq cost, everlance mileage tracker, stride mileage tracker, quickbooks mileage tracker, driversnote app, mileage log app, doordash mileage tracker, gps mileage tracker
+Ordered by volume, low competition first, then brand fit. Each cluster names its parent pillar.
 
-**D. Expense Reporting & Documentation** (Parent: Expense Report) — the paperwork end of the journey, feeding the Pro export features.
-travel expense report template, printable mileage log, employee expense report template, travel expense substantiation, expense report pdf export, expense report form
+**A. Geographic Non-Standard Locations** (Parent: gsa per diem rates)
+gsa per diem | 60,500/L; per diem rates | 22,200/L; gsa rates | 12,100/L; new york per diem | 1,300/L; per diem in dc | 3,600/L; per diem in california | 590/L; gsa lodging rates | 720/L; gsa travel rates | 880/L; us state department per diem | 3,600/L; per diem rates international | 3,600/L; oconus per diem | 1,000/L; oconus per diem rates | 480/L; per diem rates by state | 480/L; per diem rates per state | 480/L; california per diem rate | 210/L; department of state per diem rates | 210/L; gsa new york per diem | 140/L; gsa rate washington dc | 110/L; per diem lookup | 590/L; gsa per diem calculator | 480/L; gsa per diem lookup | 210/L; per diem rates by city | 70/L
 
-**E. Per Diem & Tax Logic** (Parent: Per Diem Taxability) — the "is this taxable" question family, distinct from the accountable-plan closer above.
-taxable per diem allowance, per diem above federal rate, per diem allowance, per diem pay, irs per diem, irs per diem rates, irs and per diem, per diem irs, per diem rate per mile, meals and incidental expenses
+**B. IRS Mileage Deep-Dive** (Parent: irs mileage rate)
+federal mileage rate | 12,100/L; irs travel rate | 12,100/L; irs mileage reimbursement rate | 12,100/L; current mileage reimbursement rate | 12,100/L; federal mileage reimbursement | 12,100/L; mileage rate calculator | 6,600/L; calculating mileage reimbursement | 6,600/L; irs mileage reimbursement | 2,400/L; government mileage rate | 2,900/L; va mileage reimbursement | 1,900/L; claiming mileage on taxes | 1,000/L; mileage tax deduction | 1,000/L; irs mileage reimbursement rules | 390/L; business mileage calculator | 210/L; irs car allowance | 70/L
 
-**F. Federal Travel Regulation Framework** (Parent: Federal Travel Regulation) — the legal scaffolding referenced across every guide; low volume individually but high trust value collectively.
-federal regulations for travel, joint federal travel regulations, gsa federal travel regulations, gsa travel regulations, ftr travel, opm travel regulations, federal employee travel regulations, far travel regulations, travel voucher
+**C. Mileage Tracking Tools & Apps** (Parent: mileage reimbursement). Comparison and "alternative to" framing only. We do not build a GPS tracker.
+mileage tracker app | 5,400/M; mileage tracker | 4,400/M; free mileage tracker app | 2,400/M; best free mileage tracker app | 1,000/M; everlance mileage tracker | 880/L; quickbooks mileage tracker | 480/L; mileiq cost | 390/L; mileage tracking app for business | 260/M; mileiq reviews | 140/L; best mileage tracker | 140/M; mileage tracker for small business | 90/L
+
+**D. Expense Reporting & Documentation** (Parent: per diem). Feeds the Pro expense report and CSV export.
+expense report | 5,400/L; travel voucher | 1,600/L; travel expense reimbursement | 320/L; mileage reimbursement policy | 210/L; printable mileage log | 390/M; travel expense report template | 170/M; employee expense report template | 70/M; per diem policy | 70/L; travel expense substantiation | unverified; expense report pdf export | unverified
+
+**E. Per Diem & Tax Logic** (Parent: per diem)
+per diem pay | 880/L; travel stipend | 390/L; per diem allowance | 210/L; irs per diem | 720/L; irs per diem rates | 320/L; gsa meal per diem | 390/L; travel nurse per diem | 140/M; per diem employee rights | 110/L; meals and incidental expenses | 110/L; per diem rate per mile | 40/L; m&ie breakdown | 50/L; per diem vs reimbursement | 30/L; standard conus rate | 30/L; per diem for government contractors | 10/L; taxable per diem allowance | unverified; per diem above federal rate | unverified; seasonal per diem rates | unverified
+
+**F. Federal Travel Regulation Framework** (Parent: federal travel regulation). Low volume each, high trust value together.
+irs travel reimbursement guidelines | 140/L; gsa federal travel regulations | 70/L; joint federal travel regulations | 50/L; gsa travel regulations | 40/L
 
 ---
-Notes for writers: figures marked "GEO-only" have negligible Keyword Planner volume but come up repeatedly in AI-assistant queries during our own testing — write for the answer, not the search bar. City and state hub pages (Cluster A) should carry the same entity scaffolding as the DC and NYC hidden gems above. Update the 2026 pillar and closer pages the moment GSA/IRS publish new-year rates — the January spike rewards whoever is first indexed. Cluster C exists because Ramp and MileIQ dominate the mileage-app conversation, not because we intend to build a GPS tracker; use it for comparison and "why a free calculator beats a subscription tracker" framing, not head-on competition.
+
+Notes for writers: `unverified` terms are GEO targets, so write for the answer. Give the city and state hubs (Cluster A) the same entity scaffolding as the DC and NYC gems. Cluster C is for comparison, since Ramp and MileIQ dominate that conversation. Update the 2026 pillar and closer pages as soon as GSA or IRS publish new-year rates.
