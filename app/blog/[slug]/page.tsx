@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { POSTS, getPost, type Block } from "@/lib/posts";
+import { relatedPosts } from "@/lib/related";
 import { SITE } from "@/lib/site";
 import { Container, Button, Eyebrow, Badge, Card } from "@/components/ui";
 
@@ -253,6 +254,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             {p.supportingKeywords.slice(0, 8).map((k) => <Badge key={k} tone="ink">{k}</Badge>)}
           </div>
         )}
+
+        <section className="mt-12 border-t border-line pt-6" aria-labelledby="related-heading">
+          <h2 id="related-heading" className="font-display text-xl font-semibold text-ink">Related guides</h2>
+          <ul className="mt-3 space-y-2 text-sm">
+            {relatedPosts(p.slug).map((r) => (
+              <li key={r.slug}>
+                <Link href={`/blog/${r.slug}`} className="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">{r.title}</Link>
+              </li>
+            ))}
+          </ul>
+        </section>
 
         <div className="mt-12 rounded-2xl border border-accent/30 bg-accent-tint p-6">
           <h2 className="font-display text-xl font-semibold text-ink">Calculate it now</h2>

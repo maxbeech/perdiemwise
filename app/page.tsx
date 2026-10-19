@@ -5,8 +5,21 @@ import { Badge, Button, Card, Container, Eyebrow, SectionHead } from "@/componen
 import { SITE, IRS_MILEAGE_2026 } from "@/lib/site";
 import { FISCAL_YEAR, LOCATIONS, STANDARD_LODGING, STANDARD_MIE } from "@/lib/gsa";
 import { US_STATES } from "@/lib/states";
+import { getPost } from "@/lib/posts";
 
 const POPULAR = ["new-york-city-ny", "san-francisco-ca", "washington-dc", "chicago-il", "boston-ma", "los-angeles-ca", "seattle-wa", "denver-co", "austin-tx", "miami-fl", "las-vegas-nv", "san-diego-ca"];
+
+const FEATURED_GUIDES = [
+  "2026-irs-standard-mileage-rate",
+  "calculating-mileage-reimbursement",
+  "claiming-mileage-deduction-taxes",
+  "favr-mileage-reimbursement-explained",
+  "best-mileage-tracking-apps-compared",
+  "expense-report-software-compared",
+  "conus-per-diem-rates-standard",
+  "are-provided-meals-deducted-from-per-diem",
+  "federal-travel-regulation-explained",
+];
 
 const FAQ = [
   { q: "What is the standard per diem rate for 2026?", a: `For FY${FISCAL_YEAR} the standard CONUS per diem is $${STANDARD_LODGING} for lodging and $${STANDARD_MIE} for meals & incidentals — $${STANDARD_LODGING + STANDARD_MIE} a day combined. Higher-cost cities have their own GSA rates.` },
@@ -138,6 +151,23 @@ export default function Home() {
       </Container></section>
 
       {/* Popular destinations */}
+      <section className="border-t border-line py-20"><Container>
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">Popular guides</h2>
+          <Link href="/blog" className="shrink-0 text-sm font-medium text-accent hover:underline">All guides →</Link>
+        </div>
+        <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {FEATURED_GUIDES.map((slug) => getPost(slug)).filter((p): p is NonNullable<ReturnType<typeof getPost>> => Boolean(p)).map((p) => (
+            <li key={p.slug}>
+              <Link href={`/blog/${p.slug}`} className="block h-full rounded-xl border border-line bg-surface p-4 transition hover:border-accent/40 hover:shadow-sm">
+                <span className="font-display text-base font-semibold text-ink">{p.title}</span>
+                <span className="mt-1 block text-sm text-muted">{p.description}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </Container></section>
+
       <section className="border-t border-line py-20"><Container>
         <div className="flex items-end justify-between">
           <SectionHead eyebrow="Per diem rates" title="Popular destinations" />
