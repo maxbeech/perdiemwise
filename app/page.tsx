@@ -101,11 +101,11 @@ export default function Home() {
         <SectionHead eyebrow="How it works" title="Built the way a travel voucher actually adds up" lede="Three rules trip people up when they do this by hand. PerDiemWise applies all three, every time." />
         <div className="mt-10 grid gap-5 md:grid-cols-3">
           {[
-            ["01", "Lodging, per night", "Each night is capped at that city's GSA rate for the month it falls in — seasonal rates handled automatically."],
+            ["01", "Lodging, per night", <>Each night is capped at that city&apos;s <Link href="/blog/gsa-per-diem-rates-explained" className="text-accent hover:underline">GSA rate</Link> for the month it falls in — seasonal rates handled automatically.</>],
             ["02", "M&IE at 75% on travel days", "Meals & incidentals pay full on whole days and 75% on the first and last day, with provided meals deducted."],
             ["03", "Mileage at the IRS rate", `Personal-vehicle miles reimbursed at the current 2026 IRS rate of ${(IRS_MILEAGE_2026.current.rates.business * 100).toFixed(1)}¢ — in the same place.`],
           ].map(([n, h, p]) => (
-            <Card key={n} className="p-6">
+            <Card key={String(n)} className="p-6">
               <span className="tnum text-sm text-accent">{n}</span>
               <h3 className="mt-3 font-display text-xl font-semibold text-ink">{h}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted">{p}</p>
