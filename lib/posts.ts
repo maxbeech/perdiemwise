@@ -276,7 +276,7 @@ export const POSTS: Post[] = [
       { type: "p", text: "Calculating per diem by hand looks fiddly the first time you try it — a seasonal lodging rate here, a 75% reduction there — but it genuinely comes down to four repeatable steps. Once you've done it for one trip, every trip after that follows the same pattern." },
       { type: "callout", title: "TL;DR", text: "Look up the GSA lodging and M&IE rate for your destination and travel month, count your nights and days separately, apply the 75% rule to M&IE on your first and last travel day only, then add lodging (per night) to M&IE (per day) for a total. A calculator does this automatically, but the manual method below shows exactly what's happening under the hood." },
       { type: "h2", text: "Step 1: Look up the destination rate" },
-      { type: "p", text: "Find the GSA lodging and M&IE rates for the city you're visiting on the [official GSA per diem lookup tool](https://www.gsa.gov/travel/plan-book/per-diem-rates), or use our own [per diem calculator](/calculators/per-diem-calculator), which pulls from the same underlying dataset. If the city isn't separately listed — and most towns and smaller cities aren't — use the standard CONUS rate: $110 lodging and $68 M&IE for FY2026. Our guide to the [standard CONUS rate](/blog/standard-conus-per-diem-rate-explained) explains exactly when that fallback applies. Lodging can change by month in seasonal destinations (ski towns, beach resorts, convention cities), so make sure you're using the rate for the specific month you'll actually be travelling, not just an annual average." },
+      { type: "p", text: "Find the GSA lodging and M&IE rates for the city you're visiting on the [official GSA per diem lookup tool](https://www.gsa.gov/travel/plan-book/per-diem-rates), or use our own [per diem calculator](/calculators/per-diem-calculator), which pulls from the same underlying dataset. If the city isn't separately listed — and most towns and smaller cities aren't — use the standard CONUS rate: $113 lodging and $68 M&IE for FY2027 (1 October 2026 to 30 September 2027), per [GSA's FY 2027 per diem highlights](https://www.gsa.gov/system/files/FY2027perdiemhighlights.docx). Our guide to the [standard CONUS rate](/blog/standard-conus-per-diem-rate-explained) explains exactly when that fallback applies. Lodging can change by month in seasonal destinations (ski towns, beach resorts, convention cities), so make sure you're using the rate for the specific month you'll actually be travelling, not just an annual average." },
       { type: "h2", text: "Step 2: Count nights and days separately" },
       { type: "p", text: "This is the step people most often get wrong, because lodging and M&IE are counted on different bases. Lodging is paid per night — a trip that arrives Monday afternoon and leaves Wednesday morning is two nights (Monday and Tuesday), not three. M&IE, by contrast, is paid per day, and it includes both travel days — so that same trip has three M&IE days (Monday, Tuesday, Wednesday)." },
       { type: "h2", text: "Step 3: Apply the 75% rule to M&IE" },
@@ -289,21 +289,21 @@ export const POSTS: Post[] = [
         "M&IE = (first day at 75%) + (full days at 100%) + (last day at 75%), minus any provided-meal deductions.",
         "Total per diem = lodging + M&IE.",
       ] },
-      { type: "table", caption: "Worked example: 3-night trip, standard rate", headers: ["Day", "Lodging", "M&IE"], rows: [
-        ["Day 1 (arrival)", "$110", "$51 (75%)"],
-        ["Day 2 (full day)", "$110", "$68 (100%)"],
-        ["Day 3 (full day)", "$110", "$68 (100%)"],
+      { type: "table", caption: "Worked example: 3-night trip, standard FY2027 rate", headers: ["Day", "Lodging", "M&IE"], rows: [
+        ["Day 1 (arrival)", "$113", "$51 (75%)"],
+        ["Day 2 (full day)", "$113", "$68 (100%)"],
+        ["Day 3 (full day)", "$113", "$68 (100%)"],
         ["Day 4 (departure)", "—", "$51 (75%)"],
-        ["Total", "$330", "$238"],
+        ["Total", "$339", "$238"],
       ] },
-      { type: "p", text: "That example totals $568 for the trip ($330 lodging + $238 M&IE) — a figure that would be easy to overstate by $34 or more if you paid full M&IE on the arrival and departure days instead of the correct 75%." },
+      { type: "p", text: "That example totals $577 for the trip ($339 lodging + $238 M&IE) — a figure that would be easy to overstate by $34 or more if you paid full M&IE on the arrival and departure days instead of the correct 75%." },
       { type: "quote", text: "Per diem rates for federal travel are set to reasonably reimburse a traveler for lodging and meal costs incurred while on official business, without requiring receipts for every expense.", attribution: "U.S. General Services Administration, gsa.gov" },
       { type: "h2", text: "Let a calculator do the day-by-day work" },
-      { type: "p", text: "Manually tracking seasonal lodging changes and the 75% rule across a longer, multi-city trip gets error-prone fast. That's exactly what PerDiemWise automates — pick a city and your travel dates, and it returns an itemised, day-by-day total using the current GSA FY2026 figures, ready to attach to an expense report." },
+      { type: "p", text: "Manually tracking seasonal lodging changes and the 75% rule across a longer, multi-city trip gets error-prone fast. That's exactly what PerDiemWise automates — pick a city and your travel dates, and it returns an itemised, day-by-day total from the GSA per diem dataset it is built on, ready to attach to an expense report." },
       { type: "faq", items: [
         { q: "How is per diem calculated for a multi-day trip?", a: "Add up lodging per night stayed plus M&IE per day travelled, applying the 75% rule to M&IE on the first and last day only, then deduct the value of any provided meals." },
         { q: "Do I count arrival and departure days as full days?", a: "For M&IE, yes — both travel days are counted, but at 75% of the full rate rather than 100%. For lodging, you only pay for nights you actually stayed." },
-        { q: "What if my destination isn't listed by GSA?", a: "Use the standard CONUS rate — $110 lodging and $68 M&IE for FY2026 — which applies to any US destination not separately listed." },
+        { q: "What if my destination isn't listed by GSA?", a: "Use the standard CONUS rate — $113 lodging and $68 M&IE for FY2027 (1 October 2026 to 30 September 2027) — which applies to any US destination not separately listed." },
         { q: "Is there a free tool to calculate per diem automatically?", a: "Yes — our per diem calculator applies the current GSA rates, the 75% rule, and seasonal lodging changes automatically for any US destination and date range." },
       ] },
     ],
@@ -348,7 +348,8 @@ export const POSTS: Post[] = [
         "Breakfast, lunch and dinner, at the specific dollar split published in the GSA M&IE table for that rate tier — see our [full M&IE breakdown](/blog/meals-and-incidentals-mie-breakdown-explained) for the exact figures.",
         "Incidentals — a flat $5 per day for small fees and tips, such as tips to porters, hotel housekeeping staff, or similar service workers.",
       ] },
-      { type: "table", caption: "What's inside the FY2026 standard $68 M&IE rate", headers: ["Component", "Amount"], rows: [
+      { type: "p", text: "The M&IE figure is the same for FY2027 (1 October 2026 to 30 September 2027) as it was for FY2026: GSA did not revise the M&IE tiers, so the $68 standard breakdown below still applies. Only the standard lodging cap moved, from $110 to $113 a night, per [GSA's FY 2027 per diem highlights](https://www.gsa.gov/system/files/FY2027perdiemhighlights.docx)." },
+      { type: "table", caption: "What's inside the FY2027 standard $68 M&IE rate", headers: ["Component", "Amount"], rows: [
         ["Breakfast", "$16"],
         ["Lunch", "$19"],
         ["Dinner", "$28"],
@@ -374,7 +375,7 @@ export const POSTS: Post[] = [
     slug: "meals-and-incidentals-mie-breakdown-explained",
     title: "The GSA M&IE Breakdown, Explained",
     description:
-      "Every GSA M&IE tier splits into breakfast, lunch, dinner and incidentals. Here's the FY2026 breakdown and how deductions for provided meals work.",
+      "Every GSA M&IE tier splits into breakfast, lunch, dinner and incidentals. Here's the FY2027 breakdown (unchanged from FY2026) and how deductions for provided meals work.",
     keyword: "m&ie breakdown",
     supportingKeywords: [
       "meals and incidental expenses breakdown",
@@ -387,7 +388,7 @@ export const POSTS: Post[] = [
     longTailPhrases: [
       "how much of per diem is for breakfast lunch and dinner",
       "how to deduct a provided meal from per diem",
-      "what is the m&ie breakdown for fy2026",
+      "what is the m&ie breakdown for fy2027",
     ],
     category: "Academy",
     date: "2026-06-14",
@@ -403,8 +404,9 @@ export const POSTS: Post[] = [
       { type: "callout", title: "TL;DR", text: "GSA splits every M&IE rate tier into four components — breakfast, lunch, dinner and a flat $5 incidentals allowance — that add up to the published daily total. When a meal is provided free of charge, deduct only that meal's specific value from the day's M&IE claim; the $5 incidentals portion is never deducted, even if all three meals are covered." },
       { type: "h2", text: "Why GSA publishes a meal-by-meal breakdown at all" },
       { type: "p", text: "M&IE isn't a single monolithic number — GSA publishes a granular breakdown so travellers can deduct any meal that was provided at no cost, for example a conference lunch, a hotel's complimentary breakfast, or a client dinner picked up by someone else. Without that breakdown, there would be no fair way to adjust a per diem claim downward when part of the day's food was already paid for by someone other than the traveller." },
-      { type: "h2", text: "The FY2026 M&IE tiers in full" },
-      { type: "table", caption: "FY2026 GSA M&IE breakdown by rate tier", headers: ["Total M&IE", "Breakfast", "Lunch", "Dinner", "Incidentals", "First/last day (75%)"], rows: [
+      { type: "h2", text: "The FY2027 M&IE tiers in full" },
+      { type: "p", text: "GSA did not revise the M&IE tiers for FY2027 (1 October 2026 to 30 September 2027). They were last revised in FY2025 and are scheduled for review in FY2028, so the figures below are the same ones that applied in FY2026. Source: [GSA's FY 2027 per diem highlights](https://www.gsa.gov/system/files/FY2027perdiemhighlights.docx)." },
+      { type: "table", caption: "FY2027 GSA M&IE breakdown by rate tier (unchanged from FY2026)", headers: ["Total M&IE", "Breakfast", "Lunch", "Dinner", "Incidentals", "First/last day (75%)"], rows: [
         ["$68", "$16", "$19", "$28", "$5", "$51.00"],
         ["$74", "$18", "$20", "$31", "$5", "$55.50"],
         ["$80", "$20", "$22", "$33", "$5", "$60.00"],

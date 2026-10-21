@@ -1,5 +1,19 @@
 # Changelog
 
+## [Unreleased] — 2026-10-21 — Lifecycle refresh: FY2027 figures in three guides
+
+### Changed
+- `how-to-calculate-per-diem-for-a-business-trip`: standard CONUS rate is now $113 lodging + $68 M&IE for FY2027 (was FY2026 $110 + $68). The 3-night worked example is now $339 lodging + $238 M&IE = $577 (was $568). The FAQ and the "destination not listed" fallback were updated to match.
+- `what-does-per-diem-cover`: added a sentence stating the FY2027 M&IE figure is unchanged and the standard lodging cap moved from $110 to $113; the M&IE table is now labelled FY2027.
+- `meals-and-incidentals-mie-breakdown-explained`: the tier table and heading are labelled FY2027, with a sourced note that GSA did not revise the M&IE tiers for FY2027. The figures themselves are unchanged. The description and long-tail phrase now say FY2027.
+- Publish dates are unchanged on all three posts.
+
+### Added
+- `test/fy-rate-currency.test.mts` guards the three refreshed posts against FY2026 figures presented as current. Wired into `npm test`.
+
+### Known gap
+- Unchanged from 2026-10-16: `lib/gsa-rates.json` and the `/per-diem/*` city pages (and the home page's "Official GSA FY2026 rates" line) still use the FY2026 dataset. Regenerating that dataset from GSA's FY2027 data is a separate, larger change.
+
 ## [Unreleased] — 2026-10-16 — FY2027 per diem refresh for five posts
 
 ### Changed
