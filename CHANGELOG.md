@@ -1,5 +1,21 @@
 # Changelog
 
+## [Unreleased] — 2026-10-27 — Lifecycle refresh: FY2027 figures in four more posts
+
+### Changed
+- `per-diem-vs-mileage-reimbursement`: standard CONUS rate is now $113 lodging + $68 M&IE for FY2027 (was $110 + $68). The combined worked example is $317.80 (was $314.80). The pre-July example keeps its FY2026 $110 figure, labelled as FY2026 ($308.50). The FAQ and side-by-side table were updated to match.
+- `per-diem-policy-example`: the unlisted-destination row and the GSA-rate paragraph now state the FY2027 standard rate ($113 lodging / $68 M&IE).
+- `gsa-per-diem-first-and-last-day-75-percent-rule`: the first/last-day tier table is labelled FY2027. The tiers are unchanged from FY2026 (GSA did not revise them for FY2027); the figures themselves are not changed.
+- `are-provided-meals-deducted-from-per-diem`: the M&IE breakdown heading and caption are labelled FY2027, noting the tiers are unchanged. The figures themselves are not changed.
+- Publish dates are unchanged on all four posts.
+
+### Added
+- `test/fy-rate-currency.test.mts` now also guards these four posts against FY2026 figures presented as current.
+
+### Known gap
+- Unchanged: `lib/gsa-rates.json` and the `/per-diem/*` pages still use the FY2026 dataset. The four posts above now state FY2027 standard lodging ($113), so they disagree with the calculator's $110 fallback until the dataset is regenerated.
+- `travel-nurse-per-diem-explained` points readers to the calculator for the "current" FY2026 rate; it is deferred until the calculator dataset is regenerated, so it is not refreshed here.
+
 ## [Unreleased] — 2026-10-21 — Lifecycle refresh: FY2027 figures in three guides
 
 ### Changed

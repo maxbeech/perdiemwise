@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
 import { POSTS, type Post } from "../lib/posts";
 
-// Regression guard for the FY2027 refresh of three guides (lifecycle pass, 21 Oct 2026).
+// Regression guard for the FY2027 refresh of three guides (lifecycle pass, 21 Oct 2026)
+// and of four more posts (lifecycle pass, 27 Oct 2026; see the checks at the end of this file).
 // Each check names the post, the stale figure it must not contain, and the current one it must.
 // Source: GSA FY 2027 per diem highlights (standard CONUS $113 lodging, $68 M&IE; M&IE tiers unchanged).
 // https://www.gsa.gov/system/files/FY2027perdiemhighlights.docx
@@ -26,5 +27,24 @@ const mie = postText("meals-and-incidentals-mie-breakdown-explained");
 assert.ok(!mie.includes("FY2026 M&IE tiers in full"), "meals-and-incidentals: heading must not present FY2026 tiers as current");
 assert.ok(mie.includes("FY2027 GSA M&IE breakdown by rate tier"), "meals-and-incidentals: tier table must be labelled FY2027");
 assert.ok(mie.includes("not revise the M&IE tiers for FY2027"), "meals-and-incidentals: must state the FY2027 tiers were unchanged, with source");
+
+const firstLast = postText("gsa-per-diem-first-and-last-day-75-percent-rule");
+assert.ok(!firstLast.includes("FY2026 M&IE first/last-day"), "75-percent-rule: FY2026 tier table must not be presented as current");
+assert.ok(firstLast.includes("FY2027 M&IE first/last-day rate by tier"), "75-percent-rule: tier table must be labelled FY2027");
+
+const mealsDeducted = postText("are-provided-meals-deducted-from-per-diem");
+assert.ok(!mealsDeducted.includes("GSA FY2026 M&IE breakdown"), "provided-meals: FY2026 breakdown label must be gone");
+assert.ok(mealsDeducted.includes("GSA FY2027 M&IE breakdown by daily rate tier"), "provided-meals: tier table must be labelled FY2027");
+
+const mileageVsPerDiem = postText("per-diem-vs-mileage-reimbursement");
+assert.ok(!mileageVsPerDiem.includes("$110/night"), "per-diem-vs-mileage: stale $110/night standard rate must be gone");
+assert.ok(!mileageVsPerDiem.includes("$314.80"), "per-diem-vs-mileage: stale $314.80 combined total must be gone");
+assert.ok(mileageVsPerDiem.includes("$113 a night for lodging"), "per-diem-vs-mileage: must state the FY2027 standard rate");
+assert.ok(mileageVsPerDiem.includes("$317.80"), "per-diem-vs-mileage: worked example total must be $317.80 ($136.80 + $113 + $68)");
+assert.ok(mileageVsPerDiem.includes("$308.50"), "per-diem-vs-mileage: pre-July FY2026 example ($308.50) must be kept, labelled FY2026");
+
+const policyExample = postText("per-diem-policy-example");
+assert.ok(!policyExample.includes("$110"), "policy-example: stale $110 lodging rate must be gone");
+assert.ok(policyExample.includes("$113 lodging / $68 M&IE, FY2027"), "policy-example: unlisted-destination row must state the FY2027 standard rate");
 
 console.log("fy-rate-currency: all passed");

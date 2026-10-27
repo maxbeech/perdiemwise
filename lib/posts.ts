@@ -217,8 +217,8 @@ export const POSTS: Post[] = [
       { type: "callout", title: "TL;DR", text: "GSA and the Federal Travel Regulation (41 CFR 301-11.101) require M&IE to be paid at 75% of the full daily rate on the first and last day of any trip, no matter what time you actually departed or returned. A three-day trip therefore pays 75% + 100% + 75% of the daily M&IE rate, not three full days. It applies to M&IE only — lodging is unaffected and is still paid per actual night stayed." },
       { type: "h2", text: "Why three-quarters, and not some other fraction" },
       { type: "p", text: "The federal travel rules assume you don't need a full day of meals when you're only partly away from home — you likely ate breakfast at home before you left for the airport, or you'll have dinner at home the evening you get back. Rather than trying to prorate every trip hour-by-hour, which would be a compliance nightmare for both travellers and auditors, the Federal Travel Regulation sets a flat, simple standard: 75% of the full M&IE rate applies on the first and last calendar day of official travel, full stop. GSA's own guidance is explicit that this fraction applies regardless of actual departure and return times." },
-      { type: "h2", text: "What it looks like in dollars, FY2026" },
-      { type: "table", caption: "FY2026 M&IE first/last-day rate by tier", headers: ["Full-day M&IE rate", "First/last day (75%)"], rows: [
+      { type: "h2", text: "What it looks like in dollars, FY2027 (tiers unchanged from FY2026)" },
+      { type: "table", caption: "FY2027 M&IE first/last-day rate by tier (GSA did not revise the tiers for FY2027)", headers: ["Full-day M&IE rate", "First/last day (75%)"], rows: [
         ["$68 (standard rate)", "$51.00"],
         ["$74", "$55.50"],
         ["$80", "$60.00"],
@@ -1619,7 +1619,7 @@ const WEEK2_POSTS: Post[] = [
         ["Lodging", "Actual cost, capped at the GSA rate for destination and month"],
         ["M&IE — full travel day", "100% of the GSA M&IE rate for the destination"],
         ["M&IE — first/last travel day", "75% of the GSA M&IE rate for the destination"],
-        ["Unlisted destination", "Standard CONUS rate ($110 lodging / $68 M&IE, FY2026)"],
+        ["Unlisted destination", "Standard CONUS rate ($113 lodging / $68 M&IE, FY2027)"],
       ] },
       { type: "h2", text: "What per diem does not cover" },
       { type: "ul", items: [
@@ -1705,7 +1705,7 @@ export const WEEK3_POSTS: Post[] = [
         "GSA writes the FTR (41 CFR Chapters 300-304) to implement those statutes as detailed, enforceable rules.",
         "GSA then publishes the actual numbers, the [CONUS per diem rate tables](https://www.gsa.gov/travel/plan-book/per-diem-rates), under the authority the FTR grants it.",
       ] },
-      { type: "p", text: "Agencies and contractors sit underneath all three layers. They do not get to invent their own per diem figures. For fiscal year 2026, the GSA standard CONUS rate is $110 a night for lodging and $68 a day for meals and incidental expenses, and that number is what most agency travel systems default to unless a traveller's destination has its own published rate. You can check any city's current figure with our own [per diem calculator](/calculators/per-diem-calculator), which pulls from the same GSA tables. For background on how the standard rate is set and applied, see our guide to the [standard CONUS per diem rate](/blog/standard-conus-per-diem-rate-explained), and for a broader primer start with [what is per diem](/blog/what-is-per-diem)." },
+      { type: "p", text: "Agencies and contractors sit underneath all three layers. They do not get to invent their own per diem figures. For fiscal year 2027, the GSA standard CONUS rate is $113 a night for lodging and $68 a day for meals and incidental expenses, and that number is what most agency travel systems default to unless a traveller's destination has its own published rate. You can check any city's current figure with our own [per diem calculator](/calculators/per-diem-calculator), which pulls from the same GSA tables. For background on how the standard rate is set and applied, see our guide to the [standard CONUS per diem rate](/blog/standard-conus-per-diem-rate-explained), and for a broader primer start with [what is per diem](/blog/what-is-per-diem)." },
       { type: "h2", text: "FTR vs JTR vs DSSR: three rulebooks, three audiences" },
       { type: "p", text: "This is the confusion that catches almost everyone out at some point. Three different regulations govern government travel, and which one applies depends entirely on who you are and where you are going." },
       { type: "table", caption: "How the FTR, JTR, and DSSR compare", headers: ["Regulation", "Who it covers", "Published by", "Where rates live"], rows: [
@@ -1843,17 +1843,17 @@ export const WEEK3_POSTS: Post[] = [
       creditUrl: "https://www.pexels.com/@gabrielrissi",
     },
     body: [
-      { type: "callout", title: "Short answer", text: "Yes, you can claim both on the same trip. Per diem and mileage reimbursement cover completely different costs. Per diem is a flat daily allowance for lodging and meals/incidentals, set by GSA destination rates (FY2026 standard rate: $110/night lodging, $68/day M&IE). Mileage reimbursement is a per-mile rate for using your own car (IRS 2026 standard rate: 72.5 cents/mile before 1 July, 76 cents/mile from 1 July after a mid-year rise). Drive your own car to a conference and stay overnight, and you claim mileage for the miles driven plus per diem for the hotel and food. That's one trip, two reimbursements, no conflict." },
+      { type: "callout", title: "Short answer", text: "Yes, you can claim both on the same trip. Per diem and mileage reimbursement cover completely different costs. Per diem is a flat daily allowance for lodging and meals/incidentals, set by GSA destination rates (FY2027 standard rate from 1 October 2026: $113/night lodging, $68/day M&IE). Mileage reimbursement is a per-mile rate for using your own car (IRS 2026 standard rate: 72.5 cents/mile before 1 July, 76 cents/mile from 1 July after a mid-year rise). Drive your own car to a conference and stay overnight, and you claim mileage for the miles driven plus per diem for the hotel and food. That's one trip, two reimbursements, no conflict." },
       { type: "h2", text: "Per diem and mileage reimbursement pay for different things" },
       { type: "p", text: "People often assume these are competing options, as if you must pick one. They aren't. Per diem pays for staying somewhere: your hotel room, breakfast, lunch, dinner, and small incidentals like tips. Mileage reimbursement pays for getting there: the fuel, wear, and running cost of driving your own vehicle instead of flying or renting a car. One is a lodging-and-food allowance. The other is a vehicle-cost allowance. Because they sit in separate cost categories, a single business trip can legitimately trigger both." },
       { type: "h2", text: "What is per diem?" },
-      { type: "p", text: "Per diem is a flat daily allowance that reimburses lodging and meals/incidental expenses (M&IE) without requiring itemised receipts for every coffee or sandwich. The rate is set by destination, using the [GSA per diem rates](https://www.gsa.gov/travel/plan-book/per-diem-rates), which cover federal travel within the continental United States (CONUS). For FY2026, the standard CONUS rate is $110 a night for lodging and $68 a day for meals and incidentals. Higher-cost cities and counties, plus travel outside the continental US, use different rates — see our guide on [OCONUS vs CONUS per diem](/blog/oconus-vs-conus-per-diem) for how that split works. You can read a fuller explainer in [what is per diem](/blog/what-is-per-diem), or run your own numbers with the [per diem calculator](/calculators/per-diem-calculator)." },
+      { type: "p", text: "Per diem is a flat daily allowance that reimburses lodging and meals/incidental expenses (M&IE) without requiring itemised receipts for every coffee or sandwich. The rate is set by destination, using the [GSA per diem rates](https://www.gsa.gov/travel/plan-book/per-diem-rates), which cover federal travel within the continental United States (CONUS). For FY2027 (1 October 2026 to 30 September 2027), the standard CONUS rate is $113 a night for lodging and $68 a day for meals and incidentals. Higher-cost cities and counties, plus travel outside the continental US, use different rates — see our guide on [OCONUS vs CONUS per diem](/blog/oconus-vs-conus-per-diem) for how that split works. You can read a fuller explainer in [what is per diem](/blog/what-is-per-diem), or run your own numbers with the [per diem calculator](/calculators/per-diem-calculator)." },
       { type: "h2", text: "What is mileage reimbursement?" },
       { type: "p", text: "Mileage reimbursement pays employees for using their own vehicle on business trips. Instead of tracking fuel, oil changes, insurance, and depreciation separately, the [IRS sets a standard mileage rate](https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents) each year that bundles all running costs into one per-mile figure. For 2026, the business rate opened at 72.5 cents per mile and rose to 76 cents per mile from 1 July after a mid-year adjustment. Multiply the miles driven for business by the rate in effect on the travel date, and that's the reimbursement, regardless of what the car actually cost to run. Full detail is in our [2026 IRS standard mileage rate](/blog/2026-irs-standard-mileage-rate) post, and you can calculate a trip with the [mileage reimbursement calculator](/calculators/mileage-reimbursement-calculator)." },
       { type: "table", caption: "Per diem vs. mileage reimbursement, side by side", headers: ["", "Per diem", "Mileage reimbursement"], rows: [
         ["What it covers", "Lodging, meals and incidentals", "Cost of driving your own vehicle"],
         ["How it's calculated", "Flat daily rate by destination", "Rate per mile driven"],
-        ["2026 rate (standard)", "$110/night lodging + $68/day M&IE", "72.5¢/mile (Jan–Jun), 76¢/mile (Jul–Dec)"],
+        ["Standard rate (per diem FY2027; IRS 2026)", "$113/night lodging + $68/day M&IE", "72.5¢/mile (Jan–Jun), 76¢/mile (Jul–Dec)"],
         ["Rate source", "GSA destination per diem rates", "IRS standard mileage rate"],
         ["Receipts usually needed?", "No, it's a flat allowance", "No, just a mileage log"],
         ["Can combine with the other?", "Yes", "Yes"],
@@ -1864,11 +1864,11 @@ export const WEEK3_POSTS: Post[] = [
       { type: "p", text: "Say an employee drives their own car 180 miles round trip to a conference, stays one night in a standard-rate CONUS location, and eats meals there. Here's how the two allowances stack, in real numbers, using the current mileage rate (76¢/mile, effective 1 July 2026)." },
       { type: "table", caption: "Combined trip cost: mileage plus per diem", headers: ["Expense", "Calculation", "Amount"], rows: [
         ["Mileage reimbursement", "180 miles × $0.76", "$136.80"],
-        ["Lodging per diem", "1 night × $110", "$110.00"],
+        ["Lodging per diem", "1 night × $113", "$113.00"],
         ["M&IE per diem", "1 day × $68", "$68.00"],
-        ["Total reimbursement", "$136.80 + $110 + $68", "$314.80"],
+        ["Total reimbursement", "$136.80 + $113 + $68", "$317.80"],
       ] },
-      { type: "p", text: "That $314.80 is the full, legitimate reimbursement for one overnight trip: driving costs and staying costs, added together rather than chosen between. Neither figure reduces the other. (The same trip taken before 1 July 2026 uses the earlier 72.5¢ mileage rate instead — $130.50 mileage, $308.50 total.)" },
+      { type: "p", text: "That $317.80 is the full, legitimate reimbursement for one overnight trip: driving costs and staying costs, added together rather than chosen between. Neither figure reduces the other. (The same trip taken before 1 July 2026 uses the earlier 72.5¢ mileage rate and the FY2026 $110 lodging rate instead — $130.50 mileage, $308.50 total.)" },
       { type: "p", text: "There is one useful admin check before approving a combined claim: make sure the traveller has recorded the business purpose and route for the mileage, then record the overnight destination and travel dates for per diem. A client visit in Richmond followed by a conference hotel in Washington, DC can create both claims, but the file should make the two cost categories easy to trace. That small bit of structure saves the familiar end-of-month hunt through calendar invites and fuel-card transactions." },
       { type: "quote", text: "We establish the per diem rates that federal agencies use to reimburse their employees for lodging and meals and incidental expenses incurred while on official travel within the continental United States.", attribution: "U.S. General Services Administration, gsa.gov" },
       { type: "h2", text: "When does each one apply?" },
@@ -1882,7 +1882,7 @@ export const WEEK3_POSTS: Post[] = [
       { type: "faq", items: [
         { q: "Can I claim per diem and mileage reimbursement on the same trip?", a: "Yes. Per diem covers lodging and meals; mileage reimbursement covers the cost of driving your own vehicle. They're separate cost categories, so both can be claimed on one trip without double-counting." },
         { q: "Does the mileage rate already include fuel?", a: "Yes. The IRS standard mileage rate bundles fuel, maintenance, insurance and depreciation into one per-mile figure. Don't claim petrol receipts on top of the mileage rate for the same trip." },
-        { q: "What's the 2026 GSA standard per diem rate?", a: "The FY2026 standard CONUS rate is $110 a night for lodging and $68 a day for meals and incidental expenses. Higher-cost destinations have their own, higher rates." },
+        { q: "What's the FY2027 GSA standard per diem rate?", a: "The FY2027 standard CONUS rate (1 October 2026 to 30 September 2027) is $113 a night for lodging and $68 a day for meals and incidental expenses. Higher-cost destinations have their own, higher rates." },
         { q: "What's the 2026 IRS mileage rate for business travel?", a: "72.5 cents per mile for business use of a personal vehicle before 1 July 2026, rising to 76 cents per mile from 1 July after a mid-year IRS adjustment." },
         { q: "Do I need receipts for per diem or mileage claims?", a: "Generally no. Per diem is a flat allowance and mileage reimbursement is based on a logged distance, not itemised receipts. Employers may still require a trip log or expense report as proof of travel." },
       ] },
@@ -2434,8 +2434,8 @@ export const WEEK3_POSTS: Post[] = [
       { type: "p", text: "Per diem is meant to cover meals and small daily costs once, not twice. So GSA built a straightforward rule: if a meal is handed to you free of charge, you deduct that meal's value from your day's [Meals and Incidental Expenses (M&IE)](/blog/meals-and-incidentals-mie-breakdown-explained) allowance before you claim it. Below is exactly how much to subtract, what counts as 'provided', and where the line sits." },
       { type: "h2", text: "How the meal-by-meal deduction works" },
       { type: "p", text: "GSA doesn't just publish one M&IE number for each location. Every tier is split into set amounts for breakfast, lunch, dinner and incidentals, listed in the [GSA per diem rates](https://www.gsa.gov/travel/plan-book/per-diem-rates) tables. When a meal is provided, you find your trip's daily tier, look up the amount allocated to that specific meal, and subtract only that figure. You don't estimate a third of the total, and you don't touch the other two meals or the incidentals portion. This mechanic comes from the [Federal Travel Regulation](https://www.ecfr.gov/current/title-41/subtitle-F/chapter-301/subchapter-B/part-301-11) that GSA per diem is built on." },
-      { type: "h2", text: "GSA M&IE meal breakdown table (FY2026)" },
-      { type: "table", caption: "GSA FY2026 M&IE breakdown by daily rate tier. Source: GSA, gsa.gov/travel/plan-book/per-diem-rates.", headers: ["Tier total", "Breakfast", "Lunch", "Dinner", "Incidentals", "First/last day (75%)"], rows: [
+      { type: "h2", text: "GSA M&IE meal breakdown table (FY2027, unchanged from FY2026)" },
+      { type: "table", caption: "GSA FY2027 M&IE breakdown by daily rate tier (GSA did not revise the tiers for FY2027). Source: GSA, gsa.gov/travel/plan-book/per-diem-rates.", headers: ["Tier total", "Breakfast", "Lunch", "Dinner", "Incidentals", "First/last day (75%)"], rows: [
         ["$68", "$16", "$19", "$28", "$5", "$51"],
         ["$74", "$18", "$20", "$31", "$5", "$55.50"],
         ["$80", "$20", "$22", "$33", "$5", "$60"],
