@@ -103,7 +103,7 @@ export default function Home() {
           {[
             ["01", "Lodging, per night", <>Each night is capped at that city&apos;s <Link href="/blog/gsa-per-diem-rates-explained" className="text-accent hover:underline">GSA rate</Link> for the month it falls in — seasonal rates handled automatically.</>],
             ["02", "M&IE at 75% on travel days", "Meals & incidentals pay full on whole days and 75% on the first and last day, with provided meals deducted."],
-            ["03", "Mileage at the IRS rate", `Personal-vehicle miles reimbursed at the current 2026 IRS rate of ${(IRS_MILEAGE_2026.current.rates.business * 100).toFixed(1)}¢ — in the same place.`],
+            ["03", "Mileage at the IRS rate", <><Link href="/blog/mileage-reimbursement-2026-employer-guide" className="text-accent hover:underline">Personal-vehicle miles reimbursed</Link> at the current 2026 IRS rate of {(IRS_MILEAGE_2026.current.rates.business * 100).toFixed(1)}¢ — in the same place.</>],
           ].map(([n, h, p]) => (
             <Card key={String(n)} className="p-6">
               <span className="tnum text-sm text-accent">{n}</span>
