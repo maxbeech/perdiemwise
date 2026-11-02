@@ -2973,3 +2973,86 @@ for (const post of WEEK3_POSTS) {
 }
 
 POSTS.push(...WEEK3_POSTS);
+
+// Week 4: GSA mileage rate intent. Federal travellers search 'GSA mileage rate'
+// and mean the car rate that GSA sets to match the IRS standard business rate.
+const WEEK4_POSTS: Post[] = [
+  {
+    slug: "gsa-mileage-rate-2026",
+    title: "GSA Mileage Rate 2026: Why the Federal Rate Follows the IRS",
+    description:
+      "The GSA mileage rate for official car travel matches the IRS business rate: 72.5 cents before 1 July 2026 and 76 cents after. Here's how to price a trip that crosses the change.",
+    keyword: "gsa mileage rate 2026",
+    supportingKeywords: [
+      "gsa mileage rate",
+      "gsa mileage reimbursement rate",
+      "federal mileage rate 2026",
+      "privately owned vehicle mileage rate",
+      "gsa pov mileage rate",
+      "irs mileage rate 2026",
+      "76 cents per mile",
+      "72.5 cents per mile",
+      "federal travel regulation mileage",
+      "gsa mileage rate july 2026",
+    ],
+    longTailPhrases: [
+      "is the gsa mileage rate the same as the irs rate",
+      "what is the gsa mileage rate for 2026",
+      "what mileage rate do federal employees get",
+    ],
+    category: "News",
+    date: "2026-11-02",
+    readMins: 8,
+    body: [
+      { type: "p", text: "If you search for the GSA mileage rate in 2026, you are almost certainly asking what a federal employee is paid per mile for driving their own car on official business. The answer is the IRS standard business mileage rate: 72.5 cents per mile for travel before 1 July 2026, and 76 cents per mile for travel from 1 July onward. GSA sets its privately owned vehicle (POV) rate to match the IRS figure, so the two numbers move together." },
+      { type: "callout", title: "TL;DR", text: "The GSA mileage rate for official car travel in 2026 follows the IRS standard business rate. It is 72.5 cents per mile for travel up to 30 June and 76 cents per mile from 1 July. Price each trip by the date it was driven, not the date the claim is filed." },
+      { type: "h2", text: "Why GSA and the IRS quote the same number" },
+      { type: "p", text: "The Federal Travel Regulation (FTR) governs what federal employees can claim when they travel, and for car travel it ties the reimbursement rate to the IRS standard mileage rate. The same IRS figure is the one private employers can use under an accountable plan, so a federal traveller and an employee at a private firm driving the same route on the same day are paid the same per-mile amount. The statutory basis for the federal side is 5 U.S.C. section 5707, and GSA updates its POV rate when the IRS changes its own." },
+      { type: "p", text: "That link is why searches for the 'GSA mileage rate' and the 'IRS mileage rate' describe the same change. Nothing in the GSA figure is set separately from the IRS, so the question to answer is always which IRS rate applied on the day the miles were driven." },
+      { type: "h2", text: "The 2026 rate, split by travel date" },
+      { type: "p", text: "The IRS opened 2026 with a business rate of 72.5 cents per mile, then raised it to 76 cents from 1 July, citing rising fuel costs. GSA followed the midyear change for federal travellers. Because the rate depends on the date of travel, a single trip that runs across 30 June and 1 July needs each leg priced separately." },
+      { type: "table", caption: "GSA privately owned vehicle rate for 2026, by travel date", headers: ["Travel date", "Rate per mile"], rows: [
+        ["1 January to 30 June 2026", "72.5 cents"],
+        ["1 July to 31 December 2026", "76 cents"],
+        ["A trip that starts in June and finishes in July", "Price each leg by the date it was driven"],
+      ] },
+      { type: "h2", text: "Worked example: two 400-mile trips either side of July" },
+      { type: "p", text: "Take a federal employee who drives 400 miles for official business in mid-June and another 400 miles in mid-August. Priced separately by travel date, the claim is:" },
+      { type: "ul", items: [
+        "June trip: 400 miles × $0.725 = $290.00",
+        "August trip: 400 miles × $0.76 = $304.00",
+        "Total claim: $594.00",
+      ] },
+      { type: "p", text: "If both trips had been filed at the new 76-cent rate, the total would have been $608.00, overclaiming $14.00 on the June trip. Our [mileage reimbursement calculator](/calculators/mileage-reimbursement-calculator) applies the rate for the travel date you enter, so run each trip with its own date rather than one combined total. The rounding works to the cent at each trip, which keeps the claim matched to what the voucher will show." },
+      { type: "h2", text: "What changes for employers and contractors" },
+      { type: "p", text: "Private employers are not bound by the GSA figure. An employer that reimburses staff at the IRS rate under an accountable plan can pay the same 72.5 and 76 cent rates tax-free, as set out in our [IRS mileage reimbursement rules guide](/blog/irs-mileage-reimbursement-rules). Contractors paid under their own travel policy should check that policy before assuming the federal rate applies to them. For the full history of the midyear change, see [the 2026 IRS standard mileage rates](/blog/2026-irs-standard-mileage-rate) and [the trend analysis of the 2026 mileage rate](/blog/mileage-rate-2026-trend-analysis)." },
+      { type: "h2", text: "A checklist before you file a federal mileage claim" },
+      { type: "ul", items: [
+        "Confirm the travel date for every leg, not the date you submit the voucher.",
+        "Use 72.5 cents for miles driven up to 30 June 2026 and 76 cents for miles driven from 1 July 2026.",
+        "Record the destination and business purpose for each trip so the miles can be substantiated.",
+        "Check your agency's travel policy, which can add rules on top of the FTR.",
+        "Claim parking and tolls separately as actual costs, since the per-mile rate covers the cost of running the vehicle.",
+      ] },
+      { type: "h2", text: "Mileage and per diem are separate allowances" },
+      { type: "p", text: "The POV rate covers the car; per diem covers lodging and meals. A trip can carry both, and each is claimed on its own line. For the difference between them, read [per diem vs mileage reimbursement](/blog/per-diem-vs-mileage-reimbursement). Where an employer pays a flat car allowance instead of a per-mile rate, the mileage rules above do not apply, and the allowance is generally taxable. Our [FAVR explainer](/blog/favr-mileage-reimbursement-explained) covers the fixed and variable rate programme, the main route to a rate that differs from the standard figure." },
+      { type: "h2", text: "Confirm the figure before you rely on it" },
+      { type: "p", text: "Rates for federal travel are set by GSA, and secondary sites often lag behind official bulletins. Check GSA's privately owned vehicle guidance and the IRS notice for the year before you file. The figures in this article are the ones we could verify at the time of writing on 2 November 2026." },
+      { type: "faq", items: [
+        { q: "Is the GSA mileage rate the same as the IRS rate?", a: "For privately owned car travel, yes. GSA sets the POV rate to match the IRS standard business mileage rate, so the 2026 figures are 72.5 cents before 1 July and 76 cents from 1 July." },
+        { q: "What rate applies to a trip that crosses 1 July 2026?", a: "Price each leg by the date it was driven. Miles up to 30 June use 72.5 cents; miles from 1 July use 76 cents." },
+        { q: "Do federal employees get a different mileage rate from private-sector employees?", a: "Usually not for car travel, because both reference the IRS standard business rate. A private employer still needs an accountable plan for the reimbursement to stay tax-free." },
+        { q: "Are parking and tolls included in the mileage rate?", a: "Generally no. The standard mileage rate covers the operating cost of the vehicle, and parking and tolls are claimed separately as actual expenses." },
+      ] },
+    ],
+    sources: [
+      { label: "Federal Travel Regulation, 41 CFR chapter 301", url: "https://www.ecfr.gov/current/title-41/subtitle-F/chapter-301" },
+      { label: "NATP: IRS raises business mileage rate to 76 cents per mile", url: "https://www.natptax.com/news-insights/blog/irs-raises-business-mileage-rate-to-76-cents-per-mile/" },
+      { label: "CPA Practice Advisor: rising fuel costs prompt IRS to raise standard mileage rates", url: "https://www.cpapracticeadvisor.com/2026/07/16/rising-fuel-costs-prompt-irs-to-raise-standard-mileage-rates-for-rest-of-2026/186784/" },
+      { label: "FedWeek: GSA tweaks mileage rates for 2026", url: "https://www.fedweek.com/federal-managers-daily-report/gsa-tweaks-milage-rates-for-2026/" },
+      { label: "FedPayScale: 2026 federal mileage rates", url: "https://fedpayscale.org/per-diem/mileage-rates/" },
+    ],
+  },
+];
+
+POSTS.push(...WEEK4_POSTS);
