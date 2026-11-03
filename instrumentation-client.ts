@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/nextjs";
 import { IGNORED_ERROR_PATTERNS } from "@/lib/sentry-filters";
+import { CLIENT_NOISE_DENY_URLS, CLIENT_NOISE_IGNORE_ERRORS } from "@/lib/sentry-client-noise";
 import { sharedSentryOptions } from "@/lib/sentry-options";
 
 /**
@@ -16,8 +17,10 @@ if (dsn) {
   Sentry.init({
     dsn,
     ...shared,
-    // See lib/sentry-filters.ts: known non-actionable browser noise (PERDIEMWISE_WEB-1).
-    ignoreErrors: IGNORED_ERROR_PATTERNS,
+    // PERDIEMWISE_WEB-1 (lib/sentry-filters.ts) plus the rules shared across products
+    // (lib/sentry-client-noise.ts): injected-script and in-app webview errors.
+    ignoreErrors: [...IGNORED_ERROR_PATTERNS, ...CLIENT_NOISE_IGNORE_ERRORS],
+    denyUrls: CLIENT_NOISE_DENY_URLS,
     // Requests go through our own tunnel route (next.config.ts), so this is
     // same-origin. The header is required, not cosmetic: when a feedback report
     // includes a screenshot the browser sends the envelope as a raw ArrayBuffer

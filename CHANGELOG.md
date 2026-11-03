@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased] — 2026-11-03 — Injected-script errors out of Sentry (PERDIEMWISE_WEB-5)
+
+### Changed
+- "Object Not Found Matching Id:2, MethodName:update, ParamCount:4" is a native bridge injected into some in-app browsers and WebViews rejecting its own call, on a blog page, with no frame of ours. The browser Sentry init and `beforeSend` now use the shared rules in `lib/sentry-client-noise.ts` (generated from `ProductFactory/_services/sentry-client-noise`), which also cover wallet extensions, a stackless `undefined` rejection and translated-page DOM errors. The existing auth-js filter (`lib/sentry-filters.ts`) is unchanged.
+- `test/sentry-client-noise.test.ts` is new and runs in `npm test`.
+
 ## [Unreleased] — 2026-10-27 — Lifecycle refresh: FY2027 figures in four more posts
 
 ### Changed

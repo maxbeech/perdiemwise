@@ -108,6 +108,9 @@ Supabase (database, auth) and Stripe stay where they are. Point the Stripe webho
 ## Observability
 - Init: `instrumentation.ts` (server + edge) and `instrumentation-client.ts` (browser), both using
   `lib/sentry-options.ts`. Browser traffic goes through a tunnel route chosen per build.
+- Browser noise that is not ours (wallet extensions, in-app webview bridges, a stackless `undefined`
+  rejection, React DOM errors on a translated page) is dropped by `lib/sentry-client-noise.ts`,
+  generated from `ProductFactory/_services/sentry-client-noise`; edit it there, not here.
 - Report failures with `captureServerError(err, { scope, ...ids })` from `lib/observability.ts`;
   pass ids, codes and counts only (anything else is replaced). Use `logEvent` for structured logs.
 - `lib/scrub.ts` is the one scrubber for errors, logs, breadcrumbs and transactions. It fails closed.

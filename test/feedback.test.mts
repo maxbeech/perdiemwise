@@ -121,7 +121,7 @@ await test("instrumentation wires the shared scrubbed options and onRequestError
   const inst = readFileSync("instrumentation.ts", "utf8");
   assert.ok(inst.includes("sharedSentryOptions()") && inst.includes("onRequestError"));
   const opts = readFileSync("lib/sentry-options.ts", "utf8");
-  for (const needle of ["beforeSend: scrubEvent", "beforeSendTransaction", "beforeBreadcrumb", "beforeSendLog", "enableLogs: true", "consoleLoggingIntegration"]) {
+  for (const needle of ["dropClientNoise(scrubEvent)", "beforeSendTransaction", "beforeBreadcrumb", "beforeSendLog", "enableLogs: true", "consoleLoggingIntegration"]) {
     assert.ok(opts.includes(needle), needle);
   }
   assert.ok(readFileSync("next.config.ts", "utf8").includes("tunnelRoute: true"));

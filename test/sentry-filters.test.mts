@@ -62,7 +62,7 @@ test("handles missing input rather than throwing", () => {
 
 test("is wired into the client Sentry.init", () => {
   const src = readFileSync(new URL("../instrumentation-client.ts", import.meta.url), "utf8");
-  assert.ok(src.includes("ignoreErrors: IGNORED_ERROR_PATTERNS"));
+  assert.ok(src.includes("...IGNORED_ERROR_PATTERNS"));
   assert.ok(IGNORED_ERROR_PATTERNS.length > 0);
 });
 
