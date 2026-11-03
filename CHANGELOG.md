@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased] — 2026-11-03 — Blog BlogPosting author matches the visible byline (GEO authorship)
+
+### Changed
+- `app/blog/[slug]/page.tsx`: the BlogPosting JSON-LD `author` now names the same byline the page shows (`PerDiemWise Content Team`, or a post's own `author`) instead of the site name. No named human author exists yet, so no `Person` schema is emitted; that remains open.
+
 ## [Unreleased] — 2026-11-03 — Injected-script errors out of Sentry (PERDIEMWISE_WEB-5)
 
 ### Changed

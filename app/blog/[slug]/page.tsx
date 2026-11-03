@@ -158,7 +158,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       datePublished: p.date,
       dateModified: p.date,
       image: imageUrl,
-      author: { "@type": "Organization", name: SITE.name, url: SITE.url },
+      // Match the visible byline (author), not the site name, so the schema agrees with the page.
+      author: { "@type": "Organization", name: author, url: SITE.url },
       publisher: { "@type": "Organization", name: SITE.name, url: SITE.url },
       mainEntityOfPage: { "@type": "WebPage", "@id": url },
     },
