@@ -47,4 +47,24 @@ const policyExample = postText("per-diem-policy-example");
 assert.ok(!policyExample.includes("$110"), "policy-example: stale $110 lodging rate must be gone");
 assert.ok(policyExample.includes("$113 lodging / $68 M&IE, FY2027"), "policy-example: unlisted-destination row must state the FY2027 standard rate");
 
+// Lifecycle pass, 4 Nov 2026: three more posts. Stale FY2026 figures must not read as current.
+const gsaExplained = postText("gsa-per-diem-rates-explained");
+assert.ok(!gsaExplained.includes("$110/night lodging"), "gsa-explained: stale $110/night TL;DR must be gone");
+assert.ok(!gsaExplained.includes("roughly 296"), "gsa-explained: stale 296 NSA count must be gone");
+assert.ok(gsaExplained.includes("$113/night lodging and $68/day M&IE for FY2027"), "gsa-explained: TL;DR must state the FY2027 standard rate");
+assert.ok(gsaExplained.includes("$113 a night for lodging"), "gsa-explained: body must state the FY2027 standard lodging rate");
+assert.ok(gsaExplained.includes("295"), "gsa-explained: must state the FY2027 NSA count (295)");
+assert.ok(!gsaExplained.includes("The FY2026 M&IE tiers"), "gsa-explained: M&IE heading must not present FY2026 tiers as current");
+assert.ok(!gsaExplained.includes("Why rates were frozen for FY2026"), "gsa-explained: frozen-rates heading must be reworded for FY2027");
+
+const oconus = postText("oconus-vs-conus-per-diem");
+assert.ok(!oconus.includes("$110"), "oconus-vs-conus: stale $110 lodging rate must be gone");
+assert.ok(oconus.includes("$113 a night for lodging"), "oconus-vs-conus: must state the FY2027 standard rate");
+assert.ok(oconus.includes("$113 lodging / $68 M&IE for FY2027"), "oconus-vs-conus: territory row must state the FY2027 standard rate");
+
+const lodgingSeason = postText("lodging-rates-change-by-season");
+assert.ok(!lodgingSeason.includes("runs $259"), "lodging-season: present-tense FY2026 San Francisco cap must be gone");
+assert.ok(lodgingSeason.includes("FY2026 lodging cap was $259"), "lodging-season: San Francisco cap must be labelled as the FY2026 figure");
+assert.ok(lodgingSeason.includes("FY2027 rates took effect on 1 October 2026"), "lodging-season: must state FY2027 rates now apply");
+
 console.log("fy-rate-currency: all passed");

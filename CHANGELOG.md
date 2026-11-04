@@ -1,5 +1,22 @@
 # Changelog
 
+## [Unreleased] — 2026-11-04 — Lifecycle refresh: FY2027 figures in three more posts
+
+### Changed
+- `gsa-per-diem-rates-explained`: standard CONUS rate is $113 lodging + $68 M&IE for FY2027 (was $110), $181 a day combined. NSA count is 295 for FY2027 (was roughly 296). The M&IE tier table is relabelled "not revised for FY2027" with the same tier values. The frozen-rates section is reworded to cover the FY2027 $3 lodging rise and Allentown, PA moving to the standard rate. The FAQ question on FY2026 was replaced with "What changed in the FY2027 per diem rates?". Source: GSA FY 2027 per diem highlights (https://www.gsa.gov/system/files/FY2027perdiemhighlights.docx).
+- `oconus-vs-conus-per-diem`: the standard CONUS reference is $113 lodging / $68 M&IE for FY2027 in the intro, the comparison table, the territory row and the FAQ.
+- `lodging-rates-change-by-season`: the San Francisco cap is labelled as the FY2026 figure ($259, rising to $272) rather than presented as the current rate. The post now points to the San Francisco per diem page for the FY2027 month-by-month table.
+- Publish dates are unchanged on all three posts.
+
+### Deferred
+- `per-diem-rates-2026-conus-table`: the whole post is built on FY2026 city tables (lodging ranges, DC and NYC monthly caps, FAQ). It needs the FY2027 non-standard-area table, which is not yet in `lib/gsa-rates.json`, so it is not partially edited here.
+
+### Added
+- `test/fy-rate-currency.test.mts` now also guards these three posts against FY2026 figures presented as current.
+
+### Known gap
+- Unchanged: `lib/gsa-rates.json` and the `/per-diem/*` pages still use the FY2026 dataset. These posts now state FY2027 standard figures, so they disagree with the calculator until the dataset is regenerated.
+
 ## [Unreleased] — 2026-11-03 — Blog BlogPosting author matches the visible byline (GEO authorship)
 
 ### Changed
