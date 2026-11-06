@@ -124,3 +124,9 @@ The Sentry scrubber (`lib/scrub.ts`) redacts secrets of any length, backs up to 
 ## Roadmap (next)
 Google OAuth sign-in; custom employer rate with taxable-excess flag;
 multi-destination trips; OCONUS/international rate data; historical fiscal-year rates.
+
+## Browser analytics
+
+GA4 is configured with `NEXT_PUBLIC_GA_MEASUREMENT_ID`. The reviewed value action is `calculation_completed` (Completes a calculation). Portfolio returns use `active-return-v1`: a visible visit followed by a trusted interaction in a new session, at least three hours later and within seven days. Thirty idle minutes separate sessions; timers and passive tabs do not count. These are consented browser cohorts, not cross-device or native-app retention. Only complete seven-day cohorts can be compared.
+
+The generated return modules come from OpenHelm/shared/src through Products/_services/openhelm-analytics. Keep existing consent gates, exclude explicit test identities (`oh_is_test`), and run the return contract tests alongside the full test suite before release. Register the `oh_cohort_date` and `oh_return_contract` event dimensions in the selected GA property.

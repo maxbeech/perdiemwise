@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-11-06: active return measurement
+
+- Record first measured visits and intentional returns using the shared three-hour, seven-day browser contract.
+- Preserve the product analytics boundary and add regression tests for passive tabs, continuous sessions, consent and storage errors.
+
 ## [Unreleased] — 2026-11-04 — Lifecycle refresh: FY2027 figures in three more posts
 
 ### Changed
