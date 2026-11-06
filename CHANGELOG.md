@@ -311,3 +311,5 @@ subscription, and Pro features people actually pay for.
 
 ### Removed
 - `components/CheckoutButton.tsx` (superseded by `UpgradePanel`).
+
+Generated Node analytics tests assert the empty error count without narrowing the mutable collection to `never[]`; storage-error checks remain unchanged.
