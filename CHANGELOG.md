@@ -313,3 +313,5 @@ subscription, and Pro features people actually pay for.
 - `components/CheckoutButton.tsx` (superseded by `UpgradePanel`).
 
 Generated Node analytics tests assert the empty error count without narrowing the mutable collection to `never[]`; storage-error checks remain unchanged.
+
+2026-11-06: The shared GA bootstrap disables implicit page views before startup, so the explicit route tracker owns the initial and subsequent SPA page views. Product value and active-return events remain enabled.
