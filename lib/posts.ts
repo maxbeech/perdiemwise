@@ -3056,3 +3056,93 @@ const WEEK4_POSTS: Post[] = [
 ];
 
 POSTS.push(...WEEK4_POSTS);
+
+// Week 5: car allowance intent. Employees search 'IRS car allowance' and want to
+// know whether a flat monthly car payment is taxable, and how it compares with
+// paying the IRS standard mileage rate per business mile.
+const WEEK5_POSTS: Post[] = [
+  {
+    slug: "irs-car-allowance",
+    title: "IRS Car Allowance: When It Is Taxable and When a Mileage Rate Is Better",
+    description:
+      "A flat monthly car allowance is generally taxable wages. Paying the IRS business rate per mile under an accountable plan can be tax-free. Here is the worked comparison.",
+    keyword: "irs car allowance",
+    supportingKeywords: [
+      "car allowance taxable",
+      "car allowance vs mileage reimbursement",
+      "accountable plan car allowance",
+      "irs mileage reimbursement rate",
+      "72.5 cents per mile",
+      "76 cents per mile",
+      "irs standard mileage rate 2026",
+      "taxable car allowance",
+      "mileage reimbursement accountable plan",
+      "fixed monthly car allowance",
+    ],
+    longTailPhrases: [
+      "is a car allowance taxable income",
+      "is a car allowance better than mileage reimbursement",
+      "how does the irs treat a monthly car allowance",
+    ],
+    category: "Academy",
+    date: "2026-11-10",
+    readMins: 7,
+    body: [
+      { type: "p", text: "An IRS car allowance is a fixed amount an employer pays each month towards the cost of an employee's car, usually written into the contract or a benefits policy. The question most people search for is whether that money is taxable. For a flat allowance that does not depend on the miles driven for work, the answer is generally yes: it is treated as taxable wages. A per-mile reimbursement at the IRS business rate can be paid tax-free under an accountable plan, but only when the miles are properly recorded." },
+      { type: "callout", title: "TL;DR", text: "A fixed monthly car allowance is generally taxable wages, whatever the miles. Reimbursing business miles at the IRS standard business rate, 72.5 cents per mile before 1 July 2026 and 76 cents from 1 July, can be tax-free under an accountable plan with a mileage log. Price the two options side by side before choosing." },
+      { type: "h2", text: "Why a flat car allowance is treated as pay" },
+      { type: "p", text: "The tax treatment depends on whether the payment is tied to business use. A fixed monthly amount is paid whether the employee drives ten miles or a thousand, so it does not reimburse a specific expense. The IRS therefore treats it as part of pay, subject to income tax withholding and employment taxes, unless it sits inside an arrangement that meets the rules for an accountable plan." },
+      { type: "p", text: "An accountable plan has three conditions: the expense has a business connection, the employee substantiates it with records of time, place, business purpose and amount, and any excess is returned. A flat allowance fails the substantiation test in the way most people use it, because the amount is set in advance and does not follow the trips actually taken. That is why most employers who want a tax-free car benefit move to a per-mile reimbursement." },
+      { type: "h2", text: "The 2026 rates an employer can reimburse" },
+      { type: "p", text: "The IRS standard mileage rate is the most common basis for a per-mile reimbursement. For 2026 the business rate opened at 72.5 cents per mile, as set in IR-2025-128. The IRS then raised the business rate to 76 cents per mile for expenses paid or incurred on or after 1 July 2026, citing fuel prices. Each trip is priced at the rate in force on the day it was driven." },
+      { type: "table", caption: "IRS business mileage rate for 2026, by date driven", headers: ["Period", "Business rate per mile", "Tax treatment under an accountable plan"], rows: [
+        ["1 January to 30 June 2026", "72.5 cents", "Tax-free up to this rate, with substantiation"],
+        ["1 July to 31 December 2026", "76 cents", "Tax-free up to this rate, with substantiation"],
+        ["Any amount above the IRS rate", "Above 72.5 or 76 cents", "Generally taxable unless actual costs are substantiated or a FAVR plan applies"],
+      ] },
+      { type: "h2", text: "Worked example: $450 a month against 800 business miles" },
+      { type: "p", text: "Take an employee who drives 800 business miles a month and whose employer is weighing a flat car allowance of $450 a month against a per-mile reimbursement. The numbers below use the business rates above and assume the employee keeps a contemporaneous mileage log. Our [mileage reimbursement calculator](/calculators/mileage-reimbursement-calculator) applies the same rate for each trip date, so each month can be checked against its own rate." },
+      { type: "ul", items: [
+        "Flat allowance: $450 × 12 months = $5,400 a year, taxable as wages, whether or not the miles were driven.",
+        "Per-mile reimbursement, June trip month: 800 miles × $0.725 = $580.00, tax-free if substantiated.",
+        "Per-mile reimbursement, August trip month: 800 miles × $0.76 = $608.00, tax-free if substantiated.",
+        "Per-mile reimbursement for a full year at 800 miles a month, six months at each rate: 6 × $580 + 6 × $608 = $7,128.00 a year, tax-free if substantiated.",
+      ] },
+      { type: "p", text: "The per-mile figure is higher in this example, but it is only tax-free if the log supports every trip. Counting only the tax the employee would pay on the flat $5,400, at an assumed 22 per cent income tax rate and the employee's 7.65 per cent share of FICA, the allowance costs the employee roughly $1,600 a year in tax. The exact figure depends on the employee's own position, so treat it as an illustration rather than advice." },
+      { type: "h2", text: "When the allowance matches the mileage rate" },
+      { type: "p", text: "A flat allowance only equals the per-mile reimbursement at one mileage level. At the June rate, $450 a month equals about 621 business miles ($450 ÷ $0.725). At the August rate it equals about 592 miles ($450 ÷ $0.76). Below those levels the allowance pays more than the trips justify, which is the situation an auditor is most likely to question. Above them, a flat allowance underpays a driver who logs every trip." },
+      { type: "h2", text: "What an accountable plan needs for a mileage reimbursement" },
+      { type: "ul", items: [
+        "A written policy that states the reimbursement is for business miles only.",
+        "A log for each trip with the date, start and end point, business purpose and miles.",
+        "Reimbursement at or below the IRS rate for the date the miles were driven.",
+        "Return of any advance that is not used for business driving within a reasonable period.",
+        "Records kept for at least as long as the employer's own retention policy requires.",
+      ] },
+      { type: "p", text: "The same substantiation logic runs through per diem. Our guide to [accountable plan rules for travel expenses](/blog/irs-accountable-plan-travel-expenses) covers the three tests in full, and [is per diem taxable?](/blog/is-per-diem-taxable) explains how a flat payment becomes taxable when no expense trail exists." },
+      { type: "h2", text: "Car allowance or mileage reimbursement: how to choose" },
+      { type: "p", text: "For a driver who makes a small, steady number of business trips, a per-mile reimbursement keeps the payment tied to real use and is usually easier to defend. For a role that depends on the car all day, a fixed-and-variable rate arrangement can cover the fixed cost of owning the vehicle while still paying per mile. Our [FAVR explainer](/blog/favr-mileage-reimbursement-explained) sets out how that works. For the employer-side process, read [mileage reimbursement 2026: what employers need to know](/blog/mileage-reimbursement-2026-employer-guide) and [how to calculate mileage reimbursement step by step](/blog/calculating-mileage-reimbursement)." },
+      { type: "h2", text: "Checklist before you pay a car allowance" },
+      { type: "ul", items: [
+        "Decide whether the payment is a fixed allowance or a per-mile reimbursement, and say so in writing.",
+        "If it is a fixed allowance, assume it is taxable wages and check payroll treats it that way.",
+        "If it is per mile, price each trip by its own date against 72.5 or 76 cents.",
+        "Collect a mileage log for every trip before the reimbursement is paid.",
+        "Confirm the rate on the IRS standard mileage rates page before each filing period.",
+      ] },
+      { type: "faq", items: [
+        { q: "Is an IRS car allowance taxable?", a: "A fixed monthly car allowance that is not tied to documented business miles is generally taxable wages. A per-mile reimbursement at or below the IRS business rate can be tax-free under an accountable plan with a mileage log." },
+        { q: "What is the IRS business mileage rate for 2026?", a: "It is 72.5 cents per mile for business driving before 1 July 2026 and 76 cents per mile from 1 July 2026, as the IRS revised the rate mid-year." },
+        { q: "Is a car allowance better than mileage reimbursement?", a: "It depends on the miles. A flat allowance pays the same whatever the driving, so it is only comparable to a per-mile rate at a specific mileage level. A per-mile reimbursement stays tied to business use and can be tax-free with records." },
+        { q: "Can an employer pay both a car allowance and a mileage reimbursement?", a: "Paying both for the same driving creates a double payment and is hard to defend. Employers normally choose one approach for each employee and document the basis for it." },
+      ] },
+    ],
+    sources: [
+      { label: "IRS newsroom: IRS sets 2026 business standard mileage rate at 72.5 cents per mile (IR-2025-128)", url: "https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents" },
+      { label: "IRS standard mileage rates", url: "https://www.irs.gov/tax-professionals/standard-mileage-rates" },
+      { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+    ],
+  },
+];
+
+POSTS.push(...WEEK5_POSTS);
