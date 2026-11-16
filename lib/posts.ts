@@ -3146,3 +3146,109 @@ const WEEK5_POSTS: Post[] = [
 ];
 
 POSTS.push(...WEEK5_POSTS);
+
+// Week 6: travel voucher intent. Searchers want to know what a travel voucher
+// must list, which receipts it needs and how to total a trip. The worked example
+// prices mileage with the product's own IRS rate periods (lib/site.ts), and
+// leaves per diem out because the FY2027 rate table is not yet loaded.
+const WEEK6_POSTS: Post[] = [
+  {
+    slug: "travel-voucher-what-to-include",
+    title: "Travel Voucher: What to Include, Receipt by Receipt",
+    description:
+      "A travel voucher lists each trip cost with the receipt that supports it. Here is what a voucher needs, the receipt rule, and a worked total that prices mileage across the 1 July 2026 rate change.",
+    keyword: "travel voucher",
+    supportingKeywords: [
+      "travel voucher template",
+      "how to fill out a travel voucher",
+      "travel voucher receipts",
+      "travel voucher mileage",
+      "OF 1012 travel voucher",
+      "SF 1012 travel voucher",
+      "travel expense voucher",
+      "itemised travel voucher",
+      "lodging receipts travel voucher",
+      "travel voucher advance",
+    ],
+    longTailPhrases: [
+      "what should a travel voucher include",
+      "do you need receipts for a travel voucher",
+      "how do you total a travel voucher with mileage",
+    ],
+    category: "Academy",
+    date: "2026-11-16",
+    readMins: 7,
+    body: [
+      { type: "p", text: "A travel voucher is the claim you file after a trip to get back the money you spent on it. For US federal travellers it is the government's form for itemising travel costs, and it sets out what can be claimed and what proof must be attached. Private employers usually run their own version, but the same questions decide whether a payment is reimbursed and whether it stays tax-free. This guide covers what a voucher needs, how the receipt rule works, and how to total a trip that includes mileage from two different IRS rate periods." },
+      { type: "callout", title: "TL;DR", text: "A travel voucher lists each cost by date and purpose, with a receipt for lodging and for any other expense of $75 or more. Mileage is priced at the IRS business rate for the date each trip was driven, so a trip that straddles 1 July 2026 uses 72.5 cents on one side and 76 cents on the other. Total the lines once, then check the total against the receipts before you submit." },
+      { type: "h2", text: "What a travel voucher is, and which form to use" },
+      { type: "p", text: "GSA's forms library lists the older SF 1012 as obsolete and points to OF 1012 for current claims, so use the version your agency's travel office accepts. Older copies still circulate online, which is why it is worth checking before you fill one in. Your agency decides whether it wants a paper or electronic filing and which approval step comes first." },
+      { type: "p", text: "A voucher is not the same as an expense report. A voucher is usually tied to a travel authorisation and covers a single trip, while an expense report can bundle many unrelated costs across a period. Our comparison of [expense report software](/blog/expense-report-software-compared) covers the second case; this guide stays with the trip claim." },
+      { type: "h2", text: "The lines a voucher needs" },
+      { type: "ul", items: [
+        "Traveller details, the purpose of the trip and the travel authorisation number, if your agency issues one.",
+        "Each day of travel, with the dates and the places you stayed or worked.",
+        "Mileage for each trip, with the date, the miles and the rate applied.",
+        "Lodging, with the hotel's itemised bill for each night.",
+        "Transport such as airfare, rental car, taxi, parking and tolls, each on its own line.",
+        "Other authorised expenses, such as conference fees, listed separately.",
+        "Any advance you were paid, deducted from the total.",
+        "The net amount you are claiming.",
+      ] },
+      { type: "h2", text: "Receipts: the rule most claims get wrong" },
+      { type: "p", text: "The federal baseline is simple. Lodging always needs a receipt, and so does any other authorised expense of $75 or more. Expenses under $75 can be listed without a receipt. If a receipt cannot be obtained, explain the omission on the voucher, because an unexplained gap is what a reviewer will query first. Agencies can set stricter rules than the baseline, and some require receipts for airfare whatever the amount, so check your own policy before you file." },
+      { type: "table", caption: "Receipt requirements on a federal travel voucher (baseline rule)", headers: ["Expense", "Receipt needed", "What to record"], rows: [
+        ["Lodging", "Yes, every stay", "Itemised hotel bill showing each night"],
+        ["Other authorised expense of $75 or more", "Yes", "Parking, taxi, conference fee or rental car fuel, each with its receipt"],
+        ["Other authorised expense under $75", "No", "Listed on the voucher with date and purpose"],
+        ["Mileage", "No receipt; a mileage log instead", "Date, miles, business purpose and rate for each trip"],
+      ] },
+      { type: "h2", text: "Worked example: one trip across the mid-year rate change" },
+      { type: "p", text: "Take a field engineer who makes two business drives in one claim, stays in a hotel for two nights and pays for parking and a toll. Mileage is priced by the date each drive was made, using the IRS business rate in force that day. Per diem is left off this example because it needs the rate table for the trip's location and fiscal year, and the FY2027 table is not part of this calculation." },
+      { type: "table", caption: "Voucher lines for the worked example", headers: ["Line", "Date", "Calculation", "Amount"], rows: [
+        ["Client site visit, 412 miles", "12 June 2026", "412 × $0.725", "$298.70"],
+        ["Plant audit, 388 miles", "9 August 2026", "388 × $0.76", "$294.88"],
+        ["Hotel, two nights, itemised bill", "9 to 11 August 2026", "Receipted in full", "$212.40"],
+        ["Car park", "9 August 2026", "Receipted", "$18.50"],
+        ["Toll", "12 June 2026", "Under $75, listed without receipt", "$64.00"],
+        ["Total claimed", "", "", "$888.48"],
+      ] },
+      { type: "p", text: "The two mileage lines use different rates because the drives fall either side of 1 July. Pricing the June drive at 76 cents would add $14.42 (412 × $0.035) that the IRS rate does not allow for that date, so the split line is what keeps the claim defensible. The total is the sum of the five lines: $298.70 + $294.88 + $212.40 + $18.50 + $64.00 = $888.48." },
+      { type: "h2", text: "Pricing mileage by date" },
+      { type: "p", text: "The IRS business rate was 72.5 cents for expenses paid or incurred from 1 January to 30 June 2026, and 76 cents from 1 July 2026, after the IRS revised it mid-year citing fuel prices. The [2026 IRS standard mileage rates](/blog/2026-irs-standard-mileage-rate) guide has the full table. Each trip takes the rate for its own date, so any drive that falls on the other side of 30 June needs its own line." },
+      { type: "p", text: "Our [mileage reimbursement calculator](/calculators/mileage-reimbursement-calculator) takes the trip date and applies the rate for that date, which saves checking the table line by line. The step-by-step method behind the calculation is in [calculating mileage reimbursement](/blog/calculating-mileage-reimbursement)." },
+      { type: "h2", text: "Steps to total a voucher" },
+      { type: "ol", items: [
+        "List every trip with its date, start and end point, purpose and miles, and price each one at the rate for its date.",
+        "Add the transport and lodging lines from the receipts, keeping each receipt reference beside its line.",
+        "Mark any expense under $75 that has no receipt, and add a sentence explaining why.",
+        "Deduct any advance you were paid, then check the net against the receipts folder.",
+        "Attach the mileage log, because the log is what supports every mileage line.",
+      ] },
+      { type: "h2", text: "Common mistakes that get a claim returned" },
+      { type: "ul", items: [
+        "Using one rate for the whole claim when the drives fall either side of 1 July.",
+        "Claiming mileage without a log, or with trips that do not match the dates on the calendar.",
+        "Attaching a summary of a hotel stay instead of the itemised bill.",
+        "Including personal driving in the business miles.",
+        "Leaving out an advance, which overstates the net amount claimed.",
+      ] },
+      { type: "h2", text: "Keep the voucher audit-ready" },
+      { type: "p", text: "A voucher is only as good as the records behind it. Keep the mileage log, the receipts and the approval together for as long as your employer's retention policy requires. The [printable mileage log template](/blog/printable-mileage-log-template) sets out the fields a log needs. The [accountable plan rules](/blog/irs-accountable-plan-travel-expenses) explain why a private employer's reimbursement stays tax-free only when the substantiation is in place. If the employer is paying a flat car allowance rather than mileage, the [car allowance guide](/blog/irs-car-allowance) compares the two." },
+      { type: "faq", items: [
+        { q: "Do you need receipts for every expense on a travel voucher?", a: "Lodging always needs a receipt under the federal baseline rule, and so does any other authorised expense of $75 or more. Smaller expenses can be listed without one, though your agency may require more." },
+        { q: "Which form is used for a federal travel voucher?", a: "GSA's forms library lists SF 1012 as obsolete and points to OF 1012 for current claims. Use the version your agency's travel office accepts." },
+        { q: "Which mileage rate goes on a travel voucher?", a: "The IRS business rate for the date each trip was driven: 72.5 cents for trips up to 30 June 2026 and 76 cents from 1 July 2026." },
+        { q: "Do mileage claims need receipts?", a: "No receipt is needed for mileage. A log that records the date, miles, business purpose and rate for each trip is what supports the claim." },
+      ] },
+    ],
+    sources: [
+      { label: "GSA Travel Guide 3: Travel (receipt and voucher rules)", url: "https://handbook.tts.gsa.gov/travel-and-leave/travel-and-leave-policies/travel-guide-3-travel" },
+      { label: "GSA forms library: Travel Voucher", url: "https://www.gsa.gov/forms-library/travel-voucher-0" },
+      { label: "IRS newsroom: IRS sets 2026 business standard mileage rate at 72.5 cents per mile (IR-2025-128)", url: "https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents" },
+      { label: "EY Tax News: IRS adjusts some federal mileage rates effective July 1, 2026", url: "https://taxnews.ey.com/news/2026-1707-irs-adjusts-some-federal-mileage-rates-effective-july-1-2026" },
+    ],
+  },
+];
+
+POSTS.push(...WEEK6_POSTS);
