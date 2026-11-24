@@ -3252,3 +3252,110 @@ const WEEK6_POSTS: Post[] = [
 ];
 
 POSTS.push(...WEEK6_POSTS);
+
+// Week 7: expense report intent. Searchers want to know what one monthly
+// report must list and how to total it. This is distinct from the single-trip
+// travel voucher. The worked example prices mileage at the IRS business rate
+// that applies to every drive in the period (1 January to 30 June 2026), so it
+// does not depend on the mid-year rate change. Per diem is left out because the
+// FY2027 rate table is not yet loaded.
+const WEEK7_POSTS: Post[] = [
+  {
+    slug: "expense-report-how-to-build-one",
+    title: "Expense Report: How to Build One Line by Line",
+    description:
+      "An expense report lists each cost with its date, purpose and receipt, and prices mileage at the IRS rate for each trip. Here is what a report needs, the receipt rule, and a worked March to May 2026 total with an advance deducted.",
+    keyword: "expense report",
+    supportingKeywords: [
+      "how to write an expense report",
+      "expense report template",
+      "expense report format",
+      "employee expense report",
+      "expense report receipts",
+      "mileage on an expense report",
+      "expense report approval",
+      "expense report example",
+      "monthly expense report",
+      "expense report csv",
+    ],
+    longTailPhrases: [
+      "what should an expense report include",
+      "how do I fill in an expense report",
+      "do expense reports need receipts for mileage",
+    ],
+    category: "Academy",
+    date: "2026-11-24",
+    readMins: 7,
+    body: [
+      { type: "p", text: "An expense report is the document that turns a month of spending into a claim your employer can check and pay. It groups costs by date and purpose, attaches the proof for each one, and ends with a single net figure. Done well it takes an hour and rarely comes back. Done badly it sits in an approver's queue for weeks while someone chases a missing receipt. This guide sets out the lines a report needs, the receipt rule, and a worked example that totals a quarter of business driving, receipts and an advance." },
+      { type: "callout", title: "TL;DR", text: "An expense report lists each cost on its own line with the date, the business purpose and the proof. Mileage is priced trip by trip at the IRS business rate for that date, which was 72.5 cents per mile from 1 January to 30 June 2026. Receipts support every paid line, any advance is deducted, and the net is what you claim." },
+      { type: "h2", text: "Expense report or travel voucher?" },
+      { type: "p", text: "The two are often confused. A travel voucher is usually the claim for one trip, tied to a travel authorisation, and is covered in our [travel voucher guide](/blog/travel-voucher-what-to-include). An expense report bundles unrelated costs across a period, such as a few weeks of client visits, a train fare, a hotel night and a conference fee. Many employers use one template for both. The rules that matter, which are dates, purpose, receipts and mileage, apply the same way to each." },
+      { type: "h2", text: "The lines every expense report needs" },
+      { type: "p", text: "Whatever template your employer uses, a report that gets approved first time tends to carry the same information in the same order. Check that each of these is present before you submit." },
+      { type: "ul", items: [
+        "Employee name, department and the name of the approver.",
+        "The reporting period, usually a month, or a single trip if the employer asks for one report per trip.",
+        "One line per cost, with the date, the merchant or destination, the business purpose, the category and the amount.",
+        "Mileage as its own line for each trip, with the miles, the rate and the date the drive was made.",
+        "A receipt reference for every paid line, so the approver can match the two.",
+        "Any advance received, deducted from the total.",
+        "The net amount claimed.",
+      ] },
+      { type: "h2", text: "The receipt rule" },
+      { type: "p", text: "Most employers start from the federal baseline: a receipt for lodging and for any other cost of $75 or more, with smaller items listed without one. Many companies are stricter and ask for a receipt on everything, so read your own policy before you rely on the baseline. Mileage never needs a receipt. It needs a log, and the log is what supports every mileage line. The [printable mileage log template](/blog/printable-mileage-log-template) lists the fields a log should carry." },
+      { type: "p", text: "Timing matters as well as proof. Under an accountable plan, the Treasury regulations treat substantiation as reasonable when it is provided within 60 days after the expense is paid or incurred, and any advance you do not spend must be returned within 120 days. These are safe-harbour periods rather than hard deadlines, but they are the benchmark an auditor will use. The [accountable plan rules](/blog/irs-accountable-plan-travel-expenses) explain why this affects whether a reimbursement stays tax-free." },
+      { type: "h2", text: "Pricing mileage by date" },
+      { type: "p", text: "The IRS business rate is set for each period, so each trip takes the rate in force on the date it was driven. For 2026 the IRS set the business rate at 72.5 cents per mile for the start of the year, in news release IR-2025-128. The [2026 IRS standard mileage rates](/blog/2026-irs-standard-mileage-rate) guide has the full table. For any trip after 30 June, check the IRS page for the rate in force on that date, because the business rate can change during the year and a single rate for the whole report is only safe when every drive falls inside one period." },
+      { type: "p", text: "Our [mileage reimbursement calculator](/calculators/mileage-reimbursement-calculator) takes the trip date and applies the rate for that date, which saves checking the table by hand. The arithmetic behind each line is set out in [calculating mileage reimbursement](/blog/calculating-mileage-reimbursement)." },
+      { type: "h2", text: "Worked example: three months in one report" },
+      { type: "p", text: "Take a regional sales manager who files one expense report covering March to May 2026. The report has three business drives, three receipted costs and a travel advance paid before the first trip. Every drive falls between 1 January and 30 June, so every mileage line uses 72.5 cents. No per diem is included, because a per diem line needs the rate table for the city and fiscal year, which is a separate calculation." },
+      { type: "table", caption: "Expense report lines for March to May 2026", headers: ["Line", "Date", "Calculation", "Amount"], rows: [
+        ["Client visit, 186 miles", "3 March 2026", "186 × $0.725", "$134.85"],
+        ["Client visit, 94 miles", "17 April 2026", "94 × $0.725", "$68.15"],
+        ["Client visit, 240 miles", "22 May 2026", "240 × $0.725", "$174.00"],
+        ["Rail fare, return", "16 March 2026", "Receipted", "$64.00"],
+        ["Hotel, two nights", "16 to 18 March 2026", "Itemised bill attached", "$287.50"],
+        ["Client lunch, three attendees", "10 April 2026", "Receipt lists the attendees", "$96.40"],
+        ["Car park", "22 May 2026", "Receipted", "$24.00"],
+        ["Total before advance", "", "", "$848.90"],
+        ["Less travel advance received", "", "", "−$200.00"],
+        ["Net claim", "", "", "$648.90"],
+      ] },
+      { type: "p", text: "Total the mileage separately, then add the receipted lines. The three drives cover 520 miles and come to $377.00 at 72.5 cents. The receipted costs come to $471.90. Together they make $848.90 before the advance, and the $200.00 advance is deducted last, leaving a net claim of $648.90. Each line can be checked against its receipt or log entry, and the net can be checked against the bank transfer that follows." },
+      { type: "p", text: "If the advance were never reconciled, the difference would be owed back. The advance is a payment on account of costs, not a payment for them, so every dollar of it needs a matching line above it. If the costs came to less than the advance, the balance must go back to the employer within the return period your policy sets." },
+      { type: "h2", text: "Steps to build the report" },
+      { type: "ol", items: [
+        "Gather the receipts and the mileage log for the period, and sort them by date.",
+        "Price each trip's mileage at the rate for its date, and keep the miles and the rate on the line.",
+        "Enter each receipted cost on its own line, with the business purpose written in full: the client, the site or the meeting.",
+        "Add the subtotals, deduct any advance, and check the net against the receipts folder.",
+        "Attach the receipts and the mileage log in date order, and submit before the deadline your policy sets.",
+      ] },
+      { type: "h2", text: "Mistakes that get reports returned" },
+      { type: "ul", items: [
+        "Lumping several purchases into one line with no breakdown.",
+        "Writing the purpose as \"business\" rather than naming the client, site or meeting.",
+        "Claiming mileage with no log, or with trips that do not match the calendar.",
+        "Leaving out the advance, which overstates the amount owed to you.",
+        "Submitting well outside the 60-day substantiation window without an explanation.",
+      ] },
+      { type: "h2", text: "Where expense report software fits" },
+      { type: "p", text: "A spreadsheet handles one report well and struggles with the tenth. [Expense report software compared](/blog/expense-report-software-compared) covers what to look for: receipt capture, approval routing and export formats. PerDiemWise's Pro expense report recalculates each saved trip's mileage and per diem at the rate for its own date and exports the lines as CSV. That suits a report made mainly of driving and travel. For card reconciliation across many merchants you will need a wider tool." },
+      { type: "faq", items: [
+      { q: "What should an expense report include?", a: "Each cost on its own line with the date, the merchant or destination, the business purpose, the category and the amount. Mileage goes on a separate line per trip with the miles and rate, receipt references go against every paid line, and any advance is deducted before the net is claimed." },
+      { q: "Do expense reports need receipts for mileage?", a: "No receipt is needed for mileage. A log that records the date, the start and end points, the miles and the business purpose supports each mileage line." },
+      { q: "What mileage rate goes on an expense report for 2026?", a: "The IRS business rate for the date of each trip. For trips from 1 January to 30 June 2026 it was 72.5 cents per mile, under IRS news release IR-2025-128. For trips after 30 June, check the IRS page for the rate in force on that date." },
+      { q: "How long do I have to submit an expense report?", a: "Your employer's policy sets the deadline. For an accountable plan, the Treasury regulations use 60 days after the expense is paid or incurred as the reasonable period for substantiation, so submitting inside that window is the safest course." },
+      ] },
+    ],
+    sources: [
+      { label: "IRS newsroom: IRS sets 2026 business standard mileage rate at 72.5 cents per mile (IR-2025-128)", url: "https://www.irs.gov/newsroom/irs-sets-2026-business-standard-mileage-rate-at-725-cents-per-mile-up-25-cents" },
+      { label: "IRS standard mileage rates", url: "https://www.irs.gov/tax-professionals/standard-mileage-rates" },
+      { label: "IRS Publication 463: Travel, Gift, and Car Expenses", url: "https://www.irs.gov/publications/p463" },
+      { label: "26 CFR 1.62-2: Accountable plans (Cornell Legal Information Institute)", url: "https://www.law.cornell.edu/cfr/text/26/1.62-2" },
+    ],
+  },
+];
+
+POSTS.push(...WEEK7_POSTS);
