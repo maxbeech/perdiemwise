@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased] — 2026-11-26 — Lifecycle refresh: GSA mileage rate post cites the IRS announcement
+
+### Changed
+- `gsa-mileage-rate-2026`: the mid-year change to 76 cents from 1 July 2026 is now attributed to IRS Announcement 2026-11 in Internal Revenue Bulletin 2026-29, which modifies Notice 2026-10 and keeps 72.5 cents for expenses paid before 1 July. The IRB is added as the first source. Publish date is unchanged.
+
+### Checked, no change
+- `mileage-reimbursement-2026-employer-guide`: live page states 72.5 cents to 30 June and 76 cents from 1 July 2026, and cites the IRS standard mileage rates page. The REFRESH verdict rested on the year in the title, so no edit was made.
+
 ## 2026-11-06: active return measurement
 
 - Record first measured visits and intentional returns using the shared three-hour, seven-day browser contract.
