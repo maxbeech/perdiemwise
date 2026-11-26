@@ -3010,7 +3010,7 @@ const WEEK4_POSTS: Post[] = [
       { type: "p", text: "The Federal Travel Regulation (FTR) governs what federal employees can claim when they travel, and for car travel it ties the reimbursement rate to the IRS standard mileage rate. The same IRS figure is the one private employers can use under an accountable plan, so a federal traveller and an employee at a private firm driving the same route on the same day are paid the same per-mile amount. The statutory basis for the federal side is 5 U.S.C. section 5707, and GSA updates its POV rate when the IRS changes its own." },
       { type: "p", text: "That link is why searches for the 'GSA mileage rate' and the 'IRS mileage rate' describe the same change. Nothing in the GSA figure is set separately from the IRS, so the question to answer is always which IRS rate applied on the day the miles were driven." },
       { type: "h2", text: "The 2026 rate, split by travel date" },
-      { type: "p", text: "The IRS opened 2026 with a business rate of 72.5 cents per mile, then raised it to 76 cents from 1 July, citing rising fuel costs. GSA followed the midyear change for federal travellers. Because the rate depends on the date of travel, a single trip that runs across 30 June and 1 July needs each leg priced separately." },
+      { type: "p", text: "The IRS opened 2026 with a business rate of 72.5 cents per mile, then raised it to 76 cents from 1 July, citing rising fuel costs. The change was published as IRS Announcement 2026-11 in [Internal Revenue Bulletin 2026-29](https://www.irs.gov/irb/2026-29_irb). It modifies Notice 2026-10 and keeps the 72.5-cent rate for expenses paid before 1 July. GSA followed the midyear change for federal travellers. Because the rate depends on the date of travel, a single trip that runs across 30 June and 1 July needs each leg priced separately." },
       { type: "table", caption: "GSA privately owned vehicle rate for 2026, by travel date", headers: ["Travel date", "Rate per mile"], rows: [
         ["1 January to 30 June 2026", "72.5 cents"],
         ["1 July to 31 December 2026", "76 cents"],
@@ -3046,6 +3046,7 @@ const WEEK4_POSTS: Post[] = [
       ] },
     ],
     sources: [
+      { label: "IRS Internal Revenue Bulletin 2026-29: Announcement 2026-11 (76 cents from 1 July 2026)", url: "https://www.irs.gov/irb/2026-29_irb" },
       { label: "Federal Travel Regulation, 41 CFR chapter 301", url: "https://www.ecfr.gov/current/title-41/subtitle-F/chapter-301" },
       { label: "NATP: IRS raises business mileage rate to 76 cents per mile", url: "https://www.natptax.com/news-insights/blog/irs-raises-business-mileage-rate-to-76-cents-per-mile/" },
       { label: "CPA Practice Advisor: rising fuel costs prompt IRS to raise standard mileage rates", url: "https://www.cpapracticeadvisor.com/2026/07/16/rising-fuel-costs-prompt-irs-to-raise-standard-mileage-rates-for-rest-of-2026/186784/" },
